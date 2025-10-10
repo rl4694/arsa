@@ -1,29 +1,37 @@
 import pytest
-import server.cities as cities
+import server.cities as ct
 
 
 class TestIsValidId:
     def test_valid(self):
-        assert cities.is_valid_id('1') == True
+        assert ct.is_valid_id('1') == True
 
     def test_non_str(self):
-        assert cities.is_valid_id(1) == False
+        assert ct.is_valid_id(1) == False
 
     def test_empty_str(self):
-        assert cities.is_valid_id('') == False
+        assert ct.is_valid_id('') == False
 
 
 class TestCreate:
     def test_valid(self):
-        old_length = cities.length()
-        _id = cities.create({cities.NAME: 'New York'})
-        assert cities.is_valid_id(_id)
-        assert cities.length() > old_length
+        old_length = ct.length()
+        _id = ct.create({ct.NAME: 'New York'})
+        assert ct.is_valid_id(_id)
+        assert ct.length() > old_length
 
     def test_non_dict(self):
         with pytest.raises(ValueError):
-            cities.create(10)
+            ct.create(10)
 
     def test_missing_name(self):
         with pytest.raises(ValueError):
-            cities.create({})
+            ct.create({})
+
+
+class TestRead:
+    def test_basic(self):
+        ct.create({ct.NAME: 'New York'})
+        cities = ct.read()
+        assert isinstance(cities, dict)
+        assert len(cities) > 0

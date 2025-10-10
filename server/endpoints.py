@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask, request
 from flask_restx import Resource, Api, fields  # Namespace
 from flask_cors import CORS
-from server import cities
+from server import cities as ct
 
 # import werkzeug.exceptions as wz
 
@@ -62,14 +62,14 @@ class CityList(Resource):
     def get(self):
         return [
                {'id': cid, **data}
-               for cid, data in cities.cities.items()
+               for cid, data in ct.cities.items()
         ]
 
     @api.expect(city_model)
     @api.doc('create_city')
     def post(self):
         data = request.json
-        city_id = cities.create(data)
+        city_id = ct.create(data)
         return {'id': city_id, **data}, 201
 
 
@@ -77,7 +77,7 @@ class CityList(Resource):
 class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
-        city = cities.cities.get(city_id)
+        city = ct.cities.get(city_id)
         if not city:
             api.abort(404, "City not found")
         return {'id': city_id, **city}
@@ -85,15 +85,15 @@ class City(Resource):
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
-        if city_id not in cities.cities:
+        if city_id not in ct.cities:
             api.abort(404, "City not found")
         data = request.json
-        cities.cities[city_id] = data
+        ct.cities[city_id] = data
         return {'id': city_id, **data}
 
     @api.doc('delete_city')
     def delete(self, city_id):
-        if city_id not in cities.cities:
+        if city_id not in ct.cities:
             api.abort(404, "City not found")
-        del cities.cities[city_id]
+        del ct.cities[city_id]
         return '', 204

@@ -34,3 +34,7 @@ def create(fields: dict) -> str:
     _id = str(len(cities) + 1)
     cities[_id] = fields
     return _id
+
+
+def read() -> dict:
+    return cities
