@@ -16,9 +16,13 @@ api = Api(app)
 
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
+
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 MESSAGE = 'Message'
+
+CITIES_EP = '/cities'
+CITIES_RESP = 'cities'
 
 
 @api.route(HELLO_EP)
@@ -56,14 +60,14 @@ city_model = api.model(
 )
 
 
-@api.route('/cities')
+@api.route(CITIES_EP)
 class CityList(Resource):
     @api.doc('list_cities')
     def get(self):
-        return [
-               {'id': cid, **data}
-               for cid, data in ct.cities.items()
-        ]
+        cities = ct.read()
+        return {
+            CITIES_RESP: cities,
+        }
 
     @api.expect(city_model)
     @api.doc('create_city')
