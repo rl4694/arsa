@@ -37,4 +37,5 @@ def create(fields: dict) -> str:
 
 
 def read() -> dict:
+    """Return all cities stored."""
     return cities
