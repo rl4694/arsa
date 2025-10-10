@@ -5,7 +5,6 @@ NAME = 'name'
 
 # In-memory storage for states
 states = {}
-current_id = 0
 
 
 def is_valid_id(_id: str) -> bool:
@@ -33,8 +32,6 @@ def create(fields: dict) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    global current_id
-    current_id += 1
-    _id = str(current_id)
+    _id = str(len(states) + 1)
     states[_id] = fields
     return _id
