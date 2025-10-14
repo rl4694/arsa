@@ -8,7 +8,6 @@ from flask_restx import Resource, Api, fields  # Namespace
 from flask_cors import CORS
 from server import cities as ct
 from server import states as st
-from server import nations as nt
 
 # import werkzeug.exceptions as wz
 
@@ -27,8 +26,6 @@ CITIES_EP = '/cities'
 CITIES_RESP = 'cities'
 STATES_EP = '/states'
 STATES_RESP = 'states'
-NATIONS_EP = '/nations'
-NATIONS_RESP = 'nations'
 
 
 @api.route(HELLO_EP)
@@ -77,6 +74,7 @@ nation_model = api.model(
     }
 )
 
+
 # CITIES ENDPOINTS
 @api.route(CITIES_EP)
 class CityList(Resource):
@@ -120,6 +118,7 @@ class City(Resource):
         del ct.cities[city_id]
         return '', 204
 
+
 # STATES ENDPOINTS
 @api.route(STATES_EP)
 class StateList(Resource):
@@ -139,7 +138,7 @@ class StateList(Resource):
 
 
 @api.route('/states/<string:state_id>')
-class City(Resource):
+class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
         state = st.states.get(state_id)
