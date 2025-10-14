@@ -8,6 +8,7 @@ from flask_restx import Resource, Api, fields  # Namespace
 from flask_cors import CORS
 from server import cities as ct
 from server import states as st
+from server import nations as nt
 
 # import werkzeug.exceptions as wz
 
@@ -26,6 +27,8 @@ CITIES_EP = '/cities'
 CITIES_RESP = 'cities'
 STATES_EP = '/states'
 STATES_RESP = 'states'
+NATIONS_EP = '/nations'
+NATIONS_RESP = 'nations'
 
 
 @api.route(HELLO_EP)
@@ -160,4 +163,48 @@ class State(Resource):
         if state_id not in st.states:
             api.abort(404, "State not found")
         del st.states[state_id]
+        return '', 204
+
+
+# NATIONS ENDPOINTS
+@api.route(NATIONS_EP)
+class NationList(Resource):
+    @api.doc('list_nations')
+    def get(self):
+        nations = nt.read()
+        return {
+            NATIONS_RESP: nations,
+        }
+
+    @api.expect(nation_model)
+    @api.doc('create_nation')
+    def post(self):
+        data = request.json
+        nation_id = nt.create(data)
+        return {'id': nation_id, **data}, 201
+
+
+@api.route('/nations/<string:nation_id>')
+class Nation(Resource):
+    @api.doc('get_nation')
+    def get(self, nation_id):
+        nation = nt.nations.get(nation_id)
+        if not nation:
+            api.abort(404, "Nation not found")
+        return {'id': nation_id, **nation}
+
+    @api.expect(nation_model)
+    @api.doc('update_nation')
+    def put(self, nation_id):
+        if nation_id not in nt.nations:
+            api.abort(404, "Nation not found")
+        data = request.json
+        nt.nations[nation_id] = data
+        return {'id': nation_id, **data}
+
+    @api.doc('delete_nation')
+    def delete(self, nation_id):
+        if nation_id not in nt.nations:
+            api.abort(404, "Nation not found")
+        del nt.nations[nation_id]
         return '', 204
