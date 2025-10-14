@@ -7,6 +7,8 @@ from flask import Flask, request
 from flask_restx import Resource, Api, fields  # Namespace
 from flask_cors import CORS
 from server import cities as ct
+from server import states as st
+from server import nations as nt
 
 # import werkzeug.exceptions as wz
 
@@ -23,6 +25,10 @@ MESSAGE = 'Message'
 
 CITIES_EP = '/cities'
 CITIES_RESP = 'cities'
+STATES_EP = '/states'
+STATES_RESP = 'states'
+NATIONS_EP = '/nations'
+NATIONS_RESP = 'nations'
 
 
 @api.route(HELLO_EP)
@@ -58,8 +64,20 @@ city_model = api.model(
         'name': fields.String(required=True, description='City Name')
     }
 )
+state_model = api.model(
+    'State',
+    {
+        'name': fields.String(required=True, description='State Name')
+    }
+)
+nation_model = api.model(
+    'Nation',
+    {
+        'name': fields.String(required=True, description='Nation Name')
+    }
+)
 
-
+# CITIES ENDPOINTS
 @api.route(CITIES_EP)
 class CityList(Resource):
     @api.doc('list_cities')
@@ -100,4 +118,47 @@ class City(Resource):
         if city_id not in ct.cities:
             api.abort(404, "City not found")
         del ct.cities[city_id]
+        return '', 204
+
+# STATES ENDPOINTS
+@api.route(STATES_EP)
+class StateList(Resource):
+    @api.doc('list_states')
+    def get(self):
+        states = st.read()
+        return {
+            STATES_RESP: states,
+        }
+
+    @api.expect(state_model)
+    @api.doc('create_state')
+    def post(self):
+        data = request.json
+        state_id = st.create(data)
+        return {'id': state_id, **data}, 201
+
+
+@api.route('/states/<string:state_id>')
+class City(Resource):
+    @api.doc('get_state')
+    def get(self, state_id):
+        state = st.states.get(state_id)
+        if not state:
+            api.abort(404, "State not found")
+        return {'id': state_id, **state}
+
+    @api.expect(state_model)
+    @api.doc('update_state')
+    def put(self, state_id):
+        if state_id not in st.states:
+            api.abort(404, "State not found")
+        data = request.json
+        st.states[state_id] = data
+        return {'id': state_id, **data}
+
+    @api.doc('delete_state')
+    def delete(self, state_id):
+        if state_id not in st.states:
+            api.abort(404, "State not found")
+        del st.states[state_id]
         return '', 204
