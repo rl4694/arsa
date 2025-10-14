@@ -1,5 +1,5 @@
 # arsa
-An API server for geographic data.
+An API server for geographical data of natural disasters :volcano:.
 
 To build production, type `make prod`.
 
