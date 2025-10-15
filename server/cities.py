@@ -1,6 +1,7 @@
 MIN_ID_LEN = 1
 NAME = 'name'
-
+STATE = 'state'
+NATION = 'nation'
 
 cities = {}
 
@@ -23,6 +24,7 @@ def create(fields: dict) -> str:
     """
     Create a new city record.
     Requires a dict with a 'name' key.
+    Optional fields: state, nation
     Returns a string id.
     """
     if not isinstance(fields, dict):
@@ -32,7 +34,12 @@ def create(fields: dict) -> str:
 
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
-    cities[_id] = fields
+    # Currently state and nation are optional for testing, will implement proper ID in fields later with creation logic
+    cities[_id] = {
+        NAME: fields[NAME],
+        STATE: fields.get(STATE),
+        NATION: fields.get(NATION)
+    }
     return _id
 
 
