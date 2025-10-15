@@ -33,8 +33,7 @@ def length():
 def save():
     """Save current cities to file."""
     with open(CITIES_FILE, 'w') as f:
-        json.dump(cities, f, indent=2)
-        
+        json.dump(cities, f, indent=2)        
 
 def create(fields: dict) -> str:
     """
@@ -50,7 +49,8 @@ def create(fields: dict) -> str:
 
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
-    # Currently state and nation are optional for testing, will implement proper ID in fields later with creation logic
+    # Currently state and nation are optional for testing
+    # Will implement proper ID in fields later with creation logic
     cities[_id] = {
         NAME: fields[NAME],
         STATE: fields.get(STATE),
