@@ -60,7 +60,7 @@ def seed_cities(num_cities):
                 ct.STATE: city.get('region', ''),
                 ct.NATION: city.get('country', ''),
             })
-        
+
         # Print status
         print(f"Seeding cities: {ct.length() * 100 // num_cities}%")
 
@@ -82,8 +82,8 @@ def seed_nations():
             'offset': offset,
         })
         if 'data' not in res or 'metadata' not in res:
-            raise ValueError(f'No data found in GeoDB nations response: {res=}')
-        
+            raise ValueError(f'No data found in GeoDB nation response: {res=}')
+
         # Stop if we fetched all countries
         if len(res['data']) == 0:
             break
