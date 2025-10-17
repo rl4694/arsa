@@ -25,8 +25,10 @@ MESSAGE = 'Message'
 
 CITIES_EP = '/cities'
 CITIES_RESP = 'cities'
+
 STATES_EP = '/states'
 STATES_RESP = 'states'
+
 NATIONS_EP = '/nations'
 NATIONS_RESP = 'nations'
 
