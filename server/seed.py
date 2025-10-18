@@ -8,53 +8,46 @@ import time
 from server import cities as ct
 from server import nations as nt
 
-
-RAPID_API_HOST = 'wft-geo-db.p.rapidapi.com'
-RAPID_API_KEY = 'ba62340b10msh533fb3cfda50da1p1eff9djsn8ca40e19327b'
+RAPID_API_HEADERS = {
+    'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
+    'x-rapidapi-key': 'ba62340b10msh533fb3cfda50da1p1eff9djsn8ca40e19327b',
+}
 CITIES_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities'
 NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
 RESULTS_PER_PAGE = 10
-COOLDOWN_SEC = 2
+COOLDOWN_SEC = 1
 
 
-def fetch_rapid_api(url, params):
+def seed_cities(num_cities: int):
     """
-    Return JSON data from GeoDB API
+    Add initial city data from GeoDB cities API to our database
     """
-    headers = {
-        'x-rapidapi-host': RAPID_API_HOST,
-        'x-rapidapi-key': RAPID_API_KEY,
-    }
-    res = requests.get(url, headers=headers, params=params)
-    if res.status_code != 200:
-        raise ConnectionError(
-            f'Could not retrieve GeoDB cities: {res.status_code=}'
-        )
-    return res.json()
-
-
-def seed_cities(num_cities):
-    """
-    Add initial city data to our database
-    """
+    # Validate inputs
+    if not isinstance(num_cities, int):
+        raise ValueError(f'num_cities must be an integer: {type(num_cities)=}')
     if num_cities < 0:
-        raise ValueError(
-            f'Requested number of cities cannot be negative {num_cities=}'
-        )
+        raise ValueError(f'num_cities cannot be negative: {num_cities=}')
 
     offset = 0
     for i in range(num_cities // RESULTS_PER_PAGE):
         # Fetch city data
-        res = fetch_rapid_api(CITIES_URL, {
+        params = {
             'sort': '-population',
             'limit': RESULTS_PER_PAGE,
             'offset': offset,
-        })
-        if 'data' not in res:
-            raise ValueError(f'No data found in GeoDB cities response: {res=}')
+        }
+        res = requests.get(CITIES_URL, headers=RAPID_API_HEADERS,
+                           params=params)
+        if res.status_code != 200:
+            raise ConnectionError(
+                f'Could not retrieve GeoDB cities: {res.status_code=}'
+            )
+        output = res.json()
+        if 'data' not in output:
+            raise ValueError(f'No cities found in GeoDB response: {output=}')
 
         # Add city data to database
-        for city in res['data']:
+        for city in output['data']:
             ct.create({
                 ct.NAME: city.get('name', ''),
                 ct.STATE: city.get('region', ''),
@@ -71,31 +64,34 @@ def seed_cities(num_cities):
 
 def seed_nations():
     """
-    Add all nation data to our database
+    Add initial nation data from GeoDB nations API to our database
     """
     offset = 0
     num_nations = None
     while num_nations is None or offset <= num_nations:
-        # Fetch city data
-        res = fetch_rapid_api(NATIONS_URL, {
+        # Fetch nation data
+        params = {
             'limit': RESULTS_PER_PAGE,
             'offset': offset,
-        })
-        if 'data' not in res or 'metadata' not in res:
-            raise ValueError(f'No data found in GeoDB nation response: {res=}')
-
-        # Stop if we fetched all countries
-        if len(res['data']) == 0:
-            break
+        }
+        res = requests.get(NATIONS_URL, headers=RAPID_API_HEADERS,
+                           params=params)
+        if res.status_code != 200:
+            raise ConnectionError(
+                f'Could not retrieve GeoDB nations: {res.status_code=}'
+            )
+        output = res.json()
+        if 'data' not in output or 'metadata' not in output:
+            raise ValueError(f'No nations found in GeoDB response: {output=}')
 
         # Add city data to database
-        for country in res['data']:
+        for country in output['data']:
             nt.create({
                 nt.NAME: country.get('name', ''),
             })
 
         # Print status
-        num_nations = res['metadata']['totalCount']
+        num_nations = output['metadata']['totalCount']
         print(f"Seeding countries: {nt.length() * 100 // num_nations}%")
 
         # Wait for rate-limit to wear off
