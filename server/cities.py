@@ -5,6 +5,7 @@ NATION = 'nation'
 
 cities = {}
 
+
 def is_valid_id(_id: str) -> bool:
     """Return True if _id is a non-empty string."""
     if not isinstance(_id, str):
