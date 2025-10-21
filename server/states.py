@@ -40,3 +40,7 @@ def create(fields: dict) -> str:
         NATION: fields.get(NATION)
     }
     return _id
+
+def read() -> dict:
+    """Return all states stored."""
+    return states
