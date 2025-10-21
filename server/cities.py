@@ -1,22 +1,9 @@
-from flask import Flask, request
-from flask_restx import Resource, Api, fields # Namespace
-
 MIN_ID_LEN = 1
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
 
-CITIES_EP = '/cities'
-CITIES_RESP = 'cities'
-
 cities = {}
-
-city_model = api.model(
-    'City',
-    {
-        'name': fields.String(required=True, description='City Name')
-    }
-)
 
 def is_valid_id(_id: str) -> bool:
     """Return True if _id is a non-empty string."""
@@ -61,29 +48,54 @@ def read() -> dict:
     return cities
 
 
+def update(city_id: str, data: dict):
+    if city_id not in cities:
+        raise KeyError("City not found")
+    cities[city_id] = {
+        NAME: data.get(NAME)
+        STATE: data.get(STATE)
+        NATION: data.get(NATION)
+}
+
+
+def delete(city_id: str):
+    if city_id not in cities:
+        raise KeyError("City not found")
+    del cities[city_id]
+
+
+from flask import request
+from flask_restx import Resource, Namespace, fields
+
+api = Namespace('cities', description='Cities CRUD operations')
+
+city_model = api.model('City', {
+    'name': fields.String(required=True, description='City Name'),
+    'state': fields.String(description='State Name'),
+    'nation': fields.String(description='Nation Name')
+})
+
+
 # CITIES ENDPOINTS
-@api.route(CITIES_EP)
+@api.route('/')
 class CityList(Resource):
     @api.doc('list_cities')
     def get(self):
-        cities = ct.read()
-        return {
-            CITIES_RESP: cities,
-        }
+        return {'cities': read()}
 
     @api.expect(city_model)
     @api.doc('create_city')
     def post(self):
         data = request.json
-        city_id = ct.create(data)
+        city_id = create(data)
         return {'id': city_id, **data}, 201
 
 
-@api.route('/cities/<string:city_id>')
+@api.route('/<string:city_id>')
 class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
-        city = ct.cities.get(city_id)
+        city = cities.get(city_id)
         if not city:
             api.abort(404, "City not found")
         return {'id': city_id, **city}
@@ -91,15 +103,16 @@ class City(Resource):
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
-        if city_id not in ct.cities:
+        try:
+            update(city_id, request.json)
+            return {'id': city_id, **cities[city_id]}
+        except KeyError:
             api.abort(404, "City not found")
-        data = request.json
-        ct.cities[city_id] = data
-        return {'id': city_id, **data}
 
     @api.doc('delete_city')
     def delete(self, city_id):
-        if city_id not in ct.cities:
+        try:
+            delete(city_id)
+            return '', 204
+        except KeyError:
             api.abort(404, "City not found")
-        del ct.cities[city_id]
-        return '', 204
