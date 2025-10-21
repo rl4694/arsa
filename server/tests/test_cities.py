@@ -37,30 +37,35 @@ class TestRead:
         assert len(cities) > 0
         
 class TestRecursiveCreate:
-    def test_city_create_state(self):
+    def setup_method(self):
         ct.read().clear()
         from server import states, nations
         states.read().clear()
         nations.read().clear()
-        city_id = ct.create({
+
+        self.city_id = ct.create({
             ct.NAME: "Test City",
             ct.STATE: "Test State",
             ct.NATION: "Test Nation"
         })
-        city = ct.read().get(city_id)
-        assert city is not None
 
-        state_id = city[ct.STATE]
-        assert state_id is not None
-
-        state = states.read().get(city[ct.STATE])
-        assert state is not None
-        assert state[states.NAME] == "Test State"
-        nation_id = state[states.NATION]
-        assert nation_id is not None
-
-        nation = nations.read().get(nation_id)
-        assert nation is not None
-        assert nation[nations.NAME] == "Test Nation"
+        self.city = ct.read().get(self.city_id)
+        self.state_id = self.city[ct.STATE]
+        self.state = states.read().get(self.state_id)
+        self.nation_id = self.state["nation"]
+        self.nation = nations.read().get(self.nation_id)
+    def test_city_exists(self):
+        assert self.city is not None
         
-        assert city[ct.NATION] == nation_id
+    def test_state_created(self):
+        assert self.state_id is not None
+        assert self.state is not None
+        assert self.state["name"] == "Test State"
+
+    def test_nation_created(self):
+        assert self.nation_id is not None
+        assert self.nation is not None
+        assert self.nation["name"] == "Test Nation"
+
+    def test_city_links_correct_nation(self):
+        assert self.city["nation"] == self.nation_id
