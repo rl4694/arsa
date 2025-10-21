@@ -2,6 +2,16 @@ import pytest
 import server.cities as ct
 
 
+@pytest.fixture(autouse=True)
+def _reset_store():
+    # Reinitialize the module-level dict so tests don't leak state
+    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
+        ct.cities.clear()
+    yield
+    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
+        ct.cities.clear()
+
+
 class TestIsValidId:
     def test_valid(self):
         assert ct.is_valid_id('1') == True
