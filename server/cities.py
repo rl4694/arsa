@@ -1,3 +1,6 @@
+from flask import request
+from flask_restx import Resource, Namespace, fields
+
 MIN_ID_LEN = 1
 NAME = 'name'
 STATE = 'state'
@@ -52,11 +55,12 @@ def read() -> dict:
 def update(city_id: str, data: dict):
     if city_id not in cities:
         raise KeyError("City not found")
-    cities[city_id] = {
+    cities[city_id] = 
+    {
         NAME: data.get(NAME),
         STATE: data.get(STATE),
         NATION: data.get(NATION)
-}
+    }
 
 
 def delete(city_id: str):
@@ -64,9 +68,6 @@ def delete(city_id: str):
         raise KeyError("City not found")
     del cities[city_id]
 
-
-from flask import request
-from flask_restx import Resource, Namespace, fields
 
 api = Namespace('cities', description='Cities CRUD operations')
 
