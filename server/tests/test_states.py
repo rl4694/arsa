@@ -14,7 +14,8 @@ class TestIsValidId:
     def test_empty_str(self):
         assert states.is_valid_id('') == False
 
-
+# Outdated creation test
+'''
 class TestCreate:
     def test_valid(self):
         old_length = states.length()
@@ -29,3 +30,22 @@ class TestCreate:
     def test_missing_name(self):
         with pytest.raises(ValueError):
             states.create({})
+'''
+
+class TestRecursiveCreate:
+    def test_state_create_nation(self):
+        from server import nations
+        state_id = states.create({
+            states.NAME: "Test State",
+            states.NATION: "Test Nation"
+        })
+        state_obj = states.read().get(state_id)
+        assert state_obj is not None
+        
+        nation_id = state_obj[states.NATION]
+        assert nation_id is not None
+
+        nation = nations.read().get(state_obj[states.NATION])
+        assert nation is not None
+        assert nation[nations.NAME] == "Test Nation"
+

@@ -1,0 +1,72 @@
+{
+  "1": {
+    "name": "New York",
+    "state": "NY",
+    "nation": "USA"
+  },
+  "2": {
+    "name": "Seattle",
+    "state": "WA",
+    "nation": "USA"
+  },
+  "3": {
+    "name": "Toronto",
+    "state": "ON",
+    "nation": "CAN"
+  },
+  "4": {
+    "name": "Kyoto",
+    "state": "Kyoto Prefecture",
+    "nation": "Japan"
+  },
+  "5": {
+    "name": "New York City",
+    "state": "1",
+    "nation": "1"
+  },
+  "6": {
+    "name": "Los Angeles",
+    "state": "2",
+    "nation": "1"
+  },
+  "7": {
+    "name": "Toronto",
+    "state": "3",
+    "nation": "2"
+  },
+  "8": {
+    "name": "Tokyo",
+    "state": "4",
+    "nation": "3"
+  },
+  "9": {
+    "name": "London",
+    "state": "5",
+    "nation": "4"
+  },
+  "10": {
+    "name": "Sydney",
+    "state": "6",
+    "nation": "5"
+  },
+  "11": {
+    "name": "Paris",
+    "state": "7",
+    "nation": "6"
+  },
+  "12": {
+    "name": "S\u00e3o Paulo",
+    "state": "8",
+    "nation": "7"
+  },
+  "13": {
+    "name": "Berlin",
+    "state": "9",
+    "nation": "8"
+  },
+  "14": {
+    "name": "Mumbai",
+    "state": "10",
+    "nation": "9"
+  }
+}
