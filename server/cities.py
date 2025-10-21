@@ -53,8 +53,8 @@ def update(city_id: str, data: dict):
     if city_id not in cities:
         raise KeyError("City not found")
     cities[city_id] = {
-        NAME: data.get(NAME)
-        STATE: data.get(STATE)
+        NAME: data.get(NAME),
+        STATE: data.get(STATE),
         NATION: data.get(NATION)
 }
 
