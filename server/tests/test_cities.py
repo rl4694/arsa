@@ -38,7 +38,10 @@ class TestRead:
         
 class TestRecursiveCreate:
     def test_city_create_state(self):
+        ct.read().clear()
         from server import states, nations
+        states.read().clear()
+        nations.read().clear()
         city_id = ct.create({
             ct.NAME: "Test City",
             ct.STATE: "Test State",
