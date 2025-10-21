@@ -75,7 +75,7 @@ state_model = api.model('State', {
 class StateList(Resource):
     @api.doc('list_states')
     def get(self):
-        return {'states': read()]
+        return {'states': read()}
 
     @api.expect(state_model)
     @api.doc('create_state')
