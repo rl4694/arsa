@@ -29,3 +29,19 @@ class TestCreate:
     def test_missing_name(self):
         with pytest.raises(ValueError):
             states.create({})
+            
+class TestRecursiveCreate:
+    def test_state_create_nation(self):
+        from server import nations
+        state_id = states.create({
+            states.NAME: "Test State",
+            states.NATION: "Test Nation"
+        })
+        state_obj = states.read().get(state_id)
+        assert state_obj is not None
+        assert state_obj[states.NATION] is not None
+
+        nation = nations.read().get(state_obj[states.NATION])
+        assert nation is not None
+        assert nation[nations.NAME] == "Test Nation"
+

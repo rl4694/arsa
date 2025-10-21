@@ -35,3 +35,25 @@ class TestRead:
         cities = ct.read()
         assert isinstance(cities, dict)
         assert len(cities) > 0
+        
+class TestRecursiveCreate:
+    def test_city_create_state(self):
+        from server import states, nations
+        city_id = ct.create({
+            ct.NAME: "Test City",
+            ct.STATE: "Test State",
+            ct.NATION: "Test Nation"
+        })
+        city = ct.read().get(city_id)
+        assert city is not None
+        assert city[ct.STATE] is not None
+        assert city[ct.NATION] is not None
+
+        state = states.read().get(city[ct.STATE])
+        assert state is not None
+        assert state[states.NAME] == "Test State"
+        assert state[states.NATION] == city[ct.NATION]
+
+        nation = nations.read().get(city[ct.NATION])
+        assert nation is not None
+        assert nation[nations.NAME] == "Test Nation"
