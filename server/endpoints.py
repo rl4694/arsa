@@ -8,6 +8,7 @@ from flask_restx import Resource, Api  # fields, Namespace
 from flask_cors import CORS
 
 from server.cities import api as cities_ns
+from server.states import api as states_ns
 
 # import werkzeug.exceptions as wz
 
@@ -16,6 +17,7 @@ CORS(app)
 api = Api(app)
 
 api.add_namespace(cities_ns, path='/cities')
+api.add_namespace(states_ns, path='/states')
 
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
