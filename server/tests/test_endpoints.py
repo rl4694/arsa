@@ -12,8 +12,33 @@ from unittest.mock import patch
 import pytest
 
 import server.endpoints as ep
+import server.cities as ct
+import server.states as st
+import server.nations as nt
 
 TEST_CLIENT = ep.app.test_client()
+
+
+@pytest.fixture(autouse=True)
+def _reset_stores():
+    """Reset all data stores before and after each test to prevent state leakage."""
+    # Clear all stores before test
+    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
+        ct.cities.clear()
+    if hasattr(st, "states") and isinstance(st.states, dict):
+        st.states.clear()
+    if hasattr(nt, "nations") and isinstance(nt.nations, dict):
+        nt.nations.clear()
+    
+    yield
+    
+    # Clear all stores after test
+    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
+        ct.cities.clear()
+    if hasattr(st, "states") and isinstance(st.states, dict):
+        st.states.clear()
+    if hasattr(nt, "nations") and isinstance(nt.nations, dict):
+        nt.nations.clear()
 
 
 def test_hello():
