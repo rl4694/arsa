@@ -1,17 +1,1 @@
-{
-  "1": {
-    "name": "New York",
-    "state": "NY",
-    "nation": "USA"
-  },
-  "2": {
-    "name": "Seattle",
-    "state": "WA",
-    "nation": "USA"
-  },
-  "3": {
-    "name": "Toronto",
-    "state": "ON",
-    "nation": "CAN"
-  }
-}
+{}
