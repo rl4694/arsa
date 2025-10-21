@@ -32,7 +32,14 @@ class TestCreate:
 
 class TestRead:
     def test_basic(self):
-        ct.create({ct.NAME: 'New York'})
+        from server import states, nations
+        nation_id = nations.create({nations.NAME: 'USA'})
+        # We might have to standardize whether to standardize abbreviations or not
+        # This will depend on our coordinate to city API
+        # Manual entries might be different
+        # So we might have to have a system to check untrusted user input -Ryan
+        state_id = states.create({states.NAME: 'NY', states.NATION: nation_id})
+        ct.create({ct.NAME: 'New York', ct.STATE: state_id})
         cities = ct.read()
         assert isinstance(cities, dict)
         assert len(cities) > 0
