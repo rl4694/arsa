@@ -39,7 +39,9 @@ class TestRecursiveCreate:
         })
         state_obj = states.read().get(state_id)
         assert state_obj is not None
-        assert state_obj[states.NATION] is not None
+        
+        nation_id = state_obj[states.NATION]
+        assert nation_id is not None
 
         nation = nations.read().get(state_obj[states.NATION])
         assert nation is not None

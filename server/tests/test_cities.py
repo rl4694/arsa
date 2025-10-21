@@ -47,13 +47,15 @@ class TestRecursiveCreate:
         city = ct.read().get(city_id)
         assert city is not None
         assert city[ct.STATE] is not None
-        assert city[ct.NATION] is not None
 
         state = states.read().get(city[ct.STATE])
         assert state is not None
         assert state[states.NAME] == "Test State"
-        assert state[states.NATION] == city[ct.NATION]
+        nation_id = state[states.NATION]
+        assert nation_id is not None
 
         nation = nations.read().get(city[ct.NATION])
         assert nation is not None
         assert nation[nations.NAME] == "Test Nation"
+        
+        assert city[ct.NATION] == nation_id

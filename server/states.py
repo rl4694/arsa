@@ -1,11 +1,20 @@
 # server/states.py
+import os
+import json
+from server import nations
 
 MIN_ID_LEN = 1
 NAME = 'name'
 NATION = 'nation'
 
-# In-memory storage for states
-states = {}
+STATES_FILE = 'states.json'
+
+# Load states from predefined file if exists, else load the local
+if os.path.exists(STATES_FILE):
+    with open(STATES_FILE, 'r') as f:
+        states = json.load(f)
+else:
+    states = {}
 
 
 def is_valid_id(_id: str) -> bool:
@@ -20,6 +29,14 @@ def is_valid_id(_id: str) -> bool:
 def length() -> int:
     """Return the number of states stored."""
     return len(states)
+    
+    
+# Save states to predefined file
+def save():
+    """Save current states to file."""
+    os.makedirs(os.path.dirname(STATES_FILE) or '.', exist_ok=True)
+    with open(STATES_FILE, 'w') as f:
+        json.dump(states, f, indent=2)
 
 
 def create(fields: dict) -> str:
@@ -34,13 +51,26 @@ def create(fields: dict) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
+    
+    # Check if higher level nation exists, if not create
+    state_name = fields[NAME]
+    nation_name = fields.get(NATION)
+    
+    nation_id = None
+    for _id, nation in nations.read().items():
+        if nation.get(NAME, '').lower() == (nation_name or '').lower():
+            nation_id = _id
+            break
+    if not nation_id and nation_name:
+        nation_id = nations.create({NAME: nation_name})
+    
     _id = str(len(states) + 1)
     states[_id] = {
-        NAME: fields[NAME],
-        NATION: fields.get(NATION)
+        NAME: state_name,
+        NATION: nation_id
     }
+    save()
     return _id
-
+    
 def read() -> dict:
-    """Return all states stored."""
     return states
