@@ -1,5 +1,7 @@
+# server/cities.py
 import os
 import json
+from server import states
 
 MIN_ID_LEN = 1
 NAME = 'name'
@@ -49,16 +51,35 @@ def create(fields: dict) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-
+    
+    # Check if higher level state and nations exists
+    # If not recursively create them
+    city_name = fields[NAME]
+    state_name = fields.get(STATE)
+    nation_name = fields.get(NATION)
+    
+    # Check for state and create if non existent
+    # Maybe we should standardize all lowercase -ryan
+    state_id = None
+    for _id, state in states.read().items():
+        if state.get(NAME, '').lower() == (state_name or '').lower():
+            state_id = _id
+            break
+    if not state_id and state_name:
+        state_id = states.create({NAME: state_name, NATION: nation_name})
+    
+    # Check for nation using state
+    # nation creation is handled by state
+    nation_id = None
+    state_obj = states.read().get(state_id)
+    nation_id = state_obj.get(NATION)
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
 
-    # Currently state and nation are optional for testing,
-    # will implement proper ID in fields later with creation logic
     cities[_id] = {
-        NAME: fields[NAME],
-        STATE: fields.get(STATE),
-        NATION: fields.get(NATION)
+        NAME: city_name,
+        STATE: state_id,
+        NATION: nation_id
     }
     save()
     return _id
