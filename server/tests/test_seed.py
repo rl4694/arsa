@@ -87,16 +87,20 @@ class TestSeedNations:
 class TestSeedEarthquakes:
     # open manages context, so a MagicMock is necessary to simulate it
     @patch('server.seed.os.remove')
-    @patch('server.seed.KaggleApi')
+    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
     def test_valid(self, mock_open, mock_kaggle_api, mock_remove):
         data = 'location,country\n"my_city,my_state",my_nation'
         mock_open.return_value.__enter__.return_value = StringIO(data)
         sd.seed_earthquakes()
+        
+        old_count = ct.length()
+        sd.seed_cities(sd.RESULTS_PER_PAGE)
+        assert ct.length() > old_count
         # TODO: check if earthquakes are created
 
     @patch('server.seed.os.remove')
-    @patch('server.seed.KaggleApi')
+    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
     def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove):
         mock_open.side_effect = FileNotFoundError("file not found")

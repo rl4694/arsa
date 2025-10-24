@@ -13,10 +13,6 @@ from server import nations as nt
 # Initialize variables relevant to Kaggle
 os.environ['KAGGLE_USERNAME'] = "ramon10"
 os.environ['KAGGLE_KEY'] = "1f33e052779b4a71bfeab05cab4dc29a"
-# Kaggle must be imported after setting environment variables
-from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: E402
-kaggle_api = KaggleApi()
-kaggle_api.authenticate()
 EARTHQUAKES_DATASET = 'warcoder/earthquake-dataset'
 EARTHQUAKES_FILE = 'earthquake_data.csv'
 
@@ -29,6 +25,18 @@ CITIES_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities'
 NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
 RESULTS_PER_PAGE = 10
 COOLDOWN_SEC = 1
+
+
+def get_kaggle_api():
+    """
+    Return an authenticated Kaggle API which can retrieve datasets
+    """
+    # Kaggle automatically authenticates during import, so it breaks tests
+    # if left in the module scope
+    from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: E402
+    api = KaggleApi()
+    api.authenticate()
+    return api
 
 
 def seed_cities(num_cities: int):
@@ -113,13 +121,16 @@ def seed_nations():
 
 
 def seed_earthquakes():
-    kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
+    """
+    Add initial earthquake data from Kaggle to our database
+    """
     try:
+        kaggle_api = get_kaggle_api()
+        kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
         with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
             # TODO: adjust the number of rows processed
             for row in rows[0:100]:
-                print(row)
                 # TODO: get actual nations from MongoDB
                 nations = []
 
@@ -139,12 +150,14 @@ def seed_earthquakes():
                 if row['country'] in nations:
                     nation = row['country']
 
-                # TODO: replace print with natural disaster creation
-                print({
-                    'city': city,
-                    'state': state,
-                    'nation': nation,
+                # Create location in database
+                ct.create({
+                    ct.NAME: city,
+                    ct.STATE: state,
+                    ct.NATION: nation,
                 })
+                # TODO: create natural disasters
+
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
     os.remove(EARTHQUAKES_FILE)
