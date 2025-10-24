@@ -6,6 +6,8 @@ import os
 import requests
 import time
 import csv
+import zipfile
+import re
 from server import cities as ct
 from server import nations as nt
 
@@ -15,6 +17,9 @@ os.environ['KAGGLE_USERNAME'] = "ramon10"
 os.environ['KAGGLE_KEY'] = "1f33e052779b4a71bfeab05cab4dc29a"
 EARTHQUAKES_DATASET = 'warcoder/earthquake-dataset'
 EARTHQUAKES_FILE = 'earthquake_data.csv'
+LANDSLIDE_DATASET = 'kazushiadachi/global-landslide-data'
+LANDSLIDE_ZIP = 'global-landslide-data.zip'
+LANDSLIDE_FILE = 'Global_Landslide_Catalog_Export.csv'
 
 # Initialize variables relevant to Rapid API
 RAPID_API_HEADERS = {
@@ -85,11 +90,10 @@ def seed_earthquakes():
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
         with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
+            # TODO: get actual nations from MongoDB
+            nations = []
             # TODO: adjust the number of rows processed
             for row in rows[0:100]:
-                # TODO: get actual nations from MongoDB
-                nations = []
-
                 # If location is not in the expected format, skip it
                 location = row['location'].split(', ')
                 if len(location) != 2:
@@ -113,12 +117,68 @@ def seed_earthquakes():
                     ct.NATION: nation,
                 })
                 # TODO: create natural disasters
+                print(row['latitude'], row['longitude'])
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
     os.remove(EARTHQUAKES_FILE)
 
 
+def seed_landslides():
+    try:
+        kaggle_api = get_kaggle_api()
+        # Unzip CSV file
+        kaggle_api.dataset_download_files(LANDSLIDE_DATASET)
+        with zipfile.ZipFile(LANDSLIDE_ZIP, 'r') as z:
+            z.extractall('.')
+
+        ignored_words = (
+            r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
+        )
+        with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
+            rows = list(csv.DictReader(f))
+            # TODO: get actual nations from MongoDB
+            nations = []
+            # TODO: adjust the number of rows processed
+            for row in rows[0:1000]:
+                # If location is not in the expected format or contains
+                # ignored words, skip it
+                location = row['location_description'].split(', ')
+                if (len(location) != 2
+                        or re.search(
+                            ignored_words,
+                            row['location_description'],
+                            flags=re.IGNORECASE
+                        )
+                        or re.search(r'\d', row['location_description'])):
+                    continue
+
+                # Extract location data from row
+                city = location[0]
+                state = ''
+                nation = ''
+                if location[1] in nations:
+                    nation = location[1]
+                else:
+                    state = location[1]
+                if row['country_name'] in nations:
+                    nation = row['country_name']
+
+                # Create location in database
+                ct.create({
+                    ct.NAME: city,
+                    ct.STATE: state,
+                    ct.NATION: nation,
+                })
+                # TODO: create natural disasters
+                print(row['latitude'], row['longitude'])
+    except FileNotFoundError:
+        raise ConnectionError('Could not retrieve tsunami CSV file.')
+    os.remove(LANDSLIDE_ZIP)
+    os.remove(LANDSLIDE_FILE)
+
+
 if __name__ == '__main__':
-    # seed_nations()
+    seed_nations()
     seed_earthquakes()
+    seed_landslides()
