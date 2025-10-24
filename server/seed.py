@@ -39,50 +39,6 @@ def get_kaggle_api():
     return api
 
 
-def seed_cities(num_cities: int):
-    """
-    Add initial city data from GeoDB cities API to our database
-    """
-    # Validate inputs
-    if not isinstance(num_cities, int):
-        raise ValueError(f'num_cities must be an integer: {type(num_cities)=}')
-    if num_cities < 0:
-        raise ValueError(f'num_cities cannot be negative: {num_cities=}')
-
-    offset = 0
-    for i in range(num_cities // RESULTS_PER_PAGE):
-        # Fetch city data
-        params = {
-            'sort': '-population',
-            'limit': RESULTS_PER_PAGE,
-            'offset': offset,
-        }
-        res = requests.get(CITIES_URL, headers=RAPID_API_HEADERS,
-                           params=params)
-        if res.status_code != 200:
-            raise ConnectionError(
-                f'Could not retrieve GeoDB cities: {res.status_code=}'
-            )
-        output = res.json()
-        if 'data' not in output:
-            raise ValueError(f'No cities found in GeoDB response: {output=}')
-
-        # Add city data to database
-        for city in output['data']:
-            ct.create({
-                ct.NAME: city.get('name', ''),
-                ct.STATE: city.get('region', ''),
-                ct.NATION: city.get('country', ''),
-            })
-
-        # Print status
-        print(f"Seeding cities: {ct.length() * 100 // num_cities}%")
-
-        # Wait for rate-limit to wear off
-        time.sleep(COOLDOWN_SEC)
-        offset += RESULTS_PER_PAGE
-
-
 def seed_nations():
     """
     Add initial nation data from GeoDB nations API to our database
@@ -164,6 +120,5 @@ def seed_earthquakes():
 
 
 if __name__ == '__main__':
-    # seed_cities(100)
     # seed_nations()
     seed_earthquakes()
