@@ -1,6 +1,7 @@
 import pytest
 import time
-from unittest.mock import patch
+from io import StringIO
+from unittest.mock import patch, MagicMock
 from server import cities as ct
 from server import nations as nt
 from server import seed as sd
@@ -81,3 +82,23 @@ class TestSeedNations:
 
         with pytest.raises(ValueError):
             sd.seed_nations()
+
+
+class TestSeedEarthquakes:
+    # open manages context, so a MagicMock is necessary to simulate it
+    @patch('server.seed.os.remove')
+    @patch('server.seed.KaggleApi')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_valid(self, mock_open, mock_kaggle_api, mock_remove):
+        data = 'location,country\n"my_city,my_state",my_nation'
+        mock_open.return_value.__enter__.return_value = StringIO(data)
+        sd.seed_earthquakes()
+        # TODO: check if earthquakes are created
+
+    @patch('server.seed.os.remove')
+    @patch('server.seed.KaggleApi')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove):
+        mock_open.side_effect = FileNotFoundError("file not found")
+        with pytest.raises(ConnectionError):
+            sd.seed_earthquakes()

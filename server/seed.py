@@ -1,13 +1,26 @@
 """
-Run `python3 seed.py` to seed our database with starting data from various
-APIs. Be sure to empty the database before running this file.
+Run `python3 server/seed.py` to seed our database with starting data from
+various APIs. Be sure to empty the database before running this file.
 """
-
+import os
 import requests
 import time
+import csv
 from server import cities as ct
 from server import nations as nt
 
+
+# Initialize variables relevant to Kaggle
+os.environ['KAGGLE_USERNAME'] = "ramon10"
+os.environ['KAGGLE_KEY'] = "1f33e052779b4a71bfeab05cab4dc29a"
+# Kaggle must be imported after setting environment variables
+from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: E402
+kaggle_api = KaggleApi()
+kaggle_api.authenticate()
+EARTHQUAKES_DATASET = 'warcoder/earthquake-dataset'
+EARTHQUAKES_FILE = 'earthquake_data.csv'
+
+# Initialize variables relevant to Rapid API
 RAPID_API_HEADERS = {
     'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
     'x-rapidapi-key': 'ba62340b10msh533fb3cfda50da1p1eff9djsn8ca40e19327b',
@@ -99,6 +112,45 @@ def seed_nations():
         offset += RESULTS_PER_PAGE
 
 
+def seed_earthquakes():
+    kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
+    try:
+        with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
+            rows = list(csv.DictReader(f))
+            # TODO: adjust the number of rows processed
+            for row in rows[0:100]:
+                print(row)
+                # TODO: get actual nations from MongoDB
+                nations = []
+
+                # If location is not in the expected format, skip it
+                location = row['location'].split(', ')
+                if len(location) != 2:
+                    continue
+
+                # Extract location data from row
+                city = location[0]
+                state = ''
+                nation = ''
+                if location[1] in nations:
+                    nation = location[1]
+                else:
+                    state = location[1]
+                if row['country'] in nations:
+                    nation = row['country']
+
+                # TODO: replace print with natural disaster creation
+                print({
+                    'city': city,
+                    'state': state,
+                    'nation': nation,
+                })
+    except FileNotFoundError:
+        raise ConnectionError('Could not retrieve earthquake CSV file.')
+    os.remove(EARTHQUAKES_FILE)
+
+
 if __name__ == '__main__':
-    seed_cities(100)
-    seed_nations()
+    # seed_cities(100)
+    # seed_nations()
+    seed_earthquakes()
