@@ -10,26 +10,24 @@ import zipfile
 import re
 from server import cities as ct
 from server import nations as nt
+from dotenv import load_dotenv
 
 
-# Initialize variables relevant to Kaggle
-os.environ['KAGGLE_USERNAME'] = "ramon10"
-os.environ['KAGGLE_KEY'] = "1f33e052779b4a71bfeab05cab4dc29a"
+# Load environment variables
+load_dotenv()
+
+
+# Initialize constants
 EARTHQUAKES_DATASET = 'warcoder/earthquake-dataset'
 EARTHQUAKES_FILE = 'earthquake_data.csv'
+
 LANDSLIDE_DATASET = 'kazushiadachi/global-landslide-data'
 LANDSLIDE_ZIP = 'global-landslide-data.zip'
 LANDSLIDE_FILE = 'Global_Landslide_Catalog_Export.csv'
 
-# Initialize variables relevant to Rapid API
-RAPID_API_HEADERS = {
-    'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
-    'x-rapidapi-key': 'ba62340b10msh533fb3cfda50da1p1eff9djsn8ca40e19327b',
-}
-CITIES_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities'
 NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
 RESULTS_PER_PAGE = 10
-COOLDOWN_SEC = 1
+COOLDOWN_SEC = 1.5
 
 
 def get_kaggle_api():
@@ -56,7 +54,11 @@ def seed_nations():
             'limit': RESULTS_PER_PAGE,
             'offset': offset,
         }
-        res = requests.get(NATIONS_URL, headers=RAPID_API_HEADERS,
+        headers = {
+            'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
+            'x-rapidapi-key': os.getenv('RAPID_API_KEY'),
+        }
+        res = requests.get(NATIONS_URL, headers=headers,
                            params=params)
         if res.status_code != 200:
             raise ConnectionError(
@@ -175,6 +177,6 @@ def seed_landslides():
 
 
 if __name__ == '__main__':
-    # seed_nations()
+    seed_nations()
     seed_earthquakes()
     seed_landslides()
