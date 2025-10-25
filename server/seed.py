@@ -90,10 +90,8 @@ def seed_earthquakes():
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
         with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            # TODO: get actual nations from MongoDB
-            nations = []
-            # TODO: adjust the number of rows processed
-            for row in rows[0:100]:
+            nations = nt.read()
+            for row in rows:
                 # If location is not in the expected format, skip it
                 location = row['location'].split(', ')
                 if len(location) != 2:
@@ -137,10 +135,8 @@ def seed_landslides():
         )
         with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            # TODO: get actual nations from MongoDB
-            nations = []
-            # TODO: adjust the number of rows processed
-            for row in rows[0:1000]:
+            nations = nt.read()
+            for row in rows:
                 # If location is not in the expected format or contains
                 # ignored words, skip it
                 location = row['location_description'].split(', ')
@@ -179,6 +175,6 @@ def seed_landslides():
 
 
 if __name__ == '__main__':
-    seed_nations()
+    # seed_nations()
     seed_earthquakes()
     seed_landslides()
