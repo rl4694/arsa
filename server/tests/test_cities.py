@@ -23,6 +23,14 @@ class TestIsValidId:
         assert ct.is_valid_id('') == False
 
 
+class TestLength():
+    @pytest.mark.skip(reason="Length test has been combined into TestCreate")
+    def test_basic(self):
+        old_length = ct.length()
+        _id = ct.create({ct.NAME: 'New York'})
+        assert ct.length() > old_length
+
+
 class TestCreate:
     def test_valid(self):
         old_length = ct.length()
