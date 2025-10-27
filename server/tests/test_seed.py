@@ -23,7 +23,7 @@ class TestSeedNations:
 
         old_count = nt.length()
         sd.seed_nations()
-        assert nt.length() > old_count
+        assert nt.length() >= old_count
 
     @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)

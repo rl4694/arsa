@@ -9,8 +9,10 @@ import csv
 import zipfile
 import re
 from server import cities as ct
+from server import states as st
 from server import nations as nt
 from dotenv import load_dotenv
+from server.geocoding import reverse_geocode
 
 
 # Load environment variables
@@ -92,32 +94,47 @@ def seed_earthquakes():
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
         with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            nations = nt.read()
             for row in rows:
-                # If location is not in the expected format, skip it
-                location = row['location'].split(', ')
-                if len(location) != 2:
-                    continue
+                # Use coordinate data to create nation, state, cities
+                lat = float(row['latitude'])
+                lon = float(row['longitude'])
+                # We'll probably turn this into a separate function soon -RJ
+                try:
+                    # Use reverse geocode module to resolve latitude and longitude
+                    loc = reverse_geocode(lat, lon)
+                    city_name = loc.get('city')
+                    state_name = loc.get('state')
+                    nation_name = loc.get('country')
+                    
+                    if not city_name:
+                        print(f"No city found for ({lat}, {lon})")
+                        continue
+                        
+                    # Create Nation
+                    nation_id = nt.create({nt.NAME: nation_name}) if nation_name else None
+                    print(f"Created nation: {{loc.get('country')}")
+                    
+                    # Create State
+                    state_id = None
+                    if state_name:
+                        state_id = st.create({
+                            st.NAME: state_name,
+                            st.NATION: nation_id
+                        })
+                    print(f"Created state: {{loc.get('state')}, {loc.get('country')}")
+                    
+                    # Create City
+                    city_id = ct.create({
+                        ct.NAME: city_name,
+                        ct.STATE: state_id,
+                        ct.NATION: nation_id,
+                    })
+                    print(f"Created city: {loc['city']} ({loc.get('state')}, {loc.get('country')})")
 
-                # Extract location data from row
-                city = location[0]
-                state = ''
-                nation = ''
-                if location[1] in nations:
-                    nation = location[1]
-                else:
-                    state = location[1]
-                if row['country'] in nations:
-                    nation = row['country']
-
-                # Create location in database
-                ct.create({
-                    ct.NAME: city,
-                    ct.STATE: state,
-                    ct.NATION: nation,
-                })
+                except Exception as e:
+                    print(f"Error geocoding for ({lat}, {lon})")
                 # TODO: create natural disasters
-                print(row['latitude'], row['longitude'])
+                # print(row['latitude'], row['longitude'])
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
