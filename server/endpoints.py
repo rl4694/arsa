@@ -10,6 +10,7 @@ from flask_cors import CORS
 from server.cities import api as cities_ns
 from server.states import api as states_ns
 from server.nations import api as nations_ns
+from server.geocoding import api as geocoding_ns
 
 # import werkzeug.exceptions as wz
 
@@ -20,6 +21,7 @@ api = Api(app)
 api.add_namespace(cities_ns, path='/cities')
 api.add_namespace(states_ns, path='/states')
 api.add_namespace(nations_ns, path='/nations')
+api.add_namespace(geocoding_ns, path='/geocode')
 
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
