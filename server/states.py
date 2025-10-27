@@ -6,8 +6,17 @@ MIN_ID_LEN = 1
 NAME = 'name'
 NATION = 'nation'
 
-# In-memory storage for states
-states = {}
+import os
+import json
+
+STATES_FILE = 'states.json'
+
+# Load states from predefined file if exists, else load empty
+if os.path.exists(STATES_FILE):
+    with open(STATES_FILE, 'r') as f:
+        states = json.load(f)
+else:
+    states = {}
 
 
 def is_valid_id(_id: str) -> bool:
@@ -22,6 +31,13 @@ def is_valid_id(_id: str) -> bool:
 def length() -> int:
     """Return the number of states stored."""
     return len(states)
+    
+    
+def save():
+    """Save current states to file."""
+    os.makedirs(os.path.dirname(STATES_FILE) or '.', exist_ok=True)
+    with open(STATES_FILE, 'w') as f:
+        json.dump(states, f, indent=2)
 
 
 def create(fields: dict) -> str:
@@ -40,6 +56,7 @@ def create(fields: dict) -> str:
         NAME: fields.get(NAME),
         NATION: fields.get(NATION)
     }
+    save()
     return _id
 
 
@@ -54,12 +71,14 @@ def update(state_id: str, data: dict):
         NAME: data.get(NAME),
         NATION: data.get(NATION)
     }
+    save()
 
 
 def delete(state_id: str):
     if state_id not in states:
         raise KeyError("State not found")
     del states[state_id]
+    save()
 
 
 api = Namespace('states', description='States CRUD operation')
