@@ -43,11 +43,16 @@ def create(fields: dict) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-
+    # Duplicate check
+    nation_name = fields[NAME].strip().lower()
+    for _id, nation in nations.items():
+        if nation.get(NAME, '').strip().lower() == nation_name:
+            return _id
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(nations) + 1)
     nations[_id] = {
-        NAME: fields.get(NAME)
+        # Standardize Lower case
+        NAME: nation_name
     }
     save()
     return _id

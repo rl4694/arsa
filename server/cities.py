@@ -48,13 +48,15 @@ def create(fields: dict) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-
+    # Check for duplicates
+    city_name = fields[NAME].strip().lower()
+    for _id, city in cities.items():
+        if city.get(NAME, '').strip().lower() == city_name:
+            return _id
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
-    # Currently state and nation are optional for testing,
-    # Will implement proper ID in fields later with creation logic
     cities[_id] = {
-        NAME: fields[NAME],
+        NAME: city_name,
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
     }

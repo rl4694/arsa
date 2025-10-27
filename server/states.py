@@ -50,10 +50,14 @@ def create(fields: dict) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-
+    # Check for duplicates
+    state_name = fields[NAME].strip().lower()
+    for _id, state in states.items():
+        if state.get(NAME, '').strip().lower() == state_name:
+            return _id
     _id = str(len(states) + 1)
     states[_id] = {
-        NAME: fields.get(NAME),
+        NAME: state_name,
         NATION: fields.get(NATION)
     }
     save()
