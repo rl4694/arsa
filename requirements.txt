@@ -11,6 +11,7 @@ flake8==7.3.0
 Flask==2.3.3
 flask-cors==6.0.1
 flask-restx==1.1.0
+geopy==2.4.1
 idna==3.11
 iniconfig==2.1.0
 itsdangerous==2.2.0
