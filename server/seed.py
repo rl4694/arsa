@@ -121,7 +121,7 @@ def seed_earthquakes():
                             st.NAME: state_name,
                             st.NATION: nation_id
                         })
-                    print(f"Created state: {{loc.get('state')}, {loc.get('country')}")
+                    print(f"Created state: {loc.get('state')}, {loc.get('country')}")
                     
                     # Create City
                     city_id = ct.create({
