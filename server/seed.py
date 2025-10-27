@@ -112,7 +112,7 @@ def seed_earthquakes():
                         
                     # Create Nation
                     nation_id = nt.create({nt.NAME: nation_name}) if nation_name else None
-                    print(f"Created nation: {{loc.get('country')}")
+                    print(f"Created nation: {loc.get('country')}")
                     
                     # Create State
                     state_id = None
