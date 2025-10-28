@@ -40,7 +40,7 @@ def save():
         json.dump(states, f, indent=2)
 
 
-def create(fields: dict) -> str:
+def create(fields: dict, recursive=True) -> str:
     """
     Create a new state record.
     Requires a dict with a 'name' key.
@@ -54,7 +54,10 @@ def create(fields: dict) -> str:
     state_name = fields[NAME].strip().lower()
     for _id, state in states.items():
         if state.get(NAME, '').strip().lower() == state_name:
-            return _id
+            if recursive:
+                return _id
+            else:
+                raise ValueError("Duplicate state detected and recursive not allowed.")
     _id = str(len(states) + 1)
     states[_id] = {
         NAME: state_name,
@@ -104,7 +107,8 @@ class StateList(Resource):
     @api.doc('create_state')
     def post(self):
         data = request.json
-        state_id = create(data)
+        recursive = data.get('recursive', True)
+        state_id = create(data, recursive=recursive)
         return {'id': state_id, **data}, 201
 
 
