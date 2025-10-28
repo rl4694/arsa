@@ -37,7 +37,7 @@ def save():
         json.dump(cities, f, indent=2)
         
 
-def create(fields: dict) -> str:
+def create(fields: dict, recursive=True) -> str:
     """
     Create a new city record.
     Requires a dict with a 'name' key.
@@ -52,7 +52,10 @@ def create(fields: dict) -> str:
     city_name = fields[NAME].strip().lower()
     for _id, city in cities.items():
         if city.get(NAME, '').strip().lower() == city_name:
-            return _id
+            if recursive:
+                return _id
+            else:
+                raise ValueError("Duplicate city detected and recursive not allowed.")
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
     cities[_id] = {
@@ -107,7 +110,8 @@ class CityList(Resource):
     @api.doc('create_city')
     def post(self):
         data = request.json
-        city_id = create(data)
+        recursive = data.get('recursive', True)
+        city_id = create(data, recursive=recursive)
         return {'id': city_id, **data}, 201
 
 
