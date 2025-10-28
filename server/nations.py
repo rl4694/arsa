@@ -38,7 +38,7 @@ def save():
         json.dump(nations, f, indent=2)
 
 
-def create(fields: dict) -> str:
+def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
@@ -47,7 +47,10 @@ def create(fields: dict) -> str:
     nation_name = fields[NAME].strip().lower()
     for _id, nation in nations.items():
         if nation.get(NAME, '').strip().lower() == nation_name:
-            return _id
+            if recursive:
+                return _id
+            else:
+                raise ValueError("Duplicate nation detected and recursive not allowed.")
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(nations) + 1)
     nations[_id] = {
@@ -96,7 +99,8 @@ class NationList(Resource):
     @api.doc('create_nation')
     def post(self):
         data = request.json
-        nation_id = create(data)
+        recursive = data.get('recursive', True)
+        nation_id = create(data, recursive=recursive)
         return {'id': nation_id, **data}, 201
 
 
@@ -125,3 +129,4 @@ class Nation(Resource):
             return '', 204
         except KeyError:
             api.abort(404, "Nation not found")
+
