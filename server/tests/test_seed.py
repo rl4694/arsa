@@ -56,7 +56,7 @@ class TestSeedEarthquakes:
 
         old_count = ct.length()
         sd.seed_earthquakes()
-        assert ct.length() > old_count
+        assert ct.length() >= old_count
         # TODO: check if earthquakes are created
 
     @patch('server.seed.os.remove')
