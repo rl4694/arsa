@@ -1,0 +1,599 @@
+{
+  "1": {
+    "name": "afghanistan"
+  },
+  "2": {
+    "name": "albania"
+  },
+  "3": {
+    "name": "algeria"
+  },
+  "4": {
+    "name": "andorra"
+  },
+  "5": {
+    "name": "angola"
+  },
+  "6": {
+    "name": "antigua and barbuda"
+  },
+  "7": {
+    "name": "argentina"
+  },
+  "8": {
+    "name": "armenia"
+  },
+  "9": {
+    "name": "australia"
+  },
+  "10": {
+    "name": "austria"
+  },
+  "11": {
+    "name": "azerbaijan"
+  },
+  "12": {
+    "name": "bahrain"
+  },
+  "13": {
+    "name": "bangladesh"
+  },
+  "14": {
+    "name": "barbados"
+  },
+  "15": {
+    "name": "belarus"
+  },
+  "16": {
+    "name": "belgium"
+  },
+  "17": {
+    "name": "belize"
+  },
+  "18": {
+    "name": "benin"
+  },
+  "19": {
+    "name": "bhutan"
+  },
+  "20": {
+    "name": "bolivia"
+  },
+  "21": {
+    "name": "bosnia and herzegovina"
+  },
+  "22": {
+    "name": "botswana"
+  },
+  "23": {
+    "name": "brazil"
+  },
+  "24": {
+    "name": "brunei"
+  },
+  "25": {
+    "name": "bulgaria"
+  },
+  "26": {
+    "name": "burkina faso"
+  },
+  "27": {
+    "name": "burundi"
+  },
+  "28": {
+    "name": "cambodia"
+  },
+  "29": {
+    "name": "cameroon"
+  },
+  "30": {
+    "name": "canada"
+  },
+  "31": {
+    "name": "cape verde"
+  },
+  "32": {
+    "name": "central african republic"
+  },
+  "33": {
+    "name": "chad"
+  },
+  "34": {
+    "name": "chile"
+  },
+  "35": {
+    "name": "colombia"
+  },
+  "36": {
+    "name": "comoros"
+  },
+  "37": {
+    "name": "cook islands"
+  },
+  "38": {
+    "name": "costa rica"
+  },
+  "39": {
+    "name": "croatia"
+  },
+  "40": {
+    "name": "cuba"
+  },
+  "41": {
+    "name": "cyprus"
+  },
+  "42": {
+    "name": "czech republic"
+  },
+  "43": {
+    "name": "democratic republic of the congo"
+  },
+  "44": {
+    "name": "denmark"
+  },
+  "45": {
+    "name": "djibouti"
+  },
+  "46": {
+    "name": "dominica"
+  },
+  "47": {
+    "name": "dominican republic"
+  },
+  "48": {
+    "name": "ecuador"
+  },
+  "49": {
+    "name": "egypt"
+  },
+  "50": {
+    "name": "el salvador"
+  },
+  "51": {
+    "name": "equatorial guinea"
+  },
+  "52": {
+    "name": "eritrea"
+  },
+  "53": {
+    "name": "estonia"
+  },
+  "54": {
+    "name": "eswatini"
+  },
+  "55": {
+    "name": "ethiopia"
+  },
+  "56": {
+    "name": "federated states of micronesia"
+  },
+  "57": {
+    "name": "fiji"
+  },
+  "58": {
+    "name": "finland"
+  },
+  "59": {
+    "name": "france"
+  },
+  "60": {
+    "name": "gabon"
+  },
+  "61": {
+    "name": "georgia"
+  },
+  "62": {
+    "name": "germany"
+  },
+  "63": {
+    "name": "ghana"
+  },
+  "64": {
+    "name": "greece"
+  },
+  "65": {
+    "name": "grenada"
+  },
+  "66": {
+    "name": "guatemala"
+  },
+  "67": {
+    "name": "guinea"
+  },
+  "68": {
+    "name": "guinea-bissau"
+  },
+  "69": {
+    "name": "guyana"
+  },
+  "70": {
+    "name": "haiti"
+  },
+  "71": {
+    "name": "honduras"
+  },
+  "72": {
+    "name": "hong kong"
+  },
+  "73": {
+    "name": "hungary"
+  },
+  "74": {
+    "name": "iceland"
+  },
+  "75": {
+    "name": "india"
+  },
+  "76": {
+    "name": "indonesia"
+  },
+  "77": {
+    "name": "iran"
+  },
+  "78": {
+    "name": "iraq"
+  },
+  "79": {
+    "name": "ireland"
+  },
+  "80": {
+    "name": "israel"
+  },
+  "81": {
+    "name": "italy"
+  },
+  "82": {
+    "name": "ivory coast"
+  },
+  "83": {
+    "name": "jamaica"
+  },
+  "84": {
+    "name": "japan"
+  },
+  "85": {
+    "name": "jordan"
+  },
+  "86": {
+    "name": "kazakhstan"
+  },
+  "87": {
+    "name": "kenya"
+  },
+  "88": {
+    "name": "kiribati"
+  },
+  "89": {
+    "name": "kuwait"
+  },
+  "90": {
+    "name": "kyrgyzstan"
+  },
+  "91": {
+    "name": "laos"
+  },
+  "92": {
+    "name": "latvia"
+  },
+  "93": {
+    "name": "lebanon"
+  },
+  "94": {
+    "name": "lesotho"
+  },
+  "95": {
+    "name": "liberia"
+  },
+  "96": {
+    "name": "libya"
+  },
+  "97": {
+    "name": "liechtenstein"
+  },
+  "98": {
+    "name": "lithuania"
+  },
+  "99": {
+    "name": "luxembourg"
+  },
+  "100": {
+    "name": "madagascar"
+  },
+  "101": {
+    "name": "malawi"
+  },
+  "102": {
+    "name": "malaysia"
+  },
+  "103": {
+    "name": "maldives"
+  },
+  "104": {
+    "name": "mali"
+  },
+  "105": {
+    "name": "malta"
+  },
+  "106": {
+    "name": "marshall islands"
+  },
+  "107": {
+    "name": "mauritania"
+  },
+  "108": {
+    "name": "mauritius"
+  },
+  "109": {
+    "name": "mexico"
+  },
+  "110": {
+    "name": "moldova"
+  },
+  "111": {
+    "name": "monaco"
+  },
+  "112": {
+    "name": "mongolia"
+  },
+  "113": {
+    "name": "montenegro"
+  },
+  "114": {
+    "name": "morocco"
+  },
+  "115": {
+    "name": "mozambique"
+  },
+  "116": {
+    "name": "myanmar"
+  },
+  "117": {
+    "name": "namibia"
+  },
+  "118": {
+    "name": "nauru"
+  },
+  "119": {
+    "name": "nepal"
+  },
+  "120": {
+    "name": "netherlands"
+  },
+  "121": {
+    "name": "new zealand"
+  },
+  "122": {
+    "name": "nicaragua"
+  },
+  "123": {
+    "name": "niger"
+  },
+  "124": {
+    "name": "nigeria"
+  },
+  "125": {
+    "name": "niue"
+  },
+  "126": {
+    "name": "north korea"
+  },
+  "127": {
+    "name": "north macedonia"
+  },
+  "128": {
+    "name": "norway"
+  },
+  "129": {
+    "name": "oman"
+  },
+  "130": {
+    "name": "pakistan"
+  },
+  "131": {
+    "name": "palau"
+  },
+  "132": {
+    "name": "panama"
+  },
+  "133": {
+    "name": "papua new guinea"
+  },
+  "134": {
+    "name": "paraguay"
+  },
+  "135": {
+    "name": "people's republic of china"
+  },
+  "136": {
+    "name": "peru"
+  },
+  "137": {
+    "name": "philippines"
+  },
+  "138": {
+    "name": "poland"
+  },
+  "139": {
+    "name": "portugal"
+  },
+  "140": {
+    "name": "qatar"
+  },
+  "141": {
+    "name": "republic of the congo"
+  },
+  "142": {
+    "name": "romania"
+  },
+  "143": {
+    "name": "russia"
+  },
+  "144": {
+    "name": "rwanda"
+  },
+  "145": {
+    "name": "saint kitts and nevis"
+  },
+  "146": {
+    "name": "saint lucia"
+  },
+  "147": {
+    "name": "saint vincent and the grenadines"
+  },
+  "148": {
+    "name": "samoa"
+  },
+  "149": {
+    "name": "san marino"
+  },
+  "150": {
+    "name": "saudi arabia"
+  },
+  "151": {
+    "name": "senegal"
+  },
+  "152": {
+    "name": "serbia"
+  },
+  "153": {
+    "name": "seychelles"
+  },
+  "154": {
+    "name": "sierra leone"
+  },
+  "155": {
+    "name": "singapore"
+  },
+  "156": {
+    "name": "slovakia"
+  },
+  "157": {
+    "name": "slovenia"
+  },
+  "158": {
+    "name": "solomon islands"
+  },
+  "159": {
+    "name": "somalia"
+  },
+  "160": {
+    "name": "south africa"
+  },
+  "161": {
+    "name": "south korea"
+  },
+  "162": {
+    "name": "south sudan"
+  },
+  "163": {
+    "name": "spain"
+  },
+  "164": {
+    "name": "sri lanka"
+  },
+  "165": {
+    "name": "sudan"
+  },
+  "166": {
+    "name": "suriname"
+  },
+  "167": {
+    "name": "sweden"
+  },
+  "168": {
+    "name": "switzerland"
+  },
+  "169": {
+    "name": "syria"
+  },
+  "170": {
+    "name": "s\u00e3o tom\u00e9 and pr\u00edncipe"
+  },
+  "171": {
+    "name": "taiwan"
+  },
+  "172": {
+    "name": "tajikistan"
+  },
+  "173": {
+    "name": "tanzania"
+  },
+  "174": {
+    "name": "thailand"
+  },
+  "175": {
+    "name": "the bahamas"
+  },
+  "176": {
+    "name": "the gambia"
+  },
+  "177": {
+    "name": "timor-leste"
+  },
+  "178": {
+    "name": "togo"
+  },
+  "179": {
+    "name": "tonga"
+  },
+  "180": {
+    "name": "trinidad and tobago"
+  },
+  "181": {
+    "name": "tunisia"
+  },
+  "182": {
+    "name": "turkey"
+  },
+  "183": {
+    "name": "turkmenistan"
+  },
+  "184": {
+    "name": "tuvalu"
+  },
+  "185": {
+    "name": "uganda"
+  },
+  "186": {
+    "name": "ukraine"
+  },
+  "187": {
+    "name": "united arab emirates"
+  },
+  "188": {
+    "name": "united kingdom"
+  },
+  "189": {
+    "name": "united states"
+  },
+  "190": {
+    "name": "uruguay"
+  },
+  "191": {
+    "name": "uzbekistan"
+  },
+  "192": {
+    "name": "vanuatu"
+  },
+  "193": {
+    "name": "vatican city"
+  },
+  "194": {
+    "name": "venezuela"
+  },
+  "195": {
+    "name": "vietnam"
+  },
+  "196": {
+    "name": "yemen"
+  },
+  "197": {
+    "name": "zambia"
+  },
+  "198": {
+    "name": "zimbabwe"
+  },
+  "199": {
+    "name": "china"
+  }
+}
