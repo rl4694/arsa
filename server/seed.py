@@ -44,12 +44,13 @@ def get_kaggle_api():
     return api
 
 
-def seed_nations():
+def seed_nations() -> list:
     """
     Add initial nation data from GeoDB nations API to our database
     """
     offset = 0
     num_nations = None
+    result = []
     while num_nations is None or offset <= num_nations:
         # Fetch nation data
         params = {
@@ -72,9 +73,10 @@ def seed_nations():
 
         # Add city data to database
         for country in output['data']:
-            nt.create({
+            _id = nt.create({
                 nt.NAME: country.get('name', ''),
             })
+            result.append(_id)
 
         # Print status
         num_nations = output['metadata']['totalCount']
@@ -83,6 +85,7 @@ def seed_nations():
         # Wait for rate-limit to wear off
         time.sleep(COOLDOWN_SEC)
         offset += RESULTS_PER_PAGE
+    return result
 
 
 def seed_earthquakes():

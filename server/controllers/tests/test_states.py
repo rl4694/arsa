@@ -18,9 +18,10 @@ class TestIsValidId:
 class TestCreate:
     def test_valid(self):
         old_length = states.length()
-        _id = states.create({states.NAME: 'NY'})
+        _id = states.create({states.NAME: 'test1'})
         assert states.is_valid_id(_id)
         assert states.length() > old_length
+        states.delete(_id)
 
     def test_non_dict(self):
         with pytest.raises(ValueError):

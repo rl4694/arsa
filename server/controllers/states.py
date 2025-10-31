@@ -9,7 +9,7 @@ NATION = 'nation'
 import os
 import json
 
-STATES_FILE = 'states.json'
+STATES_FILE = 'json/states.json'
 
 # Load states from predefined file if exists, else load empty
 if os.path.exists(STATES_FILE):

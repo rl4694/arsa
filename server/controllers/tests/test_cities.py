@@ -27,16 +27,18 @@ class TestLength():
     @pytest.mark.skip(reason="Length test has been combined into TestCreate")
     def test_basic(self):
         old_length = ct.length()
-        _id = ct.create({ct.NAME: 'New York'})
+        _id = ct.create({ct.NAME: 'test1'})
         assert ct.length() > old_length
+        ct.delete(_id)
 
 
 class TestCreate:
     def test_valid(self):
         old_length = ct.length()
-        _id = ct.create({ct.NAME: 'New York'})
+        _id = ct.create({ct.NAME: 'test1'})
         assert ct.is_valid_id(_id)
         assert ct.length() > old_length
+        ct.delete(_id)
 
     def test_non_dict(self):
         with pytest.raises(ValueError):
@@ -49,7 +51,8 @@ class TestCreate:
 
 class TestRead:
     def test_basic(self):
-        ct.create({ct.NAME: 'New York'})
+        _id = ct.create({ct.NAME: 'test1'})
         cities = ct.read()
         assert isinstance(cities, dict)
         assert len(cities) > 0
+        ct.delete(_id)

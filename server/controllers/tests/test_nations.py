@@ -26,9 +26,10 @@ class TestIsValidId:
 class TestCreate:
     def test_valid(self):
         old_length = nt.length()
-        _id = nt.create({nt.NAME: "US"})
+        _id = nt.create({nt.NAME: "test1"})
         assert nt.is_valid_id(_id)
         assert nt.length() > old_length
+        nt.delete(_id)
 
     def test_non_dict(self):
         with pytest.raises(ValueError):
@@ -41,7 +42,8 @@ class TestCreate:
 
 class TestRead:
     def test_basic(self):
-        nt.create({nt.NAME: "US"})
+        _id = nt.create({nt.NAME: "test1"})
         nations = nt.read()
         assert isinstance(nations, dict)
         assert len(nations) > 0
+        nt.delete(_id)

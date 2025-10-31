@@ -22,8 +22,11 @@ class TestSeedNations:
         }
 
         old_count = nt.length()
-        sd.seed_nations()
+        ids = sd.seed_nations()
         assert nt.length() >= old_count
+        for _id in ids:
+            nt.delete(_id)
+
 
     @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
@@ -83,7 +86,7 @@ class TestSeedLandslides:
         old_count = ct.length()
         sd.seed_landslides()
         assert ct.length() > old_count
-        # TODO: check if earthquakes are created
+        # TODO: check if landslides are created
 
     @patch('server.seed.zipfile.ZipFile')
     @patch('server.seed.os.remove')

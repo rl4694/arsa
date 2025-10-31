@@ -8,7 +8,7 @@ import json
 MIN_ID_LEN = 1
 NAME = 'name'
 
-NATIONS_FILE = 'nations.json'
+NATIONS_FILE = 'json/nations.json'
 
 # Load nations from predefined file if exists, else load the local
 if os.path.exists(NATIONS_FILE):

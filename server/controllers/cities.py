@@ -8,7 +8,7 @@ NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
 
-CITIES_FILE = 'cities.json'
+CITIES_FILE = 'json/cities.json'
 
 if os.path.exists(CITIES_FILE):
     with open(CITIES_FILE, 'r') as f:

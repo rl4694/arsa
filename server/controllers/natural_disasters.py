@@ -8,7 +8,7 @@ DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
-DISASTERS_FILE = 'natural_disasters.json'
+DISASTERS_FILE = 'json/natural_disasters.json'
 
 if os.path.exists(DISASTERS_FILE):
   with open(DISASTERS_FILE, 'r') as f:
