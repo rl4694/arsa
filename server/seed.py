@@ -8,10 +8,10 @@ import time
 import csv
 import zipfile
 import re
-from server import cities as ct
-from server import states as st
-from server import nations as nt
 from dotenv import load_dotenv
+from server.controllers import cities as ct
+from server.controllers import states as st
+from server.controllers import nations as nt
 from server.geocoding import reverse_geocode
 
 
@@ -100,20 +100,21 @@ def seed_earthquakes():
                 lon = float(row['longitude'])
                 # We'll probably turn this into a separate function soon -RJ
                 try:
-                    # Use reverse geocode module to resolve latitude and longitude
+                    # Use reverse geocoder to resolve latitude and longitude
                     loc = reverse_geocode(lat, lon)
                     city_name = loc.get('city')
                     state_name = loc.get('state')
                     nation_name = loc.get('country')
-                    
+
                     if not city_name:
                         print(f"No city found for ({lat}, {lon})")
                         continue
-                        
+
                     # Create Nation
-                    nation_id = nt.create({nt.NAME: nation_name}) if nation_name else None
+                    nation_id = (nt.create({nt.NAME: nation_name})
+                                 if nation_name else None)
                     print(f"Created nation: {loc.get('country')}")
-                    
+
                     # Create State
                     state_id = None
                     if state_name:
@@ -121,17 +122,23 @@ def seed_earthquakes():
                             st.NAME: state_name,
                             st.NATION: nation_id
                         })
-                    print(f"Created state: {loc.get('state')}, {loc.get('country')}")
-                    
+                    print(
+                        f"Created state: {loc.get('state')},"
+                        f"{loc.get('country')}"
+                    )
+
                     # Create City
-                    city_id = ct.create({
+                    ct.create({
                         ct.NAME: city_name,
                         ct.STATE: state_id,
                         ct.NATION: nation_id,
                     })
-                    print(f"Created city: {loc['city']} ({loc.get('state')}, {loc.get('country')})")
+                    print(
+                        f"Created city: {loc['city']} ({loc.get('state')},"
+                        f"{loc.get('country')})"
+                    )
 
-                except Exception as e:
+                except Exception:
                     print(f"Error geocoding for ({lat}, {lon})")
                 # TODO: create natural disasters
                 # print(row['latitude'], row['longitude'])

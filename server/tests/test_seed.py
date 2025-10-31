@@ -2,8 +2,8 @@ import pytest
 import time
 from io import StringIO
 from unittest.mock import patch, MagicMock
-from server import cities as ct
-from server import nations as nt
+from server.controllers import cities as ct
+from server.controllers import nations as nt
 from server import seed as sd
 
 

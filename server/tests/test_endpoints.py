@@ -12,9 +12,9 @@ from unittest.mock import patch
 import pytest
 
 import server.endpoints as ep
-import server.cities as ct
-import server.states as st
-import server.nations as nt
+import server.controllers.cities as ct
+import server.controllers.states as st
+import server.controllers.nations as nt
 
 TEST_CLIENT = ep.app.test_client()
 

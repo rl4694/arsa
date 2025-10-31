@@ -1,9 +1,5 @@
 import pytest
-
-try:
-    import server.nation as nt
-except ImportError:
-    import server.nations as nt
+import server.controllers.nations as nt
 
 
 @pytest.fixture(autouse=True)

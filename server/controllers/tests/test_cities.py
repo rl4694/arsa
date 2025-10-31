@@ -1,5 +1,5 @@
 import pytest
-import server.cities as ct
+import server.controllers.cities as ct
 
 
 @pytest.fixture(autouse=True)

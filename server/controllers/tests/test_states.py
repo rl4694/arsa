@@ -1,7 +1,7 @@
 # server/tests/test_states.py
 
 import pytest
-import server.states as states
+import server.controllers.states as states
 
 
 class TestIsValidId:

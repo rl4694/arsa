@@ -7,11 +7,11 @@ from flask import Flask  # request
 from flask_restx import Resource, Api  # fields, Namespace
 from flask_cors import CORS
 
-from server.cities import api as cities_ns
-from server.states import api as states_ns
-from server.nations import api as nations_ns
+from server.controllers.cities import api as cities_ns
+from server.controllers.states import api as states_ns
+from server.controllers.nations import api as nations_ns
+from server.controllers.natural_disasters import api as disasters_ns
 from server.geocoding import api as geocoding_ns
-from server.natural_disasters import api as disasters_ns
 
 # import werkzeug.exceptions as wz
 
