@@ -7,14 +7,9 @@ MIN_ID_LEN = 1
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
-
 CITIES_FILE = 'json/cities.json'
 
-if os.path.exists(CITIES_FILE):
-    with open(CITIES_FILE, 'r') as f:
-        cities = json.load(f)
-else:
-    cities = {}
+cities = {}
 
 
 def is_valid_id(_id: str) -> bool:
@@ -29,12 +24,6 @@ def is_valid_id(_id: str) -> bool:
 def length():
     """Return the number of cities stored."""
     return len(cities)
-
-
-def save():
-    os.makedirs(os.path.dirname(CITIES_FILE) or '.', exist_ok=True)
-    with open(CITIES_FILE, 'w') as f:
-        json.dump(cities, f, indent=2)
         
 
 def create(fields: dict, recursive=True) -> str:
@@ -63,7 +52,6 @@ def create(fields: dict, recursive=True) -> str:
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
     }
-    save()
     return _id
 
 
@@ -80,14 +68,12 @@ def update(city_id: str, data: dict):
         STATE: data.get(STATE),
         NATION: data.get(NATION)
     }
-    save()
 
 
 def delete(city_id: str):
     if city_id not in cities:
         raise KeyError("City not found")
     del cities[city_id]
-    save()
 
 
 api = Namespace('cities', description='Cities CRUD operations')

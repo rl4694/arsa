@@ -1,21 +1,15 @@
 # server/nations.py
 from flask import request
 from flask_restx import Resource, Namespace, fields
-
 import os
 import json
 
+
 MIN_ID_LEN = 1
 NAME = 'name'
-
 NATIONS_FILE = 'json/nations.json'
 
-# Load nations from predefined file if exists, else load the local
-if os.path.exists(NATIONS_FILE):
-    with open(NATIONS_FILE, 'r') as f:
-        nations = json.load(f)
-else:
-    nations = {}
+nations = {}
 
 
 def is_valid_id(_id: str) -> bool:
@@ -28,14 +22,6 @@ def is_valid_id(_id: str) -> bool:
 
 def length():
     return len(nations)
-
-
-# Save nations to predefined file
-def save():
-    """Save current nations to file."""
-    os.makedirs(os.path.dirname(NATIONS_FILE) or '.', exist_ok=True)
-    with open(NATIONS_FILE, 'w') as f:
-        json.dump(nations, f, indent=2)
 
 
 def create(fields: dict, recursive=True) -> str:
@@ -57,7 +43,6 @@ def create(fields: dict, recursive=True) -> str:
         # Standardize Lower case
         NAME: nation_name
     }
-    save()
     return _id
 
 
@@ -71,14 +56,12 @@ def update(nation_id: str, data: dict):
     nations[nation_id] = {
         NAME: data.get(NAME)
     }
-    save()
 
 
 def delete(nation_id: str):
     if nation_id not in nations:
         raise KeyError("Nation not found")
     del nations[nation_id]
-    save()
 
 
 api = Namespace('nations', description='Nations CRUD operations')

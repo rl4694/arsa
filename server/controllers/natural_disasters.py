@@ -10,16 +10,7 @@ LOCATION = 'location'
 DESCRIPTION = 'description'
 DISASTERS_FILE = 'json/natural_disasters.json'
 
-if os.path.exists(DISASTERS_FILE):
-  with open(DISASTERS_FILE, 'r') as f:
-    disasters = json.load(f)
-else:
-  disasters = {}
-
-
-def save():
-  with open(DISASTERS_FILE, 'w') as f:
-    json.dump(disasters, f, indent=2)
+disasters = {}
 
 
 def create(fields: dict) -> str:
@@ -31,7 +22,6 @@ def create(fields: dict) -> str:
     LOCATION: fields.get(LOCATION),
     DESCRIPTION: fields.get(DESCRIPTION, '')
   }
-  save()
   return _id
 
 

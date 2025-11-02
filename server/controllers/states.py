@@ -1,22 +1,16 @@
 # server/states.py
 from flask import request
 from flask_restx import Resource, Namespace, fields
+import os
+import json
+
 
 MIN_ID_LEN = 1
 NAME = 'name'
 NATION = 'nation'
-
-import os
-import json
-
 STATES_FILE = 'json/states.json'
 
-# Load states from predefined file if exists, else load empty
-if os.path.exists(STATES_FILE):
-    with open(STATES_FILE, 'r') as f:
-        states = json.load(f)
-else:
-    states = {}
+states = {}
 
 
 def is_valid_id(_id: str) -> bool:
@@ -31,13 +25,6 @@ def is_valid_id(_id: str) -> bool:
 def length() -> int:
     """Return the number of states stored."""
     return len(states)
-    
-    
-def save():
-    """Save current states to file."""
-    os.makedirs(os.path.dirname(STATES_FILE) or '.', exist_ok=True)
-    with open(STATES_FILE, 'w') as f:
-        json.dump(states, f, indent=2)
 
 
 def create(fields: dict, recursive=True) -> str:
@@ -63,7 +50,6 @@ def create(fields: dict, recursive=True) -> str:
         NAME: state_name,
         NATION: fields.get(NATION)
     }
-    save()
     return _id
 
 
@@ -78,14 +64,12 @@ def update(state_id: str, data: dict):
         NAME: data.get(NAME),
         NATION: data.get(NATION)
     }
-    save()
 
 
 def delete(state_id: str):
     if state_id not in states:
         raise KeyError("State not found")
     del states[state_id]
-    save()
 
 
 api = Namespace('states', description='States CRUD operation')
