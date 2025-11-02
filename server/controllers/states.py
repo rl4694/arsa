@@ -37,6 +37,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+
     # Check for duplicates
     state_name = fields[NAME].strip().lower()
     for _id, state in states.items():
@@ -45,6 +46,7 @@ def create(fields: dict, recursive=True) -> str:
                 return _id
             else:
                 raise ValueError("Duplicate state detected and recursive not allowed.")
+
     _id = str(len(states) + 1)
     states[_id] = {
         NAME: state_name,
@@ -60,6 +62,7 @@ def read() -> dict:
 def update(state_id: str, data: dict):
     if state_id not in states:
         raise KeyError("State not found")
+
     states[state_id] = {
         NAME: data.get(NAME),
         NATION: data.get(NATION)
@@ -69,6 +72,7 @@ def update(state_id: str, data: dict):
 def delete(state_id: str):
     if state_id not in states:
         raise KeyError("State not found")
+
     del states[state_id]
 
 

@@ -29,6 +29,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+
     # Duplicate check
     nation_name = fields[NAME].strip().lower()
     for _id, nation in nations.items():
@@ -37,6 +38,7 @@ def create(fields: dict, recursive=True) -> str:
                 return _id
             else:
                 raise ValueError("Duplicate nation detected and recursive not allowed.")
+
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(nations) + 1)
     nations[_id] = {

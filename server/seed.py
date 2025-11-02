@@ -63,10 +63,14 @@ def seed_nations() -> list:
         }
         res = requests.get(NATIONS_URL, headers=headers,
                            params=params)
+
+        # Verify response is OK
         if res.status_code != 200:
             raise ConnectionError(
                 f'Could not retrieve GeoDB nations: {res.status_code=}'
             )
+
+        # Retrieve data from response
         output = res.json()
         if 'data' not in output or 'metadata' not in output:
             raise ValueError(f'No nations found in GeoDB response: {output=}')
@@ -101,6 +105,7 @@ def seed_earthquakes():
                 # Use coordinate data to create nation, state, cities
                 lat = float(row['latitude'])
                 lon = float(row['longitude'])
+
                 # We'll probably turn this into a separate function soon -RJ
                 try:
                     # Use reverse geocoder to resolve latitude and longitude
@@ -116,7 +121,7 @@ def seed_earthquakes():
                     # Create Nation
                     nation_id = (nt.create({nt.NAME: nation_name})
                                  if nation_name else None)
-                    print(f"Created nation: {loc.get('country')}")
+                    print(f"Created nation: {nation_name}")
 
                     # Create State
                     state_id = None
@@ -125,10 +130,7 @@ def seed_earthquakes():
                             st.NAME: state_name,
                             st.NATION: nation_id
                         })
-                    print(
-                        f"Created state: {loc.get('state')},"
-                        f"{loc.get('country')}"
-                    )
+                    print(f"Created state: {state_name}, {nation_name}")
 
                     # Create City
                     ct.create({
@@ -137,8 +139,8 @@ def seed_earthquakes():
                         ct.NATION: nation_id,
                     })
                     print(
-                        f"Created city: {loc['city']} ({loc.get('state')},"
-                        f"{loc.get('country')})"
+                        f"Created city: {city_name} ({state_name},"
+                        f"{nation_name})"
                     )
 
                 except Exception:

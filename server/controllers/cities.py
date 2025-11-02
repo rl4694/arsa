@@ -37,6 +37,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+
     # Check for duplicates
     city_name = fields[NAME].strip().lower()
     for _id, city in cities.items():
@@ -45,6 +46,7 @@ def create(fields: dict, recursive=True) -> str:
                 return _id
             else:
                 raise ValueError("Duplicate city detected and recursive not allowed.")
+
     # Pre-pending underscore because id is a built-in Python function
     _id = str(len(cities) + 1)
     cities[_id] = {
@@ -63,6 +65,7 @@ def read() -> dict:
 def update(city_id: str, data: dict):
     if city_id not in cities:
         raise KeyError("City not found")
+
     cities[city_id] = {
         NAME: data.get(NAME),
         STATE: data.get(STATE),
