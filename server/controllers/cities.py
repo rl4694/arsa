@@ -11,28 +11,21 @@ CITIES_FILE = 'json/cities.json'
 
 cities = {}
 
-
+# Return True when `_id` is a valid non-empty string id.
 def is_valid_id(_id: str) -> bool:
-    """Return True if _id is a non-empty string."""
     if not isinstance(_id, str):
         return False
     if len(_id) < MIN_ID_LEN:
         return False
     return True
 
-
+# Return the number of cities currently stored.
 def length():
-    """Return the number of cities stored."""
     return len(cities)
         
-
+# Create a new city record and return its id.
+# Requires a dict with a 'name' key.
 def create(fields: dict, recursive=True) -> str:
-    """
-    Create a new city record.
-    Requires a dict with a 'name' key.
-    Optional fields: state, nation
-    Returns a string id.
-    """
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
@@ -56,9 +49,8 @@ def create(fields: dict, recursive=True) -> str:
     }
     return _id
 
-
+# Return the cities store as a dictionary.
 def read() -> dict:
-    """Return all cities stored."""
     return cities
 
 
