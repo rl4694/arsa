@@ -6,6 +6,10 @@ DB_DIR = data
 SEC_DIR = security
 REQ_DIR = .
 
+# Export the Python path for the project
+PYTHONPATH ?= $(shell pwd)
+export PYTHONPATH
+
 FORCE:
 
 prod: all_tests github
