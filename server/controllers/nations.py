@@ -11,7 +11,7 @@ NATIONS_FILE = 'json/nations.json'
 
 nations = {}
 
-
+# Return True when `_id` is a valid non-empty string id.
 def is_valid_id(_id: str) -> bool:
     if not isinstance(_id, str):
         return False
@@ -19,18 +19,18 @@ def is_valid_id(_id: str) -> bool:
         return False
     return True
 
-
+# Return the number of nations currently stored.
 def length():
     return len(nations)
 
-
+# Create a new nation record and return its id.
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    # Duplicate check
+    # Duplicate check (normalize to lower case and trim whitespace)
     nation_name = fields[NAME].strip().lower()
     for _id, nation in nations.items():
         if nation.get(NAME, '').strip().lower() == nation_name:
@@ -47,11 +47,12 @@ def create(fields: dict, recursive=True) -> str:
     }
     return _id
 
-
+# Return the nations store as a dictionary.
 def read() -> dict:
     return nations
 
-
+# Update an existing nation's data.
+# Raises: KeyError: if the nation id does not exist.
 def update(nation_id: str, data: dict):
     if nation_id not in nations:
         raise KeyError("Nation not found")
@@ -59,7 +60,7 @@ def update(nation_id: str, data: dict):
         NAME: data.get(NAME)
     }
 
-
+# Delete a nation by id.
 def delete(nation_id: str):
     if nation_id not in nations:
         raise KeyError("Nation not found")
