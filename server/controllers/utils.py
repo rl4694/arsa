@@ -1,21 +1,18 @@
-import json
-import os
+from pymongo import Mongoclient
 
 
-def save_json(filename: str, data: dict):
-    """Save data to JSON file."""
-    if not isinstance(data, dict):
-        raise ValueError(f'Bad type for data: {type(data)}')
-
-    os.makedirs(os.path.dirname(filename) or '.', exist_ok=True)
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=2)
+def get_db():
+    client = MongoClient("mongodb://localhost:27017")
+    return client["arsa_db"]
 
 
-def load_json(filename: str) -> dict:
-    """Load data from JSON file."""
-    if not os.path.exists(filename):
-        raise FileNotFoundError(f"JSON file not found: {filename=}")
+def save_to_mongo(collection: str, data: dict):
+    db = get_db()
+    col = db[collection]
+    col.replace_one({'_id': data['_id']}, data, upsert=True)
 
-    with open(filename, 'r') as f:
-        return json.load(f)
+
+def load_from_mongo(collection: str, _id):
+    db = get_db()
+    col = db[collection]
+    return col.find_one({'_id': _id})
