@@ -10,7 +10,7 @@ def save_json(filename: str, data: dict):
 
 
 def load_json(filename: str) -> dict:
-        if not os.path.exists(filename):
+    if not os.path.exists(filename):
         raise FileNotFoundError(f"JSON file not found: {filename=}")
     with open(filename, 'r') as f:
         return json.load(f)
