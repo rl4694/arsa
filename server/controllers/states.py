@@ -7,8 +7,10 @@ NATION = 'nation'
 
 
 def is_valid_id(_id: str) -> bool:
-    from bson.objectid import ObjectId
+    if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
+        return True
     try:
+        from bson.objectid import ObjectId
         ObjectId(_id)
         return True
     except Exception:
@@ -16,7 +18,7 @@ def is_valid_id(_id: str) -> bool:
 
 
 def length():
-    return db.cities.count_documents({})
+    return db.states.count_documents({})
 
 
 def create(fields: dict, recursive=True) -> str:
