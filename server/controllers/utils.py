@@ -1,6 +1,13 @@
 from pymongo import MongoClient
 
 
+def save_json(filename: str, data: dict):
+    raise NotImplementedError("save_json() deprecated after MongoDB migration.")
+
+
+def load_json(filename: str) -> dict:
+    raise NotImplementedError("load_json() deprecated after MongoDB migration.")
+
 def get_db():
     client = MongoClient("mongodb://localhost:27017")
     return client["arsa_db"]
