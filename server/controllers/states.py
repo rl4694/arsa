@@ -6,6 +6,19 @@ NAME = 'name'
 NATION = 'nation'
 
 
+def is_valid_id(_id: str) -> bool:
+    from bson.objectid import ObjectId
+    try:
+        ObjectId(_id)
+        return True
+    except Exception:
+        return False
+
+
+def length():
+    return db.cities.count_documents({})
+
+
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
@@ -30,7 +43,7 @@ def create(fields: dict, recursive=True) -> str:
 
 def read() -> dict:
     states_list = list(db.states.find())
-    return {str(state['_id']): {NAME: state[name], NATION: state.get(NATION)} for state in states_list}
+    return {str(state['_id']): {NAME: state[NAME], NATION: state.get(NATION)} for state in states_list}
 
 
 def update(state_id: str, data: dict):
