@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from server.controllers import cities as ct
 from server.controllers import states as st
 from server.controllers import nations as nt
+from server.controllers.utils import is_json_populated, save_json, load_json
 from server.geocoding import reverse_geocode
 
 
@@ -31,6 +32,11 @@ NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
 RESULTS_PER_PAGE = 10
 COOLDOWN_SEC = 1.5
 
+# JSON file paths
+NATIONS_JSON_FILE = 'server/json/nations.json'
+CITIES_JSON_FILE = 'server/json/cities.json'
+STATES_JSON_FILE = 'server/json/states.json'
+
 
 def get_kaggle_api():
     """
@@ -44,10 +50,21 @@ def get_kaggle_api():
     return api
 
 
-def seed_nations() -> list:
+def seed_nations(skip_if_populated=True) -> list:
     """
     Add initial nation data from GeoDB nations API to our database
+    
+    Args:
+        skip_if_populated: If True, skip seeding if JSON file already has data
+    
+    Returns:
+        List of nation IDs created
     """
+    # Check if JSON file is already populated
+    if skip_if_populated and is_json_populated(NATIONS_JSON_FILE):
+        print(f"Nations JSON file already populated, skipping seed_nations")
+        return []
+    
     offset = 0
     num_nations = None
     result = []
@@ -89,13 +106,30 @@ def seed_nations() -> list:
         # Wait for rate-limit to wear off
         time.sleep(COOLDOWN_SEC)
         offset += RESULTS_PER_PAGE
+    
+    # Save nations data to JSON file
+    try:
+        nations_data = nt.read()
+        save_json(NATIONS_JSON_FILE, nations_data)
+        print(f"Saved {len(nations_data)} nations to {NATIONS_JSON_FILE}")
+    except Exception as e:
+        print(f"Warning: Could not save nations to JSON: {e}")
+    
     return result
 
 
-def seed_earthquakes():
+def seed_earthquakes(skip_if_populated=True):
     """
     Add initial earthquake data from Kaggle to our database
+    
+    Args:
+        skip_if_populated: If True, skip seeding if JSON file already has data
     """
+    # Check if JSON file is already populated
+    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
+        print(f"Cities JSON file already populated, skipping seed_earthquakes")
+        return
+    
     try:
         kaggle_api = get_kaggle_api()
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
@@ -153,7 +187,18 @@ def seed_earthquakes():
     os.remove(EARTHQUAKES_FILE)
 
 
-def seed_landslides():
+def seed_landslides(skip_if_populated=True):
+    """
+    Add initial landslide data from Kaggle to our database
+    
+    Args:
+        skip_if_populated: If True, skip seeding if JSON file already has data
+    """
+    # Check if JSON file is already populated
+    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
+        print(f"Cities JSON file already populated, skipping seed_landslides")
+        return
+    
     try:
         kaggle_api = get_kaggle_api()
         # Unzip CSV file

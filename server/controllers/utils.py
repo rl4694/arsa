@@ -18,6 +18,33 @@ def load_json(filename: str) -> dict:
         return json.load(f)
 
 
+def is_json_populated(filename: str) -> bool:
+    """
+    Check if a JSON file exists and contains non-empty data.
+    
+    Args:
+        filename: Path to the JSON file
+        
+    Returns:
+        True if file exists and contains data (non-empty dict/list), False otherwise
+    """
+    if not os.path.exists(filename):
+        return False
+    
+    try:
+        with open(filename, 'r') as f:
+            data = json.load(f)
+            # Check if data is a non-empty dict or list
+            if isinstance(data, dict):
+                return len(data) > 0
+            elif isinstance(data, list):
+                return len(data) > 0
+            else:
+                return False
+    except (json.JSONDecodeError, IOError):
+        return False
+
+
 def get_db():
     client = MongoClient("mongodb://localhost:27017")
     return client["arsa_db"]

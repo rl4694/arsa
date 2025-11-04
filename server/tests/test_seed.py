@@ -1,5 +1,6 @@
 import pytest
 import time
+import json
 from io import StringIO
 from unittest.mock import patch, MagicMock, call
 from server.controllers import cities as ct
@@ -158,6 +159,93 @@ class TestSeedNations:
         
         # Should handle empty array gracefully
         assert len(ids) == 0
+
+    @patch('server.seed.is_json_populated')
+    @patch('time.sleep')
+    @patch('server.seed.requests.get', autospec=True)
+    def test_skip_if_json_populated(self, mock_get, mock_sleep, mock_is_populated):
+        """Test that seed_nations skips if JSON file is already populated"""
+        mock_is_populated.return_value = True
+        
+        ids = sd.seed_nations(skip_if_populated=True)
+        
+        # Should return empty list and not make API calls
+        assert ids == []
+        assert mock_get.call_count == 0
+        mock_is_populated.assert_called_once()
+
+    @patch('server.seed.is_json_populated')
+    @patch('server.seed.save_json')
+    @patch('time.sleep')
+    @patch('server.seed.requests.get', autospec=True)
+    def test_does_not_skip_when_json_empty(self, mock_get, mock_sleep, 
+                                            mock_save_json, mock_is_populated):
+        """Test that seed_nations proceeds when JSON file is empty"""
+        mock_is_populated.return_value = False
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            'data': [{'name': 'Test Nation'}],
+            'metadata': {'totalCount': 1},
+        }
+        
+        old_count = nt.length()
+        ids = sd.seed_nations(skip_if_populated=True)
+        
+        # Should proceed with seeding
+        assert len(ids) >= 1
+        assert nt.length() >= old_count
+        mock_get.assert_called()
+        mock_save_json.assert_called_once()
+        
+        # Clean up
+        for _id in ids:
+            nt.delete(_id)
+
+    @patch('server.seed.save_json')
+    @patch('time.sleep')
+    @patch('server.seed.requests.get', autospec=True)
+    def test_saves_to_json_after_seeding(self, mock_get, mock_sleep, mock_save_json):
+        """Test that nation data is saved to JSON after seeding"""
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            'data': [{'name': 'Test Nation'}],
+            'metadata': {'totalCount': 1},
+        }
+        
+        ids = sd.seed_nations(skip_if_populated=False)
+        
+        # Verify save_json was called with nations data
+        mock_save_json.assert_called_once()
+        call_args = mock_save_json.call_args
+        assert call_args[0][0] == sd.NATIONS_JSON_FILE
+        assert isinstance(call_args[0][1], dict)
+        
+        # Clean up
+        for _id in ids:
+            nt.delete(_id)
+
+    @patch('server.seed.is_json_populated')
+    @patch('time.sleep')
+    @patch('server.seed.requests.get', autospec=True)
+    def test_force_seed_even_if_populated(self, mock_get, mock_sleep, mock_is_populated):
+        """Test that seed_nations can be forced to run even if JSON is populated"""
+        mock_is_populated.return_value = True
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            'data': [{'name': 'Test Nation'}],
+            'metadata': {'totalCount': 1},
+        }
+        
+        old_count = nt.length()
+        ids = sd.seed_nations(skip_if_populated=False)
+        
+        # Should proceed despite populated JSON
+        assert nt.length() >= old_count
+        mock_get.assert_called()
+        
+        # Clean up
+        for _id in ids:
+            nt.delete(_id)
 
 
 class TestSeedEarthquakes:
@@ -640,6 +728,48 @@ class TestSeedEarthquakes:
         # Verify correct coordinates were passed
         mock_geocode.assert_called_once_with(35.6762, 139.6503)
 
+    @patch('server.seed.is_json_populated')
+    @patch('server.seed.os.remove')
+    @patch('server.seed.get_kaggle_api')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_skip_if_json_populated(self, mock_open, mock_kaggle_api, 
+                                   mock_remove, mock_is_populated):
+        """Test that seed_earthquakes skips if JSON file is already populated"""
+        mock_is_populated.return_value = True
+        
+        sd.seed_earthquakes(skip_if_populated=True)
+        
+        # Should not download or process data
+        mock_kaggle_api.assert_not_called()
+        mock_open.assert_not_called()
+
+    @patch('server.seed.is_json_populated')
+    @patch('server.seed.reverse_geocode')
+    @patch('server.seed.os.remove')
+    @patch('server.seed.get_kaggle_api')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_does_not_skip_when_json_empty(self, mock_open, mock_kaggle_api,
+                                           mock_remove, mock_geocode, 
+                                           mock_is_populated):
+        """Test that seed_earthquakes proceeds when JSON file is empty"""
+        mock_is_populated.return_value = False
+        data = (
+            'location,country,latitude,longitude\n'
+            'Some Location,Some Country,40.0,-74.0'
+        )
+        mock_open.return_value.__enter__.return_value = StringIO(data)
+        mock_geocode.return_value = {
+            'city': 'Test City',
+            'state': 'Test State',
+            'country': 'Test Country',
+        }
+        
+        old_count = ct.length()
+        sd.seed_earthquakes(skip_if_populated=True)
+        
+        # Should proceed with seeding
+        mock_kaggle_api.assert_called_once()
+
 
 class TestSeedLandslides:
     @patch('server.seed.zipfile.ZipFile')
@@ -1037,3 +1167,43 @@ class TestSeedLandslides:
         
         # Only location without ignored words/numbers should be processed
         assert ct.length() >= old_count
+
+    @patch('server.seed.is_json_populated')
+    @patch('server.seed.zipfile.ZipFile')
+    @patch('server.seed.os.remove')
+    @patch('server.seed.get_kaggle_api')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_skip_if_json_populated(self, mock_open, mock_kaggle_api,
+                                   mock_remove, mock_zip, mock_is_populated):
+        """Test that seed_landslides skips if JSON file is already populated"""
+        mock_is_populated.return_value = True
+        
+        sd.seed_landslides(skip_if_populated=True)
+        
+        # Should not download or process data
+        mock_kaggle_api.assert_not_called()
+        mock_open.assert_not_called()
+
+    @patch('server.seed.is_json_populated')
+    @patch('server.seed.nt.read')
+    @patch('server.seed.zipfile.ZipFile')
+    @patch('server.seed.os.remove')
+    @patch('server.seed.get_kaggle_api')
+    @patch("builtins.open", new_callable=MagicMock)
+    def test_does_not_skip_when_json_empty(self, mock_open, mock_kaggle_api,
+                                           mock_remove, mock_zip, mock_nt_read,
+                                           mock_is_populated):
+        """Test that seed_landslides proceeds when JSON file is empty"""
+        mock_is_populated.return_value = False
+        data = (
+            'location_description,country_name,latitude,longitude\n'
+            '"TestCity, TestState",TestCountry,40.0,-74.0'
+        )
+        mock_open.return_value.__enter__.return_value = StringIO(data)
+        mock_nt_read.return_value = ['TestCountry']
+        
+        old_count = ct.length()
+        sd.seed_landslides(skip_if_populated=True)
+        
+        # Should proceed with seeding
+        mock_kaggle_api.assert_called_once()
