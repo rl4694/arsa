@@ -1,74 +1,55 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import os
-import json
+from server.db import db
 
-MIN_ID_LEN = 1
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
-CITIES_FILE = 'json/cities.json'
 
-cities = {}
 
-# Return True when `_id` is a valid non-empty string id.
-def is_valid_id(_id: str) -> bool:
-    if not isinstance(_id, str):
-        return False
-    if len(_id) < MIN_ID_LEN:
-        return False
-    return True
-
-# Return the number of cities currently stored.
-def length():
-    return len(cities)
-        
-# Create a new city record and return its id.
-# Requires a dict with a 'name' key.
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    # Check for duplicates
     city_name = fields[NAME].strip().lower()
-    for _id, city in cities.items():
-        if city.get(NAME, '').strip().lower() == city_name:
-            if recursive:
-                return _id
-            else:
-                raise ValueError("Duplicate city detected and recursive not allowed.")
+    existing_city = db.cities.find_one({NAME: {"$regex": f"^{city_name}$", "$options": "i"}})
 
-    # Pre-pending underscore because id is a built-in Python function
-    _id = str(len(cities) + 1)
-    cities[_id] = {
+    if existing_city:
+        if recursive:
+            return str(existing_city['_id'])
+        else:
+            raise ValueError("Duplicate city detected and recursive not allowed.")
+
+    result = db.cities.insert_one({
         NAME: city_name,
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
-    }
-    return _id
+    })
+    return str(result.inserted_id)
 
-# Return the cities store as a dictionary.
+
 def read() -> dict:
-    return cities
+    cities_list = list(db.cities.find())
+    return {str(city['_id']): {NAME: city[name], STATE: city.get(STATE), NATION: city.get(NATION)} for city in cities_list}
 
 
 def update(city_id: str, data: dict):
-    if city_id not in cities:
+    from bson.objectid import ObjectId
+    result = db.cities.update_one(
+        {'_id': ObjectId(city_id)},
+        {'$set': {NAME: data.get(NAME), STATE: data.get(STATE), NATION: data.get(NATION)}}
+    )
+    if result.matched_count == 0:
         raise KeyError("City not found")
-
-    cities[city_id] = {
-        NAME: data.get(NAME),
-        STATE: data.get(STATE),
-        NATION: data.get(NATION)
-    }
 
 
 def delete(city_id: str):
-    if city_id not in cities:
+    from bson.objectid import ObjectId
+    result = db.cities.delete_one({'_id': ObjectId(city_id)})
+    if result.deleted_count == 0:
         raise KeyError("City not found")
-    del cities[city_id]
 
 
 api = Namespace('cities', description='Cities CRUD operations')
@@ -80,7 +61,6 @@ city_model = api.model('City', {
 })
 
 
-# CITIES ENDPOINTS
 @api.route('/')
 class CityList(Resource):
     @api.doc('list_cities')
@@ -96,11 +76,12 @@ class CityList(Resource):
         return {'id': city_id, **data}, 201
 
 
-@api.route('/<string:city_id>')
+@api.route('/')
 class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
-        city = cities.get(city_id)
+        from bson.objectid import ObjectId
+        city = db.cities.find_one({'_id': ObjectId(city_id)})
         if not city:
             api.abort(404, "City not found")
         return {'id': city_id, **city}
@@ -110,7 +91,8 @@ class City(Resource):
     def put(self, city_id):
         try:
             update(city_id, request.json)
-            return {'id': city_id, **cities[city_id]}
+            city = db.cities.find_one({'_id': ObjectId(city_id)})
+            return {'id': city_id, **city}
         except KeyError:
             api.abort(404, "City not found")
 
