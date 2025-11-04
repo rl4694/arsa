@@ -1,82 +1,56 @@
-# server/states.py
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import os
-import json
+from server.db import db
 
-
-MIN_ID_LEN = 1
 NAME = 'name'
 NATION = 'nation'
-STATES_FILE = 'json/states.json'
-
-states = {}
-
-
-def is_valid_id(_id: str) -> bool:
-    """Return True if _id is a non-empty string."""
-    if not isinstance(_id, str):
-        return False
-    if len(_id) < MIN_ID_LEN:
-        return False
-    return True
-
-
-def length() -> int:
-    """Return the number of states stored."""
-    return len(states)
 
 
 def create(fields: dict, recursive=True) -> str:
-    """
-    Create a new state record.
-    Requires a dict with a 'name' key.
-    Returns a string id.
-    """
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    # Check for duplicates
     state_name = fields[NAME].strip().lower()
-    for _id, state in states.items():
-        if state.get(NAME, '').strip().lower() == state_name:
-            if recursive:
-                return _id
-            else:
-                raise ValueError("Duplicate state detected and recursive not allowed.")
+    existing_state = db.states.find_one({NAME: {"$regex": f"^{state_name}$", "$options": "i"}})
 
-    _id = str(len(states) + 1)
-    states[_id] = {
+    if existing_state:
+        if recursive:
+            return str(existing_state['_id'])
+        else:
+            raise ValueError("Duplicate state detected and recursive not allowed.")
+
+    result = db.states.insert_one({
         NAME: state_name,
         NATION: fields.get(NATION)
-    }
-    return _id
+    })
+    return str(result.inserted_id)
 
 
 def read() -> dict:
-    return states
+    states_list = list(db.states.find())
+    return {str(state['_id']): {NAME: state[name], NATION: state.get(NATION)} for state in states_list}
 
 
 def update(state_id: str, data: dict):
-    if state_id not in states:
+    from bson.objectid import ObjectId
+    result = db.states.update_one(
+        {'_id': ObjectId(state_id)},
+        {'$set': {NAME: data.get(NAME), NATION: data.get(NATION)}}
+    )
+    if result.matched_count == 0:
         raise KeyError("State not found")
-
-    states[state_id] = {
-        NAME: data.get(NAME),
-        NATION: data.get(NATION)
-    }
 
 
 def delete(state_id: str):
-    if state_id not in states:
+    from bson.objectid import ObjectId
+    result = db.states.delete_one({'_id': ObjectId(state_id)})
+    if result.deleted_count == 0:
         raise KeyError("State not found")
 
-    del states[state_id]
 
-
-api = Namespace('states', description='States CRUD operation')
+api = Namespace('states', description='States CRUD operations')
 
 state_model = api.model('State', {
     'name': fields.String(required=True, description='State Name'),
@@ -84,7 +58,6 @@ state_model = api.model('State', {
 })
 
 
-# STATES ENDPOINTS
 @api.route('/')
 class StateList(Resource):
     @api.doc('list_states')
@@ -100,11 +73,12 @@ class StateList(Resource):
         return {'id': state_id, **data}, 201
 
 
-@api.route('/<string:state_id>')
+@api.route('/')
 class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
-        state = states.get(state_id)
+        from bson.objectid import ObjectId
+        state = db.states.find_one({'_id': ObjectId(state_id)})
         if not state:
             api.abort(404, "State not found")
         return {'id': state_id, **state}
@@ -114,7 +88,8 @@ class State(Resource):
     def put(self, state_id):
         try:
             update(state_id, request.json)
-            return {'id': state_id, **states[state_id]}
+            state = db.states.find_one({'_id': ObjectId(state_id)})
+            return {'id': state_id, **state}
         except KeyError:
             api.abort(404, "State not found")
 
