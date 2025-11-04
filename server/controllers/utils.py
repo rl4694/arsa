@@ -1,4 +1,4 @@
-from pymongo import Mongoclient
+from pymongo import MongoClient
 
 
 def get_db():
