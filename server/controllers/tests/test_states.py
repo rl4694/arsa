@@ -6,9 +6,7 @@ import server.controllers.states as states
 
 class TestIsValidId:
     def test_valid(self):
-        from bson.objectid import ObjectID
-        obj_id = str(ObjectId())
-        asser states.is_valid_id(obj_id) == True
+        assert states.is_valid_id('1') == True
 
     def test_non_str(self):
         assert states.is_valid_id(1) == False
