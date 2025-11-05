@@ -32,6 +32,7 @@ class TestSeedNations:
     @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
     def test_error_response(self, mock_get, mock_sleep):
+        mock_get.return_value.status_code = 400
         mock_get.return_value.json.return_value = {}
         with pytest.raises(ConnectionError):
             sd.seed_nations()
@@ -49,6 +50,8 @@ class TestSeedNations:
     @patch('server.seed.requests.get', autospec=True)
     def test_json_pagination_multiple_pages(self, mock_get, mock_sleep):
         """Test JSON parsing with multiple pages of results"""
+        
+        sd.RESULTS_PER_PAGE = 2
         # Mock responses for multiple pages
         responses = [
             {
@@ -112,7 +115,7 @@ class TestSeedNations:
         ids = sd.seed_nations()
         
         # Should create nation with empty name
-        assert len(ids) == 0
+        assert len(ids) == 1
         assert nt.length() >= old_count
         
         # Clean up
