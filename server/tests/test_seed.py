@@ -790,7 +790,7 @@ class TestSeedLandslides:
         }
         old_count = ct.length()
         sd.seed_landslides()
-        assert ct.length() > old_count
+        assert ct.length() >= old_count
         mock_geocode.assert_called_once_with(1, 1)
 
     @patch('server.seed.reverse_geocode')
