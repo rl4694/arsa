@@ -14,7 +14,9 @@ def _reset_store():
 
 class TestIsValidId:
     def test_valid(self):
-        assert ct.is_valid_id('1') == True
+        from bson.objectid import ObjectId
+        obj_id = str(ObjectId())
+        assert ct.is_valid_id(obj_id) == True
 
     def test_non_str(self):
         assert ct.is_valid_id(1) == False
