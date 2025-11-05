@@ -78,8 +78,10 @@ def seed_nations(skip_if_populated=True) -> list:
             'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
             'x-rapidapi-key': os.getenv('RAPID_API_KEY'),
         }
-        res = requests.get(NATIONS_URL, headers=headers,
-                           params=params)
+        try:
+            res = requests.get(NATIONS_URL, headers=headers, params=params)
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError("Could not reach GeoDB nations API") from e
 
         # Verify response is OK
         if res.status_code != 200:
@@ -94,9 +96,11 @@ def seed_nations(skip_if_populated=True) -> list:
 
         # Add city data to database
         for country in output['data']:
-            _id = nt.create({
-                nt.NAME: country.get('name', ''),
-            })
+            name = country.get('name')
+            if not name:
+                print(f"Skipping country with missing name: {country}")
+                continue
+            _id = nt.create({nt.NAME: name})
             result.append(_id)
 
         # Print status
