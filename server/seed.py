@@ -118,6 +118,44 @@ def seed_nations(skip_if_populated=True) -> list:
     return result
 
 
+def create_loc_from_coordinates(lat: float, lon: float):
+    """
+    Use reverse geocoding to resolve coordinates into nation, state, city
+    
+    Args:
+        lat (float): Latitude
+        lon (float): Longitude
+    """  
+    loc = reverse_geocode(lat, lon)
+    city_name = loc.get('city')
+    state_name = loc.get('state')
+    nation_name = loc.get('country')
+    if not city_name:
+        raise ValueError(f"No city found for ({lat}, {lon})")
+    nation_id = (nt.create({nt.NAME: nation_name}) if nation_name else None)
+    state_id = None
+    if state_name:
+        state_id = st.create({
+            st.NAME: state_name,
+            st.NATION: nation_id
+        })
+    print(f"Created state: {state_name}, {nation_name}")
+    city_id = ct.create({
+        ct.NAME: city_name,
+        ct.STATE: state_id,
+        ct.NATION: nation_id,
+    })
+    print(f"Created city: {city_name} ({state_name}, {nation_name})")
+    return {
+        'city': city_id,
+        'state': state_id,
+        'nation': nation_id,
+        'city_name': city_name,
+        'state_name': state_name,
+        'nation_name': nation_name,
+    }
+
+
 def seed_earthquakes(skip_if_populated=True):
     """
     Add initial earthquake data from Kaggle to our database
@@ -142,40 +180,7 @@ def seed_earthquakes(skip_if_populated=True):
 
                 # We'll probably turn this into a separate function soon -RJ
                 try:
-                    # Use reverse geocoder to resolve latitude and longitude
-                    loc = reverse_geocode(lat, lon)
-                    city_name = loc.get('city')
-                    state_name = loc.get('state')
-                    nation_name = loc.get('country')
-
-                    if not city_name:
-                        print(f"No city found for ({lat}, {lon})")
-                        continue
-
-                    # Create Nation
-                    nation_id = (nt.create({nt.NAME: nation_name})
-                                 if nation_name else None)
-                    print(f"Created nation: {nation_name}")
-
-                    # Create State
-                    state_id = None
-                    if state_name:
-                        state_id = st.create({
-                            st.NAME: state_name,
-                            st.NATION: nation_id
-                        })
-                    print(f"Created state: {state_name}, {nation_name}")
-
-                    # Create City
-                    ct.create({
-                        ct.NAME: city_name,
-                        ct.STATE: state_id,
-                        ct.NATION: nation_id,
-                    })
-                    print(
-                        f"Created city: {city_name} ({state_name},"
-                        f"{nation_name})"
-                    )
+                    location = create_loc_from_coordinates(lat, lon)
 
                 except Exception:
                     print(f"Error geocoding for ({lat}, {lon})")
@@ -211,39 +216,19 @@ def seed_landslides(skip_if_populated=True):
         )
         with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            nations = nt.read()
             for row in rows:
-                # If location is not in the expected format or contains
-                # ignored words, skip it
-                location = row['location_description'].split(', ')
-                if (len(location) != 2
-                        or re.search(
-                            ignored_words,
-                            row['location_description'],
-                            flags=re.IGNORECASE
-                        )
-                        or re.search(r'\d', row['location_description'])):
-                    continue
+                # Use coordinate data to create nation, state, cities
+                lat = float(row['latitude'])
+                lon = float(row['longitude'])
 
-                # Extract location data from row
-                city = location[0]
-                state = ''
-                nation = ''
-                if location[1] in nations:
-                    nation = location[1]
-                else:
-                    state = location[1]
-                if row['country_name'] in nations:
-                    nation = row['country_name']
+                # We'll probably turn this into a separate function soon -RJ
+                try:
+                    location = create_loc_from_coordinates(lat, lon)
 
-                # Create location in database
-                ct.create({
-                    ct.NAME: city,
-                    ct.STATE: state,
-                    ct.NATION: nation,
-                })
+                except Exception:
+                    print(f"Error geocoding for ({lat}, {lon})")
                 # TODO: create natural disasters
-                print(row['latitude'], row['longitude'])
+                # print(row['latitude'], row['longitude'])
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
     os.remove(LANDSLIDE_ZIP)
