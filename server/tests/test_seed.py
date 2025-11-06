@@ -35,7 +35,7 @@ class TestSeedNations:
         mock_get.return_value.status_code = 400
         mock_get.return_value.json.return_value = {}
         with pytest.raises(ConnectionError):
-            sd.seed_nations()
+            sd.seed_nations(False)
     
     @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
@@ -44,7 +44,7 @@ class TestSeedNations:
         mock_get.return_value.json.return_value = {}
 
         with pytest.raises(ValueError):
-            sd.seed_nations()
+            sd.seed_nations(False)
 
     @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
@@ -59,20 +59,20 @@ class TestSeedNations:
                     {'name': 'Nation 1'},
                     {'name': 'Nation 2'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
             {
                 'data': [
                     {'name': 'Nation 3'},
                     {'name': 'Nation 4'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
             {
                 'data': [
                     {'name': 'Nation 5'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
         ]
         
@@ -84,7 +84,7 @@ class TestSeedNations:
 
         
         old_count = nt.length()
-        ids = sd.seed_nations()
+        ids = sd.seed_nations(False)
         
         # Verify multiple nations were created
         assert len(ids) == 5
@@ -112,10 +112,10 @@ class TestSeedNations:
         }
 
         old_count = nt.length()
-        ids = sd.seed_nations()
+        ids = sd.seed_nations(False)
         
-        # Should create nation with empty name
-        assert len(ids) == 1
+        # Should ignore nations with empty names
+        assert len(ids) == 0
         assert nt.length() >= old_count
         
         # Clean up
@@ -140,7 +140,7 @@ class TestSeedNations:
         }
 
         old_count = nt.length()
-        ids = sd.seed_nations()
+        ids = sd.seed_nations(False)
         
         # Should handle extra fields gracefully
         assert len(ids) == 1

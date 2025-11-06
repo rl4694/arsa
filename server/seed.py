@@ -7,12 +7,11 @@ import requests
 import time
 import csv
 import zipfile
-import re
 from dotenv import load_dotenv
 from server.controllers import cities as ct
 from server.controllers import states as st
 from server.controllers import nations as nt
-from server.controllers.utils import is_json_populated, save_json, load_json
+from server.controllers.utils import is_json_populated, save_json
 from server.geocoding import reverse_geocode
 
 
@@ -53,18 +52,18 @@ def get_kaggle_api():
 def seed_nations(skip_if_populated=True) -> list:
     """
     Add initial nation data from GeoDB nations API to our database
-    
+
     Args:
         skip_if_populated: If True, skip seeding if JSON file already has data
-    
+
     Returns:
         List of nation IDs created
     """
     # Check if JSON file is already populated
     if skip_if_populated and is_json_populated(NATIONS_JSON_FILE):
-        print(f"Nations JSON file already populated, skipping seed_nations")
+        print("Nations JSON file already populated, skipping seed_nations")
         return []
-    
+
     offset = 0
     num_nations = None
     result = []
@@ -110,7 +109,7 @@ def seed_nations(skip_if_populated=True) -> list:
         # Wait for rate-limit to wear off
         time.sleep(COOLDOWN_SEC)
         offset += RESULTS_PER_PAGE
-    
+
     # Save nations data to JSON file
     try:
         nations_data = nt.read()
@@ -118,18 +117,18 @@ def seed_nations(skip_if_populated=True) -> list:
         print(f"Saved {len(nations_data)} nations to {NATIONS_JSON_FILE}")
     except Exception as e:
         print(f"Warning: Could not save nations to JSON: {e}")
-    
+
     return result
 
 
 def create_loc_from_coordinates(lat: float, lon: float):
     """
     Use reverse geocoding to resolve coordinates into nation, state, city
-    
+
     Args:
         lat (float): Latitude
         lon (float): Longitude
-    """  
+    """
     loc = reverse_geocode(lat, lon)
     city_name = loc.get('city')
     state_name = loc.get('state')
@@ -163,15 +162,15 @@ def create_loc_from_coordinates(lat: float, lon: float):
 def seed_earthquakes(skip_if_populated=True):
     """
     Add initial earthquake data from Kaggle to our database
-    
+
     Args:
         skip_if_populated: If True, skip seeding if JSON file already has data
     """
     # Check if JSON file is already populated
     if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print(f"Cities JSON file already populated, skipping seed_earthquakes")
+        print("Cities JSON file already populated, skipping seed_earthquakes")
         return
-    
+
     try:
         kaggle_api = get_kaggle_api()
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
@@ -184,7 +183,7 @@ def seed_earthquakes(skip_if_populated=True):
 
                 # We'll probably turn this into a separate function soon -RJ
                 try:
-                    location = create_loc_from_coordinates(lat, lon)
+                    create_loc_from_coordinates(lat, lon)
 
                 except Exception:
                     print(f"Error geocoding for ({lat}, {lon})")
@@ -199,15 +198,15 @@ def seed_earthquakes(skip_if_populated=True):
 def seed_landslides(skip_if_populated=True):
     """
     Add initial landslide data from Kaggle to our database
-    
+
     Args:
         skip_if_populated: If True, skip seeding if JSON file already has data
     """
     # Check if JSON file is already populated
     if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print(f"Cities JSON file already populated, skipping seed_landslides")
+        print("Cities JSON file already populated, skipping seed_landslides")
         return
-    
+
     try:
         kaggle_api = get_kaggle_api()
         # Unzip CSV file
@@ -215,9 +214,9 @@ def seed_landslides(skip_if_populated=True):
         with zipfile.ZipFile(LANDSLIDE_ZIP, 'r') as z:
             z.extractall('.')
 
-        ignored_words = (
-            r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
-        )
+        # ignored_words = (
+        #     r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
+        # )
         with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
             for row in rows:
@@ -227,7 +226,7 @@ def seed_landslides(skip_if_populated=True):
 
                 # We'll probably turn this into a separate function soon -RJ
                 try:
-                    location = create_loc_from_coordinates(lat, lon)
+                    create_loc_from_coordinates(lat, lon)
 
                 except Exception:
                     print(f"Error geocoding for ({lat}, {lon})")
