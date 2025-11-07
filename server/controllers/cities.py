@@ -2,6 +2,8 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.db import db
 
+from bson.objectid import ObjectId
+
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
@@ -11,7 +13,6 @@ def is_valid_id(_id: str) -> bool:
     if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
         return True
     try:
-        from bson.objectid import ObjectId
         ObjectId(_id)
         return True
     except Exception:
@@ -51,7 +52,6 @@ def read() -> dict:
 
 
 def update(city_id: str, data: dict):
-    from bson.objectid import ObjectId
     result = db.cities.update_one(
         {'_id': ObjectId(city_id)},
         {'$set': {NAME: data.get(NAME), STATE: data.get(STATE), NATION: data.get(NATION)}}
@@ -61,7 +61,6 @@ def update(city_id: str, data: dict):
 
 
 def delete(city_id: str):
-    from bson.objectid import ObjectId
     result = db.cities.delete_one({'_id': ObjectId(city_id)})
     if result.deleted_count == 0:
         raise KeyError("City not found")
@@ -95,7 +94,6 @@ class CityList(Resource):
 class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
-        from bson.objectid import ObjectId
         city = db.cities.find_one({'_id': ObjectId(city_id)})
         if not city:
             api.abort(404, "City not found")
