@@ -8,10 +8,21 @@ from server.controllers import nations as nt
 from server import seed as sd
 
 
+@pytest.fixture(autouse=True)
+def patch_dependencies():
+    with (
+        patch('time.sleep') as mock_sleep,
+        patch('server.seed.save_json') as mock_save_json,
+        patch('server.seed.get_kaggle_api') as mock_kaggle_api,
+        patch('server.seed.os.remove') as mock_remove,
+        patch('server.seed.zipfile.ZipFile') as mock_zip,
+    ):
+        yield
+
+
 class TestSeedNations:
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_valid(self, mock_get, mock_sleep):
+    def test_valid(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
             'data': [{
@@ -29,26 +40,23 @@ class TestSeedNations:
             nt.delete(_id)
 
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_error_response(self, mock_get, mock_sleep):
+    def test_error_response(self, mock_get):
         mock_get.return_value.status_code = 400
         mock_get.return_value.json.return_value = {}
         with pytest.raises(ConnectionError):
             sd.seed_nations()
-    
-    @patch('time.sleep')
+
     @patch('server.seed.requests.get', autospec=True)
-    def test_missing_data(self, mock_get, mock_sleep):
+    def test_missing_data(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {}
 
         with pytest.raises(ValueError):
             sd.seed_nations()
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_pagination_multiple_pages(self, mock_get, mock_sleep):
+    def test_json_pagination_multiple_pages(self, mock_get):
         """Test JSON parsing with multiple pages of results"""
         
         sd.RESULTS_PER_PAGE = 2
@@ -97,9 +105,8 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_with_missing_name_field(self, mock_get, mock_sleep):
+    def test_json_with_missing_name_field(self, mock_get):
         """Test JSON parsing when name field is missing"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -122,9 +129,8 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_with_extra_fields(self, mock_get, mock_sleep):
+    def test_json_with_extra_fields(self, mock_get):
         """Test JSON parsing with extra fields in response"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -150,9 +156,8 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_empty_data_array(self, mock_get, mock_sleep):
+    def test_json_empty_data_array(self, mock_get):
         """Test JSON parsing with empty data array"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -168,9 +173,8 @@ class TestSeedNations:
         assert len(ids) == 0
 
     @patch('server.seed.save_json')
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_saves_to_json_after_seeding(self, mock_get, mock_sleep, mock_save_json):
+    def test_saves_to_json_after_seeding(self, mock_get, mock_save_json):
         """Test that nation data is saved to JSON after seeding"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -193,10 +197,8 @@ class TestSeedNations:
 
 class TestSeedEarthquakes:
     # open manages context, so a MagicMock is necessary to simulate it
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_valid(self, mock_open, mock_kaggle_api, mock_remove):
+    def test_valid(self, mock_open):
         data = (
             'location,country,latitude,longitude\n'
             '"my_city, my_state",my_nation,1,1'
@@ -208,20 +210,15 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
         # TODO: check if earthquakes are created
 
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove):
+    def test_failed_download(self, mock_open):
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_earthquakes()
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api, 
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test reverse geocoding from coordinates to location"""
         data = (
             'location,country,latitude,longitude\n'
@@ -244,11 +241,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_missing_city(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_mapping_with_missing_city(self, mock_open, mock_geocode):
         """Test mapping when city is missing from geocode result"""
         data = (
             'location,country,latitude,longitude\n'
@@ -270,12 +264,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_partial_location_data(self, mock_open, 
-                                                 mock_kaggle_api, mock_remove,
-                                                 mock_geocode):
+    def test_mapping_with_partial_location_data(self, mock_open, mock_geocode):
         """Test mapping with only city and country (no state)"""
         data = (
             'location,country,latitude,longitude\n'
@@ -297,11 +287,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_geocode_error_handling(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_mapping_geocode_error_handling(self, mock_open, mock_geocode):
         """Test handling of geocoding errors"""
         data = (
             'location,country,latitude,longitude\n'
@@ -327,11 +314,8 @@ class TestSeedEarthquakes:
         assert mock_geocode.call_count == 2
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_coordinate_to_location_mapping(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_coordinate_to_location_mapping(self, mock_open, mock_geocode):
         """Test complete coordinate-to-location mapping flow"""
         data = (
             'location,country,latitude,longitude\n'
@@ -358,11 +342,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count_cities
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test coordinate to location mapping via reverse geocoding"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -385,11 +366,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_missing_city(self, mock_open, mock_kaggle_api,
-                                   mock_remove, mock_geocode):
+    def test_mapping_missing_city(self, mock_open, mock_geocode):
         """Test mapping when reverse geocoding returns no city"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -412,11 +390,8 @@ class TestSeedEarthquakes:
         mock_geocode.assert_called_once()
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_state_and_nation(self, mock_open, mock_kaggle_api,
-                                           mock_remove, mock_geocode):
+    def test_mapping_with_state_and_nation(self, mock_open, mock_geocode):
         """Test full location mapping with city, state, and nation"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -441,11 +416,8 @@ class TestSeedEarthquakes:
         assert nt.length() >= old_count_nations
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_without_state(self, mock_open, mock_kaggle_api,
-                                    mock_remove, mock_geocode):
+    def test_mapping_without_state(self, mock_open, mock_geocode):
         """Test mapping when state is missing but city and nation exist"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -467,11 +439,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_geocoding_exception(self, mock_open, mock_kaggle_api,
-                                         mock_remove, mock_geocode):
+    def test_mapping_geocoding_exception(self, mock_open, mock_geocode):
         """Test handling of geocoding exceptions during mapping"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -490,11 +459,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_multiple_coordinates(self, mock_open, mock_kaggle_api,
-                                          mock_remove, mock_geocode):
+    def test_mapping_multiple_coordinates(self, mock_open, mock_geocode):
         """Test mapping multiple coordinates to different locations"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -519,11 +485,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api, 
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test reverse geocoding maps coordinates to location data"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -558,11 +521,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_missing_city(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_mapping_with_missing_city(self, mock_open, mock_geocode):
         """Test that rows without city data are skipped"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -584,11 +544,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_partial_location_data(self, mock_open, mock_kaggle_api,
-                                                 mock_remove, mock_geocode):
+    def test_mapping_with_partial_location_data(self, mock_open, mock_geocode):
         """Test mapping when only city and country available (no state)"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -610,11 +567,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_handles_geocoding_exception(self, mock_open, mock_kaggle_api,
-                                                  mock_remove, mock_geocode):
+    def test_mapping_handles_geocoding_exception(self, mock_open, mock_geocode):
         """Test that geocoding exceptions are handled gracefully"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -640,11 +594,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_coordinate_to_location_mapping(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_coordinate_to_location_mapping(self, mock_open, mock_geocode):
         """Test that coordinates are correctly mapped to hierarchical location data"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -674,11 +625,8 @@ class TestSeedEarthquakes:
 
 class TestSeedLandslides:
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api') 
     @patch("builtins.open", new_callable=MagicMock)
-    def test_valid_reverse_geocoding(self, mock_open, mock_kaggle_api, mock_remove, mock_zip, mock_geocode):
+    def test_valid_reverse_geocoding(self, mock_open, mock_geocode):
         data = (
             'location_description,country_name,latitude,longitude\n'
             '"my_city, my_state",my_nation,1.0,1.0'
@@ -695,11 +643,8 @@ class TestSeedLandslides:
         mock_geocode.assert_called_once_with(1, 1)
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_geocode_exception_handled(self, mock_open, mock_kaggle_api, mock_remove, mock_zip, mock_geocode):
+    def test_geocode_exception_handled(self, mock_open, mock_geocode):
         data = (
             'location_description,country_name,latitude,longitude\n'
             '"broken_city, broken_state",broken_nation,1.0,2.0'
@@ -712,12 +657,8 @@ class TestSeedLandslides:
         assert ct.length() == old_count
         mock_geocode.assert_called_once_with(1.0, 2.0)
 
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove,
-            mock_zip):
+    def test_failed_download(self, mock_open):
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_landslides()
