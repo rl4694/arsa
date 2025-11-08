@@ -1,5 +1,6 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
+import data.db_connect as dbc
 import os
 import json
 

@@ -3,6 +3,7 @@ All interaction with MongoDB should be through this file!
 We may be required to use a new database at any point.
 """
 import os
+from functools import wraps
 
 import pymongo as pm
 
@@ -14,6 +15,19 @@ SE_DB = 'seDB'
 client = None
 
 MONGO_ID = '_id'
+
+
+def needs_db(func, *args, **kwargs):
+    """
+    This provides a decorator interface for connect_db
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        global client
+        if not client:
+            connect_db()
+        return func(*args, **kwargs)
+    return wrapper
 
 
 def connect_db():
