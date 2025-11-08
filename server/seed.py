@@ -49,21 +49,13 @@ def get_kaggle_api():
     return api
 
 
-def seed_nations(skip_if_populated=True) -> list:
+def seed_nations() -> list:
     """
     Add initial nation data from GeoDB nations API to our database
-
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
 
     Returns:
         List of nation IDs created
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(NATIONS_JSON_FILE):
-        print("Nations JSON file already populated, skipping seed_nations")
-        return []
-
     offset = 0
     num_nations = None
     result = []
@@ -104,7 +96,8 @@ def seed_nations(skip_if_populated=True) -> list:
 
         # Print status
         num_nations = output['metadata']['totalCount']
-        print(f"Seeding countries: {nt.length() * 100 // num_nations}%")
+        completion_percent = nt.length() * 100 // max(num_nations, 1)
+        print(f"Seeding countries: {completion_percent}%")
 
         # Wait for rate-limit to wear off
         time.sleep(COOLDOWN_SEC)
@@ -159,18 +152,10 @@ def create_loc_from_coordinates(lat: float, lon: float):
     }
 
 
-def seed_earthquakes(skip_if_populated=True):
+def seed_earthquakes():
     """
     Add initial earthquake data from Kaggle to our database
-
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print("Cities JSON file already populated, skipping seed_earthquakes")
-        return
-
     try:
         kaggle_api = get_kaggle_api()
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
@@ -195,18 +180,10 @@ def seed_earthquakes(skip_if_populated=True):
     os.remove(EARTHQUAKES_FILE)
 
 
-def seed_landslides(skip_if_populated=True):
+def seed_landslides():
     """
     Add initial landslide data from Kaggle to our database
-
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print("Cities JSON file already populated, skipping seed_landslides")
-        return
-
     try:
         kaggle_api = get_kaggle_api()
         # Unzip CSV file
@@ -239,6 +216,8 @@ def seed_landslides(skip_if_populated=True):
 
 
 if __name__ == '__main__':
-    seed_nations()
-    seed_earthquakes()
-    seed_landslides()
+    if not is_json_populated(NATIONS_JSON_FILE):
+        seed_nations()
+    if not is_json_populated(CITIES_JSON_FILE):
+        seed_earthquakes()
+        seed_landslides()
