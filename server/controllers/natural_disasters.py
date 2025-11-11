@@ -23,9 +23,9 @@ def is_valid_id(_id: str) -> bool:
         return False
 
 
+@dbc.needs_db
 def length():
     """Return the count of disasters in the database."""
-    dbc.connect_db()
     return dbc.client[dbc.SE_DB][NATURAL_DISASTERS_COLLECTION].count_documents({})
 
 
@@ -36,7 +36,6 @@ def create(fields: dict) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
     
-    dbc.connect_db()
     doc = {
         NAME: fields.get(NAME),
         DISASTER_TYPE: fields.get(DISASTER_TYPE),
@@ -44,13 +43,14 @@ def create(fields: dict) -> str:
         LOCATION: fields.get(LOCATION),
         DESCRIPTION: fields.get(DESCRIPTION, '')
     }
+    # @needs_db decorator in dbc.create ensures connection
     result = dbc.create(NATURAL_DISASTERS_COLLECTION, doc)
     return str(result.inserted_id)
 
 
 def read() -> dict:
     """Return all natural disasters as a dictionary."""
-    dbc.connect_db()
+    # @needs_db decorator in dbc.read ensures connection
     disasters_list = dbc.read(NATURAL_DISASTERS_COLLECTION, no_id=False)
     return {
         str(disaster['_id']): {
@@ -66,7 +66,6 @@ def read() -> dict:
 def update(disaster_id: str, data: dict):
     """Update an existing disaster's data."""
     from bson.objectid import ObjectId
-    dbc.connect_db()
     update_dict = {
         NAME: data.get(NAME),
         DISASTER_TYPE: data.get(DISASTER_TYPE),
@@ -74,6 +73,7 @@ def update(disaster_id: str, data: dict):
         LOCATION: data.get(LOCATION),
         DESCRIPTION: data.get(DESCRIPTION, '')
     }
+    # @needs_db decorator in dbc.update ensures connection
     result = dbc.update(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
     if result.matched_count == 0:
         raise KeyError("Disaster not found")
@@ -82,7 +82,7 @@ def update(disaster_id: str, data: dict):
 def delete(disaster_id: str):
     """Delete a disaster by ID."""
     from bson.objectid import ObjectId
-    dbc.connect_db()
+    # @needs_db decorator in dbc.delete ensures connection
     deleted_count = dbc.delete(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
     if deleted_count == 0:
         raise KeyError("Disaster not found")
@@ -121,7 +121,7 @@ class Disaster(Resource):
         """Get a specific disaster by ID."""
         from bson.objectid import ObjectId
         try:
-            dbc.connect_db()
+            # @needs_db decorator in dbc.read_one ensures connection
             disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
             if not disaster:
                 api.abort(404, "Disaster not found")
@@ -138,7 +138,7 @@ class Disaster(Resource):
         try:
             update(disaster_id, request.json)
             from bson.objectid import ObjectId
-            dbc.connect_db()
+            # @needs_db decorator in dbc.read_one ensures connection
             disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
             disaster.pop('_id', None)
             return {'id': disaster_id, **disaster}

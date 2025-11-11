@@ -72,6 +72,51 @@ class TestConnectDB:
         assert result2 == mock_mongo
 
 
+class TestNeedsDbDecorator:
+    """Test the @needs_db decorator."""
+    
+    @patch('data.db_connect.pm.MongoClient')
+    @patch.dict('os.environ', {'CLOUD_MONGO': '0'}, clear=False)
+    def test_decorator_establishes_connection(self, mock_client):
+        """Test that @needs_db decorator establishes connection before function call."""
+        mock_mongo = MagicMock()
+        mock_client.return_value = mock_mongo
+        
+        # Call a function that uses @needs_db decorator
+        @dbc.needs_db
+        def test_function():
+            return "success"
+        
+        result = test_function()
+        
+        # Decorator should have called connect_db, which calls MongoClient
+        assert mock_client.call_count == 1
+        assert result == "success"
+        assert dbc.client == mock_mongo
+    
+    @patch('data.db_connect.pm.MongoClient')
+    @patch.dict('os.environ', {'CLOUD_MONGO': '0'}, clear=False)
+    def test_decorator_reuses_existing_connection(self, mock_client):
+        """Test that @needs_db decorator reuses existing connection."""
+        mock_mongo = MagicMock()
+        mock_client.return_value = mock_mongo
+        
+        # Establish connection first
+        dbc.connect_db()
+        assert mock_client.call_count == 1
+        
+        # Call decorated function
+        @dbc.needs_db
+        def test_function():
+            return "success"
+        
+        result = test_function()
+        
+        # Should not create a new connection
+        assert mock_client.call_count == 1  # Still 1
+        assert result == "success"
+
+
 class TestConvertMongoId:
     """Test the convert_mongo_id function."""
     

@@ -13,15 +13,14 @@ client = None
 MONGO_ID = '_id'
 
 
-def needs_db(func, *args, **kwargs):
+def needs_db(func):
     """
-    This provides a decorator interface for connect_db
+    Decorator to ensure database connection before executing function.
+    Automatically calls connect_db() if client is not connected.
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        global client
-        if not client:
-            connect_db()
+        connect_db()  # This already checks if client is None
         return func(*args, **kwargs)
     return wrapper
 
