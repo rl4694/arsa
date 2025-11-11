@@ -2,27 +2,22 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 import data.db_connect as dbc
-import os
-import json
 
+from bson.objectid import ObjectId
 
-MIN_ID_LEN = 1
 NAME = 'name'
-NATIONS_FILE = 'json/nations.json'
-
-nations = {}
 
 # Return True when `_id` is a valid non-empty string id.
 def is_valid_id(_id: str) -> bool:
-    if not isinstance(_id, str):
+    try:
+        ObjectId(_id)
+        return True
+    except Exception:
         return False
-    if len(_id) < MIN_ID_LEN:
-        return False
-    return True
 
 # Return the number of nations currently stored.
 def length():
-    return len(nations)
+    return len(dbc.read('nations', no_id=False))
 
 # Create a new nation record and return its id.
 def create(fields: dict, recursive=True) -> str:
@@ -33,39 +28,33 @@ def create(fields: dict, recursive=True) -> str:
 
     # Duplicate check (normalize to lower case and trim whitespace)
     nation_name = fields[NAME].strip().lower()
-    for _id, nation in nations.items():
-        if nation.get(NAME, '').strip().lower() == nation_name:
-            if recursive:
-                return _id
-            else:
-                raise ValueError("Duplicate nation detected and recursive not allowed.")
+    existing = dbc.read_one('nations', {NAME: {"$regex": f"^{nation_name}$", "$options": "i"}})
+    if existing:
+        if recursive:
+            return str(existing['_id'])
+        else:
+            raise ValueError("Duplicate nation detected and recursive not allowed.")
 
-    # Pre-pending underscore because id is a built-in Python function
-    _id = str(len(nations) + 1)
-    nations[_id] = {
-        # Standardize Lower case
-        NAME: nation_name
-    }
-    return _id
+    result = dbc.create('nations', {NAME: nation_name})
+    return str(result.inserted_id)
 
 # Return the nations store as a dictionary.
 def read() -> dict:
-    return nations
+    items = dbc.read('nations', no_id=False)
+    return {str(nation['_id']): {NAME: nation[NAME]} for nation in items}
 
 # Update an existing nation's data.
 # Raises: KeyError: if the nation id does not exist.
 def update(nation_id: str, data: dict):
-    if nation_id not in nations:
+    result = dbc.update('nations', {'_id': ObjectId(nation_id)}, {NAME: data.get(NAME)})
+    if result.matched_count == 0:
         raise KeyError("Nation not found")
-    nations[nation_id] = {
-        NAME: data.get(NAME)
-    }
 
 # Delete a nation by id.
 def delete(nation_id: str):
-    if nation_id not in nations:
+    deleted_count = dbc.delete('nations', {'_id': ObjectId(nation_id)})
+    if deleted_count == 0:
         raise KeyError("Nation not found")
-    del nations[nation_id]
 
 
 api = Namespace('nations', description='Nations CRUD operations')
@@ -95,17 +84,18 @@ class NationList(Resource):
 class Nation(Resource):
     @api.doc('get_nation')
     def get(self, nation_id):
-        nation = nations.get(nation_id)
+        nation = dbc.read_one('nations', {'_id': ObjectId(nation_id)})
         if not nation:
             api.abort(404, "Nation not found")
-        return {'id': nation_id, **nation}
+        return {'id': nation_id, NAME: nation[NAME]}
 
     @api.expect(nation_model)
     @api.doc('update_nation')
     def put(self, nation_id):
         try:
             update(nation_id, request.json)
-            return {'id': nation_id, **nations[nation_id]}
+            nation = dbc.read_one('nations', {'_id': ObjectId(nation_id)})
+            return {'id': nation_id, NAME: nation[NAME]}
         except KeyError:
             api.abort(404, "Nation not found")
 
