@@ -1,12 +1,14 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
-from server.db import db
+import data.db_connect as dbc
 
 NAME = 'name'
 DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
+
+NATURAL_DISASTERS_COLLECTION = 'natural_disasters'
 
 
 def is_valid_id(_id: str) -> bool:
@@ -23,7 +25,8 @@ def is_valid_id(_id: str) -> bool:
 
 def length():
     """Return the count of disasters in the database."""
-    return db.natural_disasters.count_documents({})
+    dbc.connect_db()
+    return dbc.client[dbc.SE_DB][NATURAL_DISASTERS_COLLECTION].count_documents({})
 
 
 def create(fields: dict) -> str:
@@ -33,19 +36,22 @@ def create(fields: dict) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
     
-    result = db.natural_disasters.insert_one({
+    dbc.connect_db()
+    doc = {
         NAME: fields.get(NAME),
         DISASTER_TYPE: fields.get(DISASTER_TYPE),
         DATE: fields.get(DATE),
         LOCATION: fields.get(LOCATION),
         DESCRIPTION: fields.get(DESCRIPTION, '')
-    })
+    }
+    result = dbc.create(NATURAL_DISASTERS_COLLECTION, doc)
     return str(result.inserted_id)
 
 
 def read() -> dict:
     """Return all natural disasters as a dictionary."""
-    disasters_list = list(db.natural_disasters.find())
+    dbc.connect_db()
+    disasters_list = dbc.read(NATURAL_DISASTERS_COLLECTION, no_id=False)
     return {
         str(disaster['_id']): {
             NAME: disaster.get(NAME),
@@ -60,16 +66,15 @@ def read() -> dict:
 def update(disaster_id: str, data: dict):
     """Update an existing disaster's data."""
     from bson.objectid import ObjectId
-    result = db.natural_disasters.update_one(
-        {'_id': ObjectId(disaster_id)},
-        {'$set': {
-            NAME: data.get(NAME),
-            DISASTER_TYPE: data.get(DISASTER_TYPE),
-            DATE: data.get(DATE),
-            LOCATION: data.get(LOCATION),
-            DESCRIPTION: data.get(DESCRIPTION, '')
-        }}
-    )
+    dbc.connect_db()
+    update_dict = {
+        NAME: data.get(NAME),
+        DISASTER_TYPE: data.get(DISASTER_TYPE),
+        DATE: data.get(DATE),
+        LOCATION: data.get(LOCATION),
+        DESCRIPTION: data.get(DESCRIPTION, '')
+    }
+    result = dbc.update(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
     if result.matched_count == 0:
         raise KeyError("Disaster not found")
 
@@ -77,8 +82,9 @@ def update(disaster_id: str, data: dict):
 def delete(disaster_id: str):
     """Delete a disaster by ID."""
     from bson.objectid import ObjectId
-    result = db.natural_disasters.delete_one({'_id': ObjectId(disaster_id)})
-    if result.deleted_count == 0:
+    dbc.connect_db()
+    deleted_count = dbc.delete(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
+    if deleted_count == 0:
         raise KeyError("Disaster not found")
 
 
@@ -115,7 +121,8 @@ class Disaster(Resource):
         """Get a specific disaster by ID."""
         from bson.objectid import ObjectId
         try:
-            disaster = db.natural_disasters.find_one({'_id': ObjectId(disaster_id)})
+            dbc.connect_db()
+            disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
             if not disaster:
                 api.abort(404, "Disaster not found")
             # Remove _id from response, we're including it as 'id' parameter
@@ -131,7 +138,8 @@ class Disaster(Resource):
         try:
             update(disaster_id, request.json)
             from bson.objectid import ObjectId
-            disaster = db.natural_disasters.find_one({'_id': ObjectId(disaster_id)})
+            dbc.connect_db()
+            disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
             disaster.pop('_id', None)
             return {'id': disaster_id, **disaster}
         except KeyError:

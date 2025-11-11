@@ -8,10 +8,21 @@ from server.controllers import nations as nt
 from server import seed as sd
 
 
+@pytest.fixture(autouse=True)
+def patch_dependencies():
+    with (
+        patch('time.sleep') as mock_sleep,
+        patch('server.seed.save_json') as mock_save_json,
+        patch('server.seed.get_kaggle_api') as mock_kaggle_api,
+        patch('server.seed.os.remove') as mock_remove,
+        patch('server.seed.zipfile.ZipFile') as mock_zip,
+    ):
+        yield
+
+
 class TestSeedNations:
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_valid(self, mock_get, mock_sleep):
+    def test_valid(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
             'data': [{
@@ -29,26 +40,26 @@ class TestSeedNations:
             nt.delete(_id)
 
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_error_response(self, mock_get, mock_sleep):
+    def test_error_response(self, mock_get):
         mock_get.return_value.status_code = 400
+        mock_get.return_value.json.return_value = {}
         with pytest.raises(ConnectionError):
             sd.seed_nations()
-    
-    @patch('time.sleep')
+
     @patch('server.seed.requests.get', autospec=True)
-    def test_missing_data(self, mock_get, mock_sleep):
+    def test_missing_data(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {}
 
         with pytest.raises(ValueError):
             sd.seed_nations()
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_pagination_multiple_pages(self, mock_get, mock_sleep):
+    def test_json_pagination_multiple_pages(self, mock_get):
         """Test JSON parsing with multiple pages of results"""
+        
+        sd.RESULTS_PER_PAGE = 2
         # Mock responses for multiple pages
         responses = [
             {
@@ -56,25 +67,29 @@ class TestSeedNations:
                     {'name': 'Nation 1'},
                     {'name': 'Nation 2'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
             {
                 'data': [
                     {'name': 'Nation 3'},
                     {'name': 'Nation 4'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
             {
                 'data': [
                     {'name': 'Nation 5'},
                 ],
-                'metadata': {'totalCount': 15},
+                'metadata': {'totalCount': 5},
             },
         ]
         
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.side_effect = responses
+        mock_get.side_effect = [
+            MagicMock(status_code=200, json=MagicMock(return_value=responses[0])),
+            MagicMock(status_code=200, json=MagicMock(return_value=responses[1])),
+            MagicMock(status_code=200, json=MagicMock(return_value=responses[2])),
+        ]
+
         
         old_count = nt.length()
         ids = sd.seed_nations()
@@ -90,9 +105,8 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_with_missing_name_field(self, mock_get, mock_sleep):
+    def test_json_with_missing_name_field(self, mock_get):
         """Test JSON parsing when name field is missing"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -107,17 +121,16 @@ class TestSeedNations:
         old_count = nt.length()
         ids = sd.seed_nations()
         
-        # Should create nation with empty name
-        assert len(ids) == 1
+        # Should ignore nations with empty names
+        assert len(ids) == 0
         assert nt.length() >= old_count
         
         # Clean up
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_with_extra_fields(self, mock_get, mock_sleep):
+    def test_json_with_extra_fields(self, mock_get):
         """Test JSON parsing with extra fields in response"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -143,9 +156,8 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_json_empty_data_array(self, mock_get, mock_sleep):
+    def test_json_empty_data_array(self, mock_get):
         """Test JSON parsing with empty data array"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -160,51 +172,9 @@ class TestSeedNations:
         # Should handle empty array gracefully
         assert len(ids) == 0
 
-    @patch('server.seed.is_json_populated')
-    @patch('time.sleep')
-    @patch('server.seed.requests.get', autospec=True)
-    def test_skip_if_json_populated(self, mock_get, mock_sleep, mock_is_populated):
-        """Test that seed_nations skips if JSON file is already populated"""
-        mock_is_populated.return_value = True
-        
-        ids = sd.seed_nations(skip_if_populated=True)
-        
-        # Should return empty list and not make API calls
-        assert ids == []
-        assert mock_get.call_count == 0
-        mock_is_populated.assert_called_once()
-
-    @patch('server.seed.is_json_populated')
     @patch('server.seed.save_json')
-    @patch('time.sleep')
     @patch('server.seed.requests.get', autospec=True)
-    def test_does_not_skip_when_json_empty(self, mock_get, mock_sleep, 
-                                            mock_save_json, mock_is_populated):
-        """Test that seed_nations proceeds when JSON file is empty"""
-        mock_is_populated.return_value = False
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = {
-            'data': [{'name': 'Test Nation'}],
-            'metadata': {'totalCount': 1},
-        }
-        
-        old_count = nt.length()
-        ids = sd.seed_nations(skip_if_populated=True)
-        
-        # Should proceed with seeding
-        assert len(ids) >= 1
-        assert nt.length() >= old_count
-        mock_get.assert_called()
-        mock_save_json.assert_called_once()
-        
-        # Clean up
-        for _id in ids:
-            nt.delete(_id)
-
-    @patch('server.seed.save_json')
-    @patch('time.sleep')
-    @patch('server.seed.requests.get', autospec=True)
-    def test_saves_to_json_after_seeding(self, mock_get, mock_sleep, mock_save_json):
+    def test_saves_to_json_after_seeding(self, mock_get, mock_save_json):
         """Test that nation data is saved to JSON after seeding"""
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
@@ -212,7 +182,7 @@ class TestSeedNations:
             'metadata': {'totalCount': 1},
         }
         
-        ids = sd.seed_nations(skip_if_populated=False)
+        ids = sd.seed_nations()
         
         # Verify save_json was called with nations data
         mock_save_json.assert_called_once()
@@ -224,36 +194,11 @@ class TestSeedNations:
         for _id in ids:
             nt.delete(_id)
 
-    @patch('server.seed.is_json_populated')
-    @patch('time.sleep')
-    @patch('server.seed.requests.get', autospec=True)
-    def test_force_seed_even_if_populated(self, mock_get, mock_sleep, mock_is_populated):
-        """Test that seed_nations can be forced to run even if JSON is populated"""
-        mock_is_populated.return_value = True
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = {
-            'data': [{'name': 'Test Nation'}],
-            'metadata': {'totalCount': 1},
-        }
-        
-        old_count = nt.length()
-        ids = sd.seed_nations(skip_if_populated=False)
-        
-        # Should proceed despite populated JSON
-        assert nt.length() >= old_count
-        mock_get.assert_called()
-        
-        # Clean up
-        for _id in ids:
-            nt.delete(_id)
-
 
 class TestSeedEarthquakes:
     # open manages context, so a MagicMock is necessary to simulate it
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_valid(self, mock_open, mock_kaggle_api, mock_remove):
+    def test_valid(self, mock_open):
         data = (
             'location,country,latitude,longitude\n'
             '"my_city, my_state",my_nation,1,1'
@@ -265,20 +210,15 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
         # TODO: check if earthquakes are created
 
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove):
+    def test_failed_download(self, mock_open):
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_earthquakes()
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api, 
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test reverse geocoding from coordinates to location"""
         data = (
             'location,country,latitude,longitude\n'
@@ -301,11 +241,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_missing_city(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_mapping_with_missing_city(self, mock_open, mock_geocode):
         """Test mapping when city is missing from geocode result"""
         data = (
             'location,country,latitude,longitude\n'
@@ -327,12 +264,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_partial_location_data(self, mock_open, 
-                                                 mock_kaggle_api, mock_remove,
-                                                 mock_geocode):
+    def test_mapping_with_partial_location_data(self, mock_open, mock_geocode):
         """Test mapping with only city and country (no state)"""
         data = (
             'location,country,latitude,longitude\n'
@@ -354,11 +287,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_geocode_error_handling(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_mapping_geocode_error_handling(self, mock_open, mock_geocode):
         """Test handling of geocoding errors"""
         data = (
             'location,country,latitude,longitude\n'
@@ -384,11 +314,8 @@ class TestSeedEarthquakes:
         assert mock_geocode.call_count == 2
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_coordinate_to_location_mapping(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_coordinate_to_location_mapping(self, mock_open, mock_geocode):
         """Test complete coordinate-to-location mapping flow"""
         data = (
             'location,country,latitude,longitude\n'
@@ -415,11 +342,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count_cities
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test coordinate to location mapping via reverse geocoding"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -442,11 +366,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_missing_city(self, mock_open, mock_kaggle_api,
-                                   mock_remove, mock_geocode):
+    def test_mapping_missing_city(self, mock_open, mock_geocode):
         """Test mapping when reverse geocoding returns no city"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -469,11 +390,8 @@ class TestSeedEarthquakes:
         mock_geocode.assert_called_once()
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_state_and_nation(self, mock_open, mock_kaggle_api,
-                                           mock_remove, mock_geocode):
+    def test_mapping_with_state_and_nation(self, mock_open, mock_geocode):
         """Test full location mapping with city, state, and nation"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -498,11 +416,8 @@ class TestSeedEarthquakes:
         assert nt.length() >= old_count_nations
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_without_state(self, mock_open, mock_kaggle_api,
-                                    mock_remove, mock_geocode):
+    def test_mapping_without_state(self, mock_open, mock_geocode):
         """Test mapping when state is missing but city and nation exist"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -524,11 +439,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_geocoding_exception(self, mock_open, mock_kaggle_api,
-                                         mock_remove, mock_geocode):
+    def test_mapping_geocoding_exception(self, mock_open, mock_geocode):
         """Test handling of geocoding exceptions during mapping"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -547,11 +459,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_multiple_coordinates(self, mock_open, mock_kaggle_api,
-                                          mock_remove, mock_geocode):
+    def test_mapping_multiple_coordinates(self, mock_open, mock_geocode):
         """Test mapping multiple coordinates to different locations"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -576,11 +485,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_reverse_geocoding_mapping(self, mock_open, mock_kaggle_api, 
-                                       mock_remove, mock_geocode):
+    def test_reverse_geocoding_mapping(self, mock_open, mock_geocode):
         """Test reverse geocoding maps coordinates to location data"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -615,11 +521,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_missing_city(self, mock_open, mock_kaggle_api,
-                                       mock_remove, mock_geocode):
+    def test_mapping_with_missing_city(self, mock_open, mock_geocode):
         """Test that rows without city data are skipped"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -641,11 +544,8 @@ class TestSeedEarthquakes:
         assert ct.length() == old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_with_partial_location_data(self, mock_open, mock_kaggle_api,
-                                                 mock_remove, mock_geocode):
+    def test_mapping_with_partial_location_data(self, mock_open, mock_geocode):
         """Test mapping when only city and country available (no state)"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -667,11 +567,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_mapping_handles_geocoding_exception(self, mock_open, mock_kaggle_api,
-                                                  mock_remove, mock_geocode):
+    def test_mapping_handles_geocoding_exception(self, mock_open, mock_geocode):
         """Test that geocoding exceptions are handled gracefully"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -697,11 +594,8 @@ class TestSeedEarthquakes:
         assert ct.length() >= old_count
 
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_coordinate_to_location_mapping(self, mock_open, mock_kaggle_api,
-                                            mock_remove, mock_geocode):
+    def test_coordinate_to_location_mapping(self, mock_open, mock_geocode):
         """Test that coordinates are correctly mapped to hierarchical location data"""
         data = (
             'latitude,longitude,magnitude\n'
@@ -728,482 +622,43 @@ class TestSeedEarthquakes:
         # Verify correct coordinates were passed
         mock_geocode.assert_called_once_with(35.6762, 139.6503)
 
-    @patch('server.seed.is_json_populated')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_skip_if_json_populated(self, mock_open, mock_kaggle_api, 
-                                   mock_remove, mock_is_populated):
-        """Test that seed_earthquakes skips if JSON file is already populated"""
-        mock_is_populated.return_value = True
-        
-        sd.seed_earthquakes(skip_if_populated=True)
-        
-        # Should not download or process data
-        mock_kaggle_api.assert_not_called()
-        mock_open.assert_not_called()
 
-    @patch('server.seed.is_json_populated')
+class TestSeedLandslides:
     @patch('server.seed.reverse_geocode')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_does_not_skip_when_json_empty(self, mock_open, mock_kaggle_api,
-                                           mock_remove, mock_geocode, 
-                                           mock_is_populated):
-        """Test that seed_earthquakes proceeds when JSON file is empty"""
-        mock_is_populated.return_value = False
+    def test_valid_reverse_geocoding(self, mock_open, mock_geocode):
         data = (
-            'location,country,latitude,longitude\n'
-            'Some Location,Some Country,40.0,-74.0'
+            'location_description,country_name,latitude,longitude\n'
+            '"my_city, my_state",my_nation,1.0,1.0'
         )
         mock_open.return_value.__enter__.return_value = StringIO(data)
         mock_geocode.return_value = {
-            'city': 'Test City',
-            'state': 'Test State',
-            'country': 'Test Country',
+            'city': 'New York',
+            'state': 'New York',
+            'country': 'United States'
         }
-        
         old_count = ct.length()
-        sd.seed_earthquakes(skip_if_populated=True)
-        
-        # Should proceed with seeding
-        mock_kaggle_api.assert_called_once()
+        sd.seed_landslides()
+        assert ct.length() >= old_count
+        mock_geocode.assert_called_once_with(1, 1)
 
-
-class TestSeedLandslides:
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
+    @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_valid(self, mock_open, mock_kaggle_api, mock_remove, mock_zip):
+    def test_geocode_exception_handled(self, mock_open, mock_geocode):
         data = (
             'location_description,country_name,latitude,longitude\n'
-            '"my_city, my_state",my_nation,1,1'
+            '"broken_city, broken_state",broken_nation,1.0,2.0'
         )
         mock_open.return_value.__enter__.return_value = StringIO(data)
+        mock_geocode.side_effect = Exception("A")
 
         old_count = ct.length()
         sd.seed_landslides()
-        assert ct.length() > old_count
-        # TODO: check if landslides are created
+        assert ct.length() == old_count
+        mock_geocode.assert_called_once_with(1.0, 2.0)
 
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
     @patch("builtins.open", new_callable=MagicMock)
-    def test_failed_download(self, mock_open, mock_kaggle_api, mock_remove,
-            mock_zip):
+    def test_failed_download(self, mock_open):
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_landslides()
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_parsing_city_state(self, mock_open, 
-                                                      mock_kaggle_api, 
-                                                      mock_remove, mock_zip,
-                                                      mock_nations_read):
-        """Test parsing location_description into city and state"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Seattle, Washington",United States,47.6062,-122.3321\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'United States': 'id1'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_parsing_city_nation(self, mock_open,
-                                                       mock_kaggle_api,
-                                                       mock_remove, mock_zip,
-                                                       mock_nations_read):
-        """Test parsing when second part is a nation name"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Tokyo, Japan",Japan,35.6762,139.6503\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'Japan': 'id1', 'United States': 'id2'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_with_ignored_words(self, mock_open,
-                                                      mock_kaggle_api,
-                                                      mock_remove, mock_zip,
-                                                      mock_nations_read):
-        """Test that locations with ignored words are skipped"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Highway 101, California",United States,34.0522,-118.2437\n'
-            '"Near Seattle, Washington",United States,47.6062,-122.3321\n'
-            '"Main Road, Texas",United States,29.7604,-95.3698\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'United States': 'id1'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # All three should be skipped due to ignored words
-        assert ct.length() == old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_with_numbers(self, mock_open,
-                                                mock_kaggle_api,
-                                                mock_remove, mock_zip,
-                                                mock_nations_read):
-        """Test that locations with numbers are skipped"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"City123, State",Nation,1,1\n'
-            '"1st Avenue, Washington",United States,47.6062,-122.3321\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'Nation': 'id1', 'United States': 'id2'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should be skipped due to numbers
-        assert ct.length() == old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_invalid_format(self, mock_open,
-                                                  mock_kaggle_api,
-                                                  mock_remove, mock_zip,
-                                                  mock_nations_read):
-        """Test that locations not in 'city, state/nation' format are skipped"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"SingleLocation",Nation,1,1\n'
-            '"City, State, Extra",Nation,1,1\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'Nation': 'id1'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should be skipped due to invalid format
-        assert ct.length() == old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_mapping_with_nation_match(self, mock_open,
-                                                 mock_kaggle_api,
-                                                 mock_remove, mock_zip,
-                                                 mock_nations_read):
-        """Test mapping when country_name matches existing nations"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Vancouver, British Columbia",Canada,49.2827,-123.1207\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'Canada': 'id1', 'United States': 'id2'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should create city with mapped nation
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_mapping_multiple_entries(self, mock_open,
-                                                mock_kaggle_api,
-                                                mock_remove, mock_zip,
-                                                mock_nations_read):
-        """Test mapping multiple location entries"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Seattle, Washington",United States,47.6062,-122.3321\n'
-            '"Portland, Oregon",United States,45.5152,-122.6784\n'
-            '"Vancouver, British Columbia",Canada,49.2827,-123.1207\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'Canada': 'id1', 'United States': 'id2'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should create all three cities
-        assert ct.length() >= old_count + 3
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_mapping_case_sensitivity(self, mock_open,
-                                                mock_kaggle_api,
-                                                mock_remove, mock_zip,
-                                                mock_nations_read):
-        """Test that ignored words filter is case insensitive"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"HIGHWAY 101, California",United States,34.0522,-118.2437\n'
-            '"Near town, Washington",United States,47.6062,-122.3321\n'
-            '"On Main Street, Texas",United States,29.7604,-95.3698\n'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nations_read.return_value = {'United States': 'id1'}
-        
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # All should be filtered despite uppercase
-        assert ct.length() == old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_description_parsing(self, mock_open, mock_kaggle_api,
-                                          mock_remove, mock_zip, mock_nt_read):
-        """Test parsing of location_description field into city/state/nation"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Tokyo, Japan",Japan,35.6762,139.6503\n'
-            '"Paris, France",France,48.8566,2.3522'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Japan', 'France', 'United States']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should create cities for valid location descriptions
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_mapping_with_state(self, mock_open, mock_kaggle_api,
-                                         mock_remove, mock_zip, mock_nt_read):
-        """Test mapping location description to city and state"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"San Francisco, California",United States,37.7749,-122.4194'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['United States']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should create city with state
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_location_mapping_nation_vs_state(self, mock_open, mock_kaggle_api,
-                                              mock_remove, mock_zip, mock_nt_read):
-        """Test that location is correctly mapped to nation vs state"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"City, Mexico",Mexico,19.4326,-99.1332'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Mexico', 'United States', 'Canada']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # When second part matches nation list, should map to nation not state
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_skip_invalid_location_format(self, mock_open, mock_kaggle_api,
-                                          mock_remove, mock_zip, mock_nt_read):
-        """Test that locations with invalid format are skipped"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Single Location",Country,1,1\n'
-            '"Too, Many, Parts",Country,2,2\n'
-            '"Valid, Location",Country,3,3'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Country']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Only valid format (comma-separated pair) should be processed
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_skip_location_with_ignored_words(self, mock_open, mock_kaggle_api,
-                                              mock_remove, mock_zip, mock_nt_read):
-        """Test that locations with road/highway keywords are filtered out"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Highway 101, California",USA,1,1\n'
-            '"Main Road, Texas",USA,2,2\n'
-            '"Route 66, Arizona",USA,3,3\n'
-            '"Downtown, New York",USA,4,4\n'
-            '"City Center, Florida",USA,5,5'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['USA']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Locations with road/highway/route should be skipped
-        # Only valid city locations should be added
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_skip_location_with_numbers(self, mock_open, mock_kaggle_api,
-                                        mock_remove, mock_zip, mock_nt_read):
-        """Test that locations with numbers are filtered out"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Building 123, District",Country,1,1\n'
-            '"5th Avenue, City",Country,2,2\n'
-            '"Clean City, Clean State",Country,3,3'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Country']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Locations with numbers should be skipped
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_country_name_fallback_mapping(self, mock_open, mock_kaggle_api,
-                                           mock_remove, mock_zip, mock_nt_read):
-        """Test that country_name field is used as fallback for nation mapping"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"City, UnknownPlace",Brazil,1,1'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Brazil', 'Argentina']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Should use country_name when location part doesn't match nations
-        assert ct.length() >= old_count
-
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_complex_location_filtering(self, mock_open, mock_kaggle_api,
-                                        mock_remove, mock_zip, mock_nt_read):
-        """Test combination of filtering rules (ignored words + numbers)"""
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"Near Highway 5, State",Country,1,1\n'
-            '"On Route 123, Place",Country,2,2\n'
-            '"ValidCity, ValidState",Country,3,3'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['Country']
-
-        old_count = ct.length()
-        sd.seed_landslides()
-        
-        # Only location without ignored words/numbers should be processed
-        assert ct.length() >= old_count
-
-    @patch('server.seed.is_json_populated')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_skip_if_json_populated(self, mock_open, mock_kaggle_api,
-                                   mock_remove, mock_zip, mock_is_populated):
-        """Test that seed_landslides skips if JSON file is already populated"""
-        mock_is_populated.return_value = True
-        
-        sd.seed_landslides(skip_if_populated=True)
-        
-        # Should not download or process data
-        mock_kaggle_api.assert_not_called()
-        mock_open.assert_not_called()
-
-    @patch('server.seed.is_json_populated')
-    @patch('server.seed.nt.read')
-    @patch('server.seed.zipfile.ZipFile')
-    @patch('server.seed.os.remove')
-    @patch('server.seed.get_kaggle_api')
-    @patch("builtins.open", new_callable=MagicMock)
-    def test_does_not_skip_when_json_empty(self, mock_open, mock_kaggle_api,
-                                           mock_remove, mock_zip, mock_nt_read,
-                                           mock_is_populated):
-        """Test that seed_landslides proceeds when JSON file is empty"""
-        mock_is_populated.return_value = False
-        data = (
-            'location_description,country_name,latitude,longitude\n'
-            '"TestCity, TestState",TestCountry,40.0,-74.0'
-        )
-        mock_open.return_value.__enter__.return_value = StringIO(data)
-        mock_nt_read.return_value = ['TestCountry']
-        
-        old_count = ct.length()
-        sd.seed_landslides(skip_if_populated=True)
-        
-        # Should proceed with seeding
-        mock_kaggle_api.assert_called_once()

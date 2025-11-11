@@ -1,20 +1,20 @@
 import pytest
 import server.controllers.cities as ct
+import data.db_connect as dbc
+import mongomock
 
 
 @pytest.fixture(autouse=True)
-def _reset_store():
-    # Reinitialize the module-level dict so tests don't leak state
-    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
-        ct.cities.clear()
-    yield
-    if hasattr(ct, "cities") and isinstance(ct.cities, dict):
-        ct.cities.clear()
+def patch_db(monkeypatch):
+    def fake_connect():
+        client = mongomock.MongoClient()
+        return client['testDB']
+    monkeypatch.setattr(dbc, "connect_db", fake_connect)
 
 
 class TestIsValidId:
     def test_valid(self):
-        assert ct.is_valid_id('1') == True
+        assert ct.is_valid_id('507f1f77bcf86cd799439011') == True
 
     def test_non_str(self):
         assert ct.is_valid_id(1) == False
@@ -24,20 +24,23 @@ class TestIsValidId:
 
 
 class TestLength():
-    @pytest.mark.skip(reason="Length test has been combined into TestCreate")
     def test_basic(self):
-        old_length = ct.length()
-        _id = ct.create({ct.NAME: 'test1'})
-        assert ct.length() > old_length
-        ct.delete(_id)
+        assert ct.length() == 0
+        id1 = ct.create({ct.NAME: "alpha"})
+        id2 = ct.create({ct.NAME: "bravo"})
+        assert ct.length() == 2
+        ct.delete(id1)
+        assert ct.length() == 1
+        ct.delete(id2)
+        assert ct.length() == 0
 
 
 class TestCreate:
     def test_valid(self):
-        old_length = ct.length()
-        _id = ct.create({ct.NAME: 'test1'})
+        _id = ct.create({ct.NAME: 'testcity'})
         assert ct.is_valid_id(_id)
-        assert ct.length() > old_length
+        cities = ct.read()
+        assert _id in cities
         ct.delete(_id)
 
     def test_non_dict(self):
@@ -54,5 +57,23 @@ class TestRead:
         _id = ct.create({ct.NAME: 'test1'})
         cities = ct.read()
         assert isinstance(cities, dict)
+        assert _id in cities
         assert len(cities) > 0
         ct.delete(_id)
+
+
+class TestUpdate:
+    def test_basic(self):
+        _id = ct.create({ct.NAME: 'updatecity', ct.STATE: 'old'})
+        ct.update(_id, {ct.NAME: 'updatecity', ct.STATE: 'new'})
+        cities = ct.read()
+        assert cities[_id][ct.STATE] == 'new'
+        ct.delete(_id)
+
+
+class TestDelete:
+    def test_basic(self):
+        _id = ct.create({ct.NAME: 'delcity'})
+        ct.delete(_id)
+        cities = ct.read()
+        assert _id not in cities

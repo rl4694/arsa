@@ -7,13 +7,12 @@ import requests
 import time
 import csv
 import zipfile
-import re
 from dotenv import load_dotenv
 from server.controllers import cities as ct
 from server.controllers import states as st
 from server.controllers import nations as nt
 from server.controllers import natural_disasters as nd
-from server.controllers.utils import is_json_populated, save_json, load_json
+from server.controllers.utils import is_json_populated, save_json
 from server.geocoding import reverse_geocode
 
 
@@ -51,21 +50,13 @@ def get_kaggle_api():
     return api
 
 
-def seed_nations(skip_if_populated=True) -> list:
+def seed_nations() -> list:
     """
     Add initial nation data from GeoDB nations API to our database
-    
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
-    
+
     Returns:
         List of nation IDs created
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(NATIONS_JSON_FILE):
-        print(f"Nations JSON file already populated, skipping seed_nations")
-        return []
-    
     offset = 0
     num_nations = None
     result = []
@@ -79,8 +70,10 @@ def seed_nations(skip_if_populated=True) -> list:
             'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
             'x-rapidapi-key': os.getenv('RAPID_API_KEY'),
         }
-        res = requests.get(NATIONS_URL, headers=headers,
-                           params=params)
+        try:
+            res = requests.get(NATIONS_URL, headers=headers, params=params)
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError("Could not reach GeoDB nations API") from e
 
         # Verify response is OK
         if res.status_code != 200:
@@ -95,19 +88,22 @@ def seed_nations(skip_if_populated=True) -> list:
 
         # Add city data to database
         for country in output['data']:
-            _id = nt.create({
-                nt.NAME: country.get('name', ''),
-            })
+            name = country.get('name')
+            if not name:
+                print(f"Skipping country with missing name: {country}")
+                continue
+            _id = nt.create({nt.NAME: name})
             result.append(_id)
 
         # Print status
         num_nations = output['metadata']['totalCount']
-        print(f"Seeding countries: {nt.length() * 100 // num_nations}%")
+        completion_percent = nt.length() * 100 // max(num_nations, 1)
+        print(f"Seeding countries: {completion_percent}%")
 
         # Wait for rate-limit to wear off
         time.sleep(COOLDOWN_SEC)
         offset += RESULTS_PER_PAGE
-    
+
     # Save nations data to JSON file
     try:
         nations_data = nt.read()
@@ -115,22 +111,52 @@ def seed_nations(skip_if_populated=True) -> list:
         print(f"Saved {len(nations_data)} nations to {NATIONS_JSON_FILE}")
     except Exception as e:
         print(f"Warning: Could not save nations to JSON: {e}")
-    
+
     return result
 
 
-def seed_earthquakes(skip_if_populated=True):
+def create_loc_from_coordinates(lat: float, lon: float):
+    """
+    Use reverse geocoding to resolve coordinates into nation, state, city
+
+    Args:
+        lat (float): Latitude
+        lon (float): Longitude
+    """
+    loc = reverse_geocode(lat, lon)
+    city_name = loc.get('city')
+    state_name = loc.get('state')
+    nation_name = loc.get('country')
+    if not city_name:
+        raise ValueError(f"No city found for ({lat}, {lon})")
+    nation_id = (nt.create({nt.NAME: nation_name}) if nation_name else None)
+    state_id = None
+    if state_name:
+        state_id = st.create({
+            st.NAME: state_name,
+            st.NATION: nation_id
+        })
+    print(f"Created state: {state_name}, {nation_name}")
+    city_id = ct.create({
+        ct.NAME: city_name,
+        ct.STATE: state_id,
+        ct.NATION: nation_id,
+    })
+    print(f"Created city: {city_name} ({state_name}, {nation_name})")
+    return {
+        'city': city_id,
+        'state': state_id,
+        'nation': nation_id,
+        'city_name': city_name,
+        'state_name': state_name,
+        'nation_name': nation_name,
+    }
+
+
+def seed_earthquakes():
     """
     Add initial earthquake data from Kaggle to our database
-    
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print(f"Cities JSON file already populated, skipping seed_earthquakes")
-        return
-    
     try:
         kaggle_api = get_kaggle_api()
         kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
@@ -143,40 +169,8 @@ def seed_earthquakes(skip_if_populated=True):
 
                 # We'll probably turn this into a separate function soon -RJ
                 try:
-                    # Use reverse geocoder to resolve latitude and longitude
-                    loc = reverse_geocode(lat, lon)
-                    city_name = loc.get('city')
-                    state_name = loc.get('state')
-                    nation_name = loc.get('country')
-
-                    if not city_name:
-                        print(f"No city found for ({lat}, {lon})")
-                        continue
-
-                    # Create Nation
-                    nation_id = (nt.create({nt.NAME: nation_name})
-                                 if nation_name else None)
-                    print(f"Created nation: {nation_name}")
-
-                    # Create State
-                    state_id = None
-                    if state_name:
-                        state_id = st.create({
-                            st.NAME: state_name,
-                            st.NATION: nation_id
-                        })
-                    print(f"Created state: {state_name}, {nation_name}")
-
-                    # Create City
-                    city_id = ct.create({
-                        ct.NAME: city_name,
-                        ct.STATE: state_id,
-                        ct.NATION: nation_id,
-                    })
-                    print(
-                        f"Created city: {city_name} ({state_name},"
-                        f"{nation_name})"
-                    )
+                    loc_data = create_loc_from_coordinates(lat, lon)
+                    city_name = loc_data['city_name']
 
                     # Create Natural Disaster (Earthquake)
                     disaster_id = nd.create({
@@ -196,18 +190,10 @@ def seed_earthquakes(skip_if_populated=True):
     os.remove(EARTHQUAKES_FILE)
 
 
-def seed_landslides(skip_if_populated=True):
+def seed_landslides():
     """
     Add initial landslide data from Kaggle to our database
-    
-    Args:
-        skip_if_populated: If True, skip seeding if JSON file already has data
     """
-    # Check if JSON file is already populated
-    if skip_if_populated and is_json_populated(CITIES_JSON_FILE):
-        print(f"Cities JSON file already populated, skipping seed_landslides")
-        return
-    
     try:
         kaggle_api = get_kaggle_api()
         # Unzip CSV file
@@ -215,57 +201,33 @@ def seed_landslides(skip_if_populated=True):
         with zipfile.ZipFile(LANDSLIDE_ZIP, 'r') as z:
             z.extractall('.')
 
-        ignored_words = (
-            r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
-        )
+        # ignored_words = (
+        #     r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
+        # )
         with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            nations = nt.read()
             for row in rows:
-                # If location is not in the expected format or contains
-                # ignored words, skip it
-                location = row['location_description'].split(', ')
-                if (len(location) != 2
-                        or re.search(
-                            ignored_words,
-                            row['location_description'],
-                            flags=re.IGNORECASE
-                        )
-                        or re.search(r'\d', row['location_description'])):
-                    continue
+                # Use coordinate data to create nation, state, cities
+                lat = float(row['latitude'])
+                lon = float(row['longitude'])
 
-                # Extract location data from row
-                city = location[0]
-                state = ''
-                nation = ''
-                if location[1] in nations:
-                    nation = location[1]
-                else:
-                    state = location[1]
-                if row['country_name'] in nations:
-                    nation = row['country_name']
-
-                # Create location in database
-                city_id = ct.create({
-                    ct.NAME: city,
-                    ct.STATE: state,
-                    ct.NATION: nation,
-                })
-                
-                # Create Natural Disaster (Landslide)
+                # We'll probably turn this into a separate function soon -RJ
                 try:
-                    lat = row.get('latitude', '')
-                    lon = row.get('longitude', '')
+                    loc_data = create_loc_from_coordinates(lat, lon)
+                    city_name = loc_data['city_name']
+
+                    # Create Natural Disaster (Landslide)
                     disaster_id = nd.create({
-                        nd.NAME: f"Landslide at {city}",
+                        nd.NAME: f"Landslide at {city_name}",
                         nd.DISASTER_TYPE: 'landslide',
                         nd.DATE: row.get('event_date', ''),
-                        nd.LOCATION: f"{lat}, {lon}" if lat and lon else city,
+                        nd.LOCATION: f"{lat}, {lon}",
                         nd.DESCRIPTION: f"Size: {row.get('landslide_size', 'N/A')}, Trigger: {row.get('trigger', 'N/A')}"
                     })
                     print(f"Created landslide disaster: {disaster_id} at {lat}, {lon}")
+
                 except Exception as e:
-                    print(f"Error creating landslide disaster: {e}")
+                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
     os.remove(LANDSLIDE_ZIP)
@@ -273,6 +235,8 @@ def seed_landslides(skip_if_populated=True):
 
 
 if __name__ == '__main__':
-    seed_nations()
-    seed_earthquakes()
-    seed_landslides()
+    if not is_json_populated(NATIONS_JSON_FILE):
+        seed_nations()
+    if not is_json_populated(CITIES_JSON_FILE):
+        seed_earthquakes()
+        seed_landslides()
