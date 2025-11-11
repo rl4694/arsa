@@ -18,6 +18,10 @@ def is_valid_id(_id: str) -> bool:
         return False
 
 
+def length() -> int:
+    return len(dbc.read('cities', no_id=False))
+
+
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
