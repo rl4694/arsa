@@ -2,7 +2,6 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
 import data.db_connect as dbc
-from data.db_connect import needs_db
 
 NAME = 'name'
 STATE = 'state'
@@ -19,8 +18,7 @@ def is_valid_id(_id: str) -> bool:
         return False
 
 
-@needs_db
-def create(fields: dict, recursive=True, db=None) -> str:
+def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
@@ -39,30 +37,27 @@ def create(fields: dict, recursive=True, db=None) -> str:
         NAME: city_name,
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
-    }, db=db)
+    })
     return str(result.inserted_id)
 
 
-@needs_db
-def read(db=None) -> dict:
-    cities_list = dbc.read('cities', no_id=False, db=db)
+def read() -> dict:
+    cities_list = dbc.read('cities', no_id=False)
     return {str(city['_id']): {NAME: city[NAME], STATE: city.get(STATE), NATION: city.get(NATION)} for city in cities_list}
 
 
-@needs_db
-def update(city_id: str, data: dict, db=None):
+def update(city_id: str, data: dict):
     result = dbc.update('cities', {'_id': ObjectId(city_id)}, {
         NAME: data.get(NAME),
         STATE: data.get(STATE),
         NATION: data.get(NATION)
-    }, db=db)
+    })
     if result.matched_count == 0:
         raise KeyError("City not found")
 
 
-@needs_db
-def delete(city_id: str, db=None):
-    deleted_count = dbc.delete('cities', {'_id': ObjectId(city_id)}, db=db)
+def delete(city_id: str):
+    deleted_count = dbc.delete('cities', {'_id': ObjectId(city_id)})
     if deleted_count == 0:
         raise KeyError("City not found")
 
