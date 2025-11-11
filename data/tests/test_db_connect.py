@@ -89,3 +89,21 @@ class TestConvertMongoId:
         dbc.convert_mongo_id(doc)
         assert doc == {'name': 'test'}
 
+
+@pytest.mark.skip(reason="CRUD operations require active MongoDB connection")
+class TestDatabaseCRUDOperations:
+    """Tests for create, read, update, delete operations (requires live DB)."""
+    
+    def test_create_document(self):
+        """Test creating a document in the database."""
+        # Skipped: requires live MongoDB instance
+        test_doc = {'name': 'test', 'value': 123}
+        result = dbc.create('test_collection', test_doc)
+        assert result.inserted_id is not None
+    
+    def test_read_documents(self):
+        """Test reading documents from the database."""
+        # Skipped: requires live MongoDB instance
+        docs = dbc.read('test_collection')
+        assert isinstance(docs, list)
+

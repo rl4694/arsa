@@ -244,4 +244,16 @@ class TestGeocodeEndpoint:
         response = self.client.get('/geocode/?lat=40.7128&lon=-74.0060')
         
         assert response.status_code == 503
+    
+    @pytest.mark.skip(reason="Future feature: batch geocoding not yet implemented")
+    def test_batch_geocode_multiple_locations(self):
+        """Test batch geocoding of multiple coordinate pairs (future feature)."""
+        # This test is skipped because batch geocoding is planned for v2.0
+        response = self.client.post('/geocode/batch', json={
+            'locations': [
+                {'lat': 40.7128, 'lon': -74.0060},
+                {'lat': 34.0522, 'lon': -118.2437}
+            ]
+        })
+        assert response.status_code == 200
 
