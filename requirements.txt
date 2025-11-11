@@ -21,7 +21,7 @@ jsonschema-specifications==2025.9.1
 kaggle==1.7.4.5
 MarkupSafe==3.0.2
 mccabe==0.7.0
-mongomock==4.2.0
+mongomock==4.2.0.post1
 packaging==25.0
 pluggy==1.6.0
 protobuf==6.33.0
