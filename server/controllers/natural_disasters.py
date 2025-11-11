@@ -1,32 +1,85 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import os
-import json
+from server.db import db
 
 NAME = 'name'
 DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
-DISASTERS_FILE = 'json/natural_disasters.json'
 
-disasters = {}
+
+def is_valid_id(_id: str) -> bool:
+    """Validate if an ID is valid (ObjectId format)."""
+    if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
+        return True
+    try:
+        from bson.objectid import ObjectId
+        ObjectId(_id)
+        return True
+    except Exception:
+        return False
+
+
+def length():
+    """Return the count of disasters in the database."""
+    return db.natural_disasters.count_documents({})
 
 
 def create(fields: dict) -> str:
-  _id = str(len(disasters) + 1)
-  disasters[_id] = {
-    NAME: fields.get(NAME),
-    DISASTER_TYPE: fields.get(DISASTER_TYPE),
-    DATE: fields.get(DATE),
-    LOCATION: fields.get(LOCATION),
-    DESCRIPTION: fields.get(DESCRIPTION, '')
-  }
-  return _id
+    """Create a new natural disaster record and return its ID."""
+    if not isinstance(fields, dict):
+        raise ValueError(f'Bad type for fields: {type(fields)}')
+    if not fields.get(NAME):
+        raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+    
+    result = db.natural_disasters.insert_one({
+        NAME: fields.get(NAME),
+        DISASTER_TYPE: fields.get(DISASTER_TYPE),
+        DATE: fields.get(DATE),
+        LOCATION: fields.get(LOCATION),
+        DESCRIPTION: fields.get(DESCRIPTION, '')
+    })
+    return str(result.inserted_id)
 
 
 def read() -> dict:
-  return disasters
+    """Return all natural disasters as a dictionary."""
+    disasters_list = list(db.natural_disasters.find())
+    return {
+        str(disaster['_id']): {
+            NAME: disaster.get(NAME),
+            DISASTER_TYPE: disaster.get(DISASTER_TYPE),
+            DATE: disaster.get(DATE),
+            LOCATION: disaster.get(LOCATION),
+            DESCRIPTION: disaster.get(DESCRIPTION, '')
+        } for disaster in disasters_list
+    }
+
+
+def update(disaster_id: str, data: dict):
+    """Update an existing disaster's data."""
+    from bson.objectid import ObjectId
+    result = db.natural_disasters.update_one(
+        {'_id': ObjectId(disaster_id)},
+        {'$set': {
+            NAME: data.get(NAME),
+            DISASTER_TYPE: data.get(DISASTER_TYPE),
+            DATE: data.get(DATE),
+            LOCATION: data.get(LOCATION),
+            DESCRIPTION: data.get(DESCRIPTION, '')
+        }}
+    )
+    if result.matched_count == 0:
+        raise KeyError("Disaster not found")
+
+
+def delete(disaster_id: str):
+    """Delete a disaster by ID."""
+    from bson.objectid import ObjectId
+    result = db.natural_disasters.delete_one({'_id': ObjectId(disaster_id)})
+    if result.deleted_count == 0:
+        raise KeyError("Disaster not found")
 
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
@@ -41,33 +94,58 @@ disaster_model = api.model('NaturalDisaster', {
 
 @api.route('/')
 class DisasterList(Resource):
-  def get(self):
-    return {'disasters': read()}
+    @api.doc('list_disasters')
+    def get(self):
+        """Get all natural disasters."""
+        return {'disasters': read()}
 
-  @api.expect(disaster_model)
-  def post(self):
-    data = request.json
-    disaster_id = create(data)
-    return {'id': disaster_id, **data}, 201
+    @api.expect(disaster_model)
+    @api.doc('create_disaster')
+    def post(self):
+        """Create a new natural disaster."""
+        data = request.json
+        disaster_id = create(data)
+        return {'id': disaster_id, **data}, 201
 
 
 @api.route('/<string:disaster_id>')
 class Disaster(Resource):
-  def get(self, disaster_id):
-    disaster = disasters.get(disaster_id)
-    if not disaster:
-      api.abort(404, "Disaster not found")
-    return {'id': disaster_id, **disaster}
+    @api.doc('get_disaster')
+    def get(self, disaster_id):
+        """Get a specific disaster by ID."""
+        from bson.objectid import ObjectId
+        try:
+            disaster = db.natural_disasters.find_one({'_id': ObjectId(disaster_id)})
+            if not disaster:
+                api.abort(404, "Disaster not found")
+            # Remove _id from response, we're including it as 'id' parameter
+            disaster.pop('_id', None)
+            return {'id': disaster_id, **disaster}
+        except Exception:
+            api.abort(404, "Disaster not found")
 
-  @api.expect(disaster_model)
-  def put(self, disaster_id):
-    if disaster_id not in disasters:
-      api.abort(404, "Disaster not found")
-    update(disaster_id, request.json)
-    return {'id': disaster_id, **disasters[disaster_id]}
+    @api.expect(disaster_model)
+    @api.doc('update_disaster')
+    def put(self, disaster_id):
+        """Update an existing disaster."""
+        try:
+            update(disaster_id, request.json)
+            from bson.objectid import ObjectId
+            disaster = db.natural_disasters.find_one({'_id': ObjectId(disaster_id)})
+            disaster.pop('_id', None)
+            return {'id': disaster_id, **disaster}
+        except KeyError:
+            api.abort(404, "Disaster not found")
+        except Exception:
+            api.abort(400, "Bad request")
 
-  def delete(self, disaster_id):
-    if disaster_id not in disasters:
-      api.abort(404, "Disaster not found")
-    delete(disaster_id)
-    return '', 204
+    @api.doc('delete_disaster')
+    def delete(self, disaster_id):
+        """Delete a disaster by ID."""
+        try:
+            delete(disaster_id)
+            return '', 204
+        except KeyError:
+            api.abort(404, "Disaster not found")
+        except Exception:
+            api.abort(400, "Bad request")
