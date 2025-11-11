@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from server.controllers import cities as ct
 from server.controllers import states as st
 from server.controllers import nations as nt
+from server.controllers import natural_disasters as nd
 from server.controllers.utils import is_json_populated, save_json, load_json
 from server.geocoding import reverse_geocode
 
@@ -167,7 +168,7 @@ def seed_earthquakes(skip_if_populated=True):
                     print(f"Created state: {state_name}, {nation_name}")
 
                     # Create City
-                    ct.create({
+                    city_id = ct.create({
                         ct.NAME: city_name,
                         ct.STATE: state_id,
                         ct.NATION: nation_id,
@@ -177,10 +178,18 @@ def seed_earthquakes(skip_if_populated=True):
                         f"{nation_name})"
                     )
 
-                except Exception:
-                    print(f"Error geocoding for ({lat}, {lon})")
-                # TODO: create natural disasters
-                # print(row['latitude'], row['longitude'])
+                    # Create Natural Disaster (Earthquake)
+                    disaster_id = nd.create({
+                        nd.NAME: f"Earthquake at {city_name}",
+                        nd.DISASTER_TYPE: 'earthquake',
+                        nd.DATE: row.get('time', ''),
+                        nd.LOCATION: f"{lat}, {lon}",
+                        nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')}, Depth: {row.get('depth', 'N/A')} km"
+                    })
+                    print(f"Created earthquake disaster: {disaster_id}")
+
+                except Exception as e:
+                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
@@ -237,13 +246,26 @@ def seed_landslides(skip_if_populated=True):
                     nation = row['country_name']
 
                 # Create location in database
-                ct.create({
+                city_id = ct.create({
                     ct.NAME: city,
                     ct.STATE: state,
                     ct.NATION: nation,
                 })
-                # TODO: create natural disasters
-                print(row['latitude'], row['longitude'])
+                
+                # Create Natural Disaster (Landslide)
+                try:
+                    lat = row.get('latitude', '')
+                    lon = row.get('longitude', '')
+                    disaster_id = nd.create({
+                        nd.NAME: f"Landslide at {city}",
+                        nd.DISASTER_TYPE: 'landslide',
+                        nd.DATE: row.get('event_date', ''),
+                        nd.LOCATION: f"{lat}, {lon}" if lat and lon else city,
+                        nd.DESCRIPTION: f"Size: {row.get('landslide_size', 'N/A')}, Trigger: {row.get('trigger', 'N/A')}"
+                    })
+                    print(f"Created landslide disaster: {disaster_id} at {lat}, {lon}")
+                except Exception as e:
+                    print(f"Error creating landslide disaster: {e}")
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
     os.remove(LANDSLIDE_ZIP)
