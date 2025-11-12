@@ -28,6 +28,16 @@ LANDSLIDE_DATASET = 'kazushiadachi/global-landslide-data'
 LANDSLIDE_ZIP = 'global-landslide-data.zip'
 LANDSLIDE_FILE = 'Global_Landslide_Catalog_Export.csv'
 
+# Potential ones to work on
+TSUNAMI_DATASET = 'andrewmvd/tsunami-dataset'
+TSUNAMI_FILE = 'tsunami_dataset.csv'
+
+WILDFIRES_DATASET = 'rtatman/188-million-us-wildfires'
+WILDFIRES_FILE = 'FPA_FOD_20170508.sqlite'
+
+VOLCANO_DATASET = 'smithsonian/volcanic-eruptions'
+VOLCANO_FILE = 'eruptions.csv'
+
 NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
 RESULTS_PER_PAGE = 10
 COOLDOWN_SEC = 1.5
@@ -232,6 +242,54 @@ def seed_landslides():
         raise ConnectionError('Could not retrieve tsunami CSV file.')
     os.remove(LANDSLIDE_ZIP)
     os.remove(LANDSLIDE_FILE)
+
+# We should try and standardize a format for new disasters
+def seed_tsunamis():
+    """
+    Add initial tsunami data from Kaggle to our database
+    """
+    try:
+        kaggle_api = get_kaggle_api()
+        kaggle_api.dataset_download_file(TSUNAMI_DATASET, TSUNAMI_FILE)
+        with open(TSUNAMI_FILE, mode='r', encoding='utf-8') as f:
+            rows = list(csv.DictReader(f))
+            for row in rows:
+                # general long and lat parser module
+                lat_str = (
+                    row.get('latitude') or row.get('Latitude') or
+                    row.get('lat') or row.get('Lat')
+                )
+                lon_str = (
+                    row.get('longitude') or row.get('Longitude') or
+                    row.get('lon') or row.get('Lon') or row.get('lng')
+                )
+
+                if not lat_str or not lon_str:
+                    continue
+
+                lat = float(str(lat_str).strip())
+                lon = float(str(lon_str).strip())
+
+                try:
+                    loc_data = create_loc_from_coordinates(lat, lon)
+                    city_name = loc_data['city_name']
+
+                    # Create Natural Disaster (Tsunami)
+                    disaster_id = nd.create({
+                        nd.NAME: f"Tsunami at {city_name}",
+                        nd.DISASTER_TYPE: 'tsunami',
+                        nd.DATE: row.get('time', ''),
+                        nd.LOCATION: f"{lat}, {lon}"
+                        #nd.DESCRIPTION:
+                    })
+                    print(f"Created tsunami disaster: {disaster_id}")
+
+                except Exception as e:
+                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
+
+    except FileNotFoundError:
+        raise ConnectionError('Could not retrieve tsunami CSV file.')
+    os.remove(TSUNAMI_FILE)
 
 
 if __name__ == '__main__':
