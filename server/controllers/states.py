@@ -8,13 +8,7 @@ NAME = 'name'
 NATION = 'nation'
 
 def is_valid_id(_id: str) -> bool:
-    if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
-        return True
-    try:
-        ObjectId(_id)
-        return True
-    except Exception:
-        return False
+    return isinstance(_id, str) and ObjectId.is_valid(_id)
 
 def length():
     return len(dbc.read('states', no_id=False))
@@ -39,6 +33,8 @@ def create(fields: dict, recursive=True) -> str:
         NAME: state_name,
         NATION: fields.get(NATION)
     })
+    if not result or not getattr(result, "inserted_id", None):
+        raise RuntimeError("Create failed: no inserted_id")
     return str(result.inserted_id)
 
 
@@ -52,7 +48,7 @@ def update(state_id: str, data: dict):
         NAME: data.get(NAME),
         NATION: data.get(NATION)
     })
-    if result.matched_count == 0:
+    if not result or getattr(result, "matched_count", 0) == 0:
         raise KeyError("State not found")
 
 
@@ -79,7 +75,7 @@ class StateList(Resource):
     @api.expect(state_model)
     @api.doc('create_state')
     def post(self):
-        data = request.json
+        data = request.json or {}
         recursive = data.get('recursive', True)
         state_id = create(data, recursive=recursive)
         return {'id': state_id, **data}, 201
@@ -89,10 +85,13 @@ class StateList(Resource):
 class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
+        if not is_valid_id(state_id):
+            api.abort(404, "State not found")
         state = dbc.read_one('states', {'_id': ObjectId(state_id)})
         if not state:
             api.abort(404, "State not found")
-        return {'id': state_id, **state}
+        return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
+
 
     @api.expect(state_model)
     @api.doc('update_state')

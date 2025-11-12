@@ -9,13 +9,7 @@ NATION = 'nation'
 
 
 def is_valid_id(_id: str) -> bool:
-    if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
-        return True
-    try:
-        ObjectId(_id)
-        return True
-    except Exception:
-        return False
+    return isinstance(_id, str) and ObjectId.is_valid(_id)
 
 
 def length() -> int:
@@ -29,7 +23,8 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
     city_name = fields[NAME].strip().lower()
-    existing_city = dbc.read_one('cities', {NAME: {"$regex": f"^{city_name}$", "$options": "i"}}, db=db)
+    existing_city = dbc.read_one('cities', {NAME: {"$regex": f"^{city_name}$", "$options": "i"}})
+
 
     if existing_city:
         if recursive:
