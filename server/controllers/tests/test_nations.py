@@ -1,5 +1,6 @@
 import pytest
 import server.controllers.nations as nt
+import server.common as common
 
 
 @pytest.fixture(autouse=True)
@@ -12,22 +13,11 @@ def _reset_store():
         nt.nations.clear()
 
 
-class TestIsValidId:
-    def test_valid(self):
-        assert nt.is_valid_id("507f1f77bcf86cd799439011") is True
-
-    def test_non_str(self):
-        assert nt.is_valid_id(1) is False
-
-    def test_empty_str(self):
-        assert nt.is_valid_id("") is False
-
-
 class TestCreate:
     def test_valid(self):
         old_length = nt.length()
         _id = nt.create({nt.NAME: "test1"})
-        assert nt.is_valid_id(_id)
+        assert common.is_valid_id(_id)
         assert nt.length() > old_length
         nt.delete(_id)
 

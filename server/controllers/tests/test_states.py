@@ -2,24 +2,14 @@
 
 import pytest
 import server.controllers.states as states
-
-
-class TestIsValidId:
-    def test_valid(self):
-        assert states.is_valid_id('507f1f77bcf86cd799439011') == True
-
-    def test_non_str(self):
-        assert states.is_valid_id(1) == False
-
-    def test_empty_str(self):
-        assert states.is_valid_id('') == False
+import server.common as common
 
 
 class TestCreate:
     def test_valid(self):
         old_length = states.length()
         _id = states.create({states.NAME: 'test1'})
-        assert states.is_valid_id(_id)
+        assert common.is_valid_id(_id)
         assert states.length() > old_length
         states.delete(_id)
 

@@ -1,19 +1,11 @@
 # server/nations.py
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import data.db_connect as dbc
-
 from bson.objectid import ObjectId
+import data.db_connect as dbc
 
 NAME = 'name'
 
-# Return True when `_id` is a valid non-empty string id.
-def is_valid_id(_id: str) -> bool:
-    try:
-        ObjectId(_id)
-        return True
-    except Exception:
-        return False
 
 # Return the number of nations currently stored.
 def length():

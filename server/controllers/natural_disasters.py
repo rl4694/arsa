@@ -11,18 +11,6 @@ DESCRIPTION = 'description'
 NATURAL_DISASTERS_COLLECTION = 'natural_disasters'
 
 
-def is_valid_id(_id: str) -> bool:
-    """Validate if an ID is valid (ObjectId format)."""
-    if isinstance(_id, str) and _id.isdigit() and int(_id) > 0:
-        return True
-    try:
-        from bson.objectid import ObjectId
-        ObjectId(_id)
-        return True
-    except Exception:
-        return False
-
-
 @dbc.needs_db
 def length():
     """Return the count of disasters in the database."""

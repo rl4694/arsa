@@ -1,17 +1,7 @@
 import pytest
 import server.controllers.cities as ct
+import server.common as common
 import data.db_connect as dbc
-
-
-class TestIsValidId:
-    def test_valid(self):
-        assert ct.is_valid_id('507f1f77bcf86cd799439011') == True
-
-    def test_non_str(self):
-        assert ct.is_valid_id(1) == False
-
-    def test_empty_str(self):
-        assert ct.is_valid_id('') == False
 
 
 class TestLength():
@@ -29,7 +19,7 @@ class TestLength():
 class TestCreate:
     def test_valid(self):
         _id = ct.create({ct.NAME: 'testcity'})
-        assert ct.is_valid_id(_id)
+        assert common.is_valid_id(_id)
         cities = ct.read()
         assert _id in cities
         ct.delete(_id)

@@ -8,10 +8,6 @@ STATE = 'state'
 NATION = 'nation'
 
 
-def is_valid_id(_id: str) -> bool:
-    return isinstance(_id, str) and ObjectId.is_valid(_id)
-
-
 def length() -> int:
     return len(dbc.read('cities', no_id=False))
 

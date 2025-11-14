@@ -1,14 +1,12 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import data.db_connect as dbc
-
 from bson.objectid import ObjectId
+import server.common as common
+import data.db_connect as dbc
 
 NAME = 'name'
 NATION = 'nation'
 
-def is_valid_id(_id: str) -> bool:
-    return isinstance(_id, str) and ObjectId.is_valid(_id)
 
 def length():
     return len(dbc.read('states', no_id=False))
@@ -85,7 +83,7 @@ class StateList(Resource):
 class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
-        if not is_valid_id(state_id):
+        if not common.is_valid_id(state_id):
             api.abort(404, "State not found")
         state = dbc.read_one('states', {'_id': ObjectId(state_id)})
         if not state:

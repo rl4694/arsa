@@ -1,6 +1,11 @@
 import os
 import json
-from pymongo import MongoClient
+from bson.objectid import ObjectId
+
+
+def is_valid_id(_id: str) -> bool:
+    """Return whether _id is a valid document id"""
+    return isinstance(_id, str) and ObjectId.is_valid(_id)
 
 
 def save_json(filename: str, data: dict):
@@ -21,16 +26,17 @@ def load_json(filename: str) -> dict:
 def is_json_populated(filename: str) -> bool:
     """
     Check if a JSON file exists and contains non-empty data.
-    
+
     Args:
         filename: Path to the JSON file
-        
+
     Returns:
-        True if file exists and contains data (non-empty dict/list), False otherwise
+        True if file exists and contains data (non-empty dict/list)
+        False otherwise
     """
     if not os.path.exists(filename):
         return False
-    
+
     try:
         with open(filename, 'r') as f:
             data = json.load(f)
@@ -43,20 +49,3 @@ def is_json_populated(filename: str) -> bool:
                 return False
     except (json.JSONDecodeError, IOError):
         return False
-
-
-def get_db():
-    client = MongoClient("mongodb://localhost:27017")
-    return client["arsa_db"]
-
-
-def save_to_mongo(collection: str, data: dict):
-    db = get_db()
-    col = db[collection]
-    col.replace_one({'_id': data['_id']}, data, upsert=True)
-
-
-def load_from_mongo(collection: str, _id):
-    db = get_db()
-    col = db[collection]
-    return col.find_one({'_id': _id})

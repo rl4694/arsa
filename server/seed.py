@@ -12,7 +12,7 @@ from server.controllers import cities as ct
 from server.controllers import states as st
 from server.controllers import nations as nt
 from server.controllers import natural_disasters as nd
-from server.controllers.utils import is_json_populated, save_json
+from server.common import is_json_populated, save_json
 from server.geocoding import reverse_geocode
 
 
