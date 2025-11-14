@@ -44,6 +44,6 @@ class Cache:
         """
         Return the data stored in the cache.
         """
-        if not self.data:
+        if self.data is None:
             self.reload()
         return self.data
