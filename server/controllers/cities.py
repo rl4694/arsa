@@ -1,47 +1,52 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
+from server.controllers.cache import Cache
 import data.db_connect as dbc
 
 COLLECTION = 'cities'
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
+cache = Cache(COLLECTION, (NAME, STATE))
 
 
+@cache.needs_cache
 def length() -> int:
-    return len(dbc.read(COLLECTION, no_id=False))
+    return len(cache.data)
 
 
+@cache.needs_cache
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    city_name = fields[NAME].strip().lower()
-    existing_city = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{city_name}$", "$options": "i"}})
+    name = fields[NAME].strip().lower()
+    state = fields.get(STATE)
 
-
-    if existing_city:
+    if (name, state) in cache.data:
         if recursive:
-            return str(existing_city['_id'])
+            return str(cache.data[(name, state)]['_id'])
         else:
             raise ValueError("Duplicate city detected and recursive not allowed.")
 
     result = dbc.create(COLLECTION, {
-        NAME: city_name,
+        NAME: name,
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
     })
+    cache.reload()
     return str(result.inserted_id)
 
 
+@cache.needs_cache
 def read() -> dict:
-    cities_list = dbc.read(COLLECTION, no_id=False)
-    return {str(city['_id']): {NAME: city[NAME], STATE: city.get(STATE), NATION: city.get(NATION)} for city in cities_list}
+    return cache.data
 
 
+@cache.needs_cache
 def update(city_id: str, data: dict):
     result = dbc.update(COLLECTION, {'_id': ObjectId(city_id)}, {
         NAME: data.get(NAME),
@@ -50,12 +55,15 @@ def update(city_id: str, data: dict):
     })
     if result.matched_count == 0:
         raise KeyError("City not found")
+    cache.reload()
 
 
+@cache.needs_cache
 def delete(city_id: str):
     deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(city_id)})
     if deleted_count == 0:
         raise KeyError("City not found")
+    cache.reload()
 
 
 api = Namespace('cities', description='Cities CRUD operations')
