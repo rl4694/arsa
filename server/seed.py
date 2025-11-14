@@ -188,12 +188,13 @@ def seed_earthquakes():
                         nd.DISASTER_TYPE: 'earthquake',
                         nd.DATE: row.get('time', ''),
                         nd.LOCATION: f"{lat}, {lon}",
-                        nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')}, Depth: {row.get('depth', 'N/A')} km"
+                        nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
+                                        f"Depth: {row.get('depth', 'N/A')} km"
                     })
                     print(f"Created earthquake disaster: {disaster_id}")
 
                 except Exception as e:
-                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
+                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
@@ -227,21 +228,24 @@ def seed_landslides():
                     city_name = loc_data['city_name']
 
                     # Create Natural Disaster (Landslide)
+                    size = row.get('landslide_size', 'N/A')
+                    trigger = row.get('trigger', 'N/A')
                     disaster_id = nd.create({
                         nd.NAME: f"Landslide at {city_name}",
                         nd.DISASTER_TYPE: 'landslide',
                         nd.DATE: row.get('event_date', ''),
                         nd.LOCATION: f"{lat}, {lon}",
-                        nd.DESCRIPTION: f"Size: {row.get('landslide_size', 'N/A')}, Trigger: {row.get('trigger', 'N/A')}"
+                        nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
                     })
-                    print(f"Created landslide disaster: {disaster_id} at {lat}, {lon}")
+                    print(f"Created landslide: {disaster_id} at {lat}, {lon}")
 
                 except Exception as e:
-                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
+                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
     os.remove(LANDSLIDE_ZIP)
     os.remove(LANDSLIDE_FILE)
+
 
 # We should try and standardize a format for new disasters
 def seed_tsunamis():
@@ -280,12 +284,12 @@ def seed_tsunamis():
                         nd.DISASTER_TYPE: 'tsunami',
                         nd.DATE: row.get('time', ''),
                         nd.LOCATION: f"{lat}, {lon}"
-                        #nd.DESCRIPTION:
+                        # nd.DESCRIPTION:
                     })
                     print(f"Created tsunami disaster: {disaster_id}")
 
                 except Exception as e:
-                    print(f"Error geocoding or creating disaster for ({lat}, {lon}): {e}")
+                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')

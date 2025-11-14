@@ -1,15 +1,6 @@
 import pytest
 import server.controllers.cities as ct
 import data.db_connect as dbc
-import mongomock
-
-
-@pytest.fixture(autouse=True)
-def patch_db(monkeypatch):
-    def fake_connect():
-        client = mongomock.MongoClient()
-        return client['testDB']
-    monkeypatch.setattr(dbc, "connect_db", fake_connect)
 
 
 class TestIsValidId:
@@ -25,14 +16,14 @@ class TestIsValidId:
 
 class TestLength():
     def test_basic(self):
-        assert ct.length() == 0
+        old_length = ct.length()
         id1 = ct.create({ct.NAME: "alpha"})
         id2 = ct.create({ct.NAME: "bravo"})
-        assert ct.length() == 2
+        assert ct.length() == old_length + 2
         ct.delete(id1)
-        assert ct.length() == 1
+        assert ct.length() == old_length + 1
         ct.delete(id2)
-        assert ct.length() == 0
+        assert ct.length() == old_length
 
 
 class TestCreate:

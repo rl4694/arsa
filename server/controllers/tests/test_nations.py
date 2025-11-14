@@ -14,7 +14,7 @@ def _reset_store():
 
 class TestIsValidId:
     def test_valid(self):
-        assert nt.is_valid_id("1") is True
+        assert nt.is_valid_id("507f1f77bcf86cd799439011") is True
 
     def test_non_str(self):
         assert nt.is_valid_id(1) is False

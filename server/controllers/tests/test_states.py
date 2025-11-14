@@ -6,7 +6,7 @@ import server.controllers.states as states
 
 class TestIsValidId:
     def test_valid(self):
-        assert states.is_valid_id('1') == True
+        assert states.is_valid_id('507f1f77bcf86cd799439011') == True
 
     def test_non_str(self):
         assert states.is_valid_id(1) == False
