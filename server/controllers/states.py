@@ -4,12 +4,13 @@ from bson.objectid import ObjectId
 import server.common as common
 import data.db_connect as dbc
 
+COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
 
 
 def length():
-    return len(dbc.read('states', no_id=False))
+    return len(dbc.read(COLLECTION, no_id=False))
 
 
 def create(fields: dict, recursive=True) -> str:
@@ -19,7 +20,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
     state_name = fields[NAME].strip().lower()
-    existing_state = dbc.read_one('states', {NAME: {"$regex": f"^{state_name}$", "$options": "i"}})
+    existing_state = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{state_name}$", "$options": "i"}})
 
     if existing_state:
         if recursive:
@@ -27,7 +28,7 @@ def create(fields: dict, recursive=True) -> str:
         else:
             raise ValueError("Duplicate state detected and recursive not allowed.")
 
-    result = dbc.create('states', {
+    result = dbc.create(COLLECTION, {
         NAME: state_name,
         NATION: fields.get(NATION)
     })
@@ -37,12 +38,12 @@ def create(fields: dict, recursive=True) -> str:
 
 
 def read() -> dict:
-    states_list = dbc.read('states', no_id=False)
+    states_list = dbc.read(COLLECTION, no_id=False)
     return {str(state['_id']): {NAME: state[NAME], NATION: state.get(NATION)} for state in states_list}
 
 
 def update(state_id: str, data: dict):
-    result = dbc.update('states', {'_id': ObjectId(state_id)}, {
+    result = dbc.update(COLLECTION, {'_id': ObjectId(state_id)}, {
         NAME: data.get(NAME),
         NATION: data.get(NATION)
     })
@@ -51,7 +52,7 @@ def update(state_id: str, data: dict):
 
 
 def delete(state_id: str):
-    deleted_count = dbc.delete('states', {'_id': ObjectId(state_id)})
+    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(state_id)})
     if deleted_count == 0:
         raise KeyError("State not found")
 
@@ -85,7 +86,7 @@ class State(Resource):
     def get(self, state_id):
         if not common.is_valid_id(state_id):
             api.abort(404, "State not found")
-        state = dbc.read_one('states', {'_id': ObjectId(state_id)})
+        state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
         if not state:
             api.abort(404, "State not found")
         return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
@@ -96,7 +97,7 @@ class State(Resource):
     def put(self, state_id):
         try:
             update(state_id, request.json)
-            state = dbc.read_one('states', {'_id': ObjectId(state_id)})
+            state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
             return {'id': state_id, **state}
         except KeyError:
             api.abort(404, "State not found")

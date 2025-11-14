@@ -3,13 +3,14 @@ from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
 import data.db_connect as dbc
 
+COLLECTION = 'cities'
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
 
 
 def length() -> int:
-    return len(dbc.read('cities', no_id=False))
+    return len(dbc.read(COLLECTION, no_id=False))
 
 
 def create(fields: dict, recursive=True) -> str:
@@ -19,7 +20,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
     city_name = fields[NAME].strip().lower()
-    existing_city = dbc.read_one('cities', {NAME: {"$regex": f"^{city_name}$", "$options": "i"}})
+    existing_city = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{city_name}$", "$options": "i"}})
 
 
     if existing_city:
@@ -28,7 +29,7 @@ def create(fields: dict, recursive=True) -> str:
         else:
             raise ValueError("Duplicate city detected and recursive not allowed.")
 
-    result = dbc.create('cities', {
+    result = dbc.create(COLLECTION, {
         NAME: city_name,
         STATE: fields.get(STATE),
         NATION: fields.get(NATION)
@@ -37,12 +38,12 @@ def create(fields: dict, recursive=True) -> str:
 
 
 def read() -> dict:
-    cities_list = dbc.read('cities', no_id=False)
+    cities_list = dbc.read(COLLECTION, no_id=False)
     return {str(city['_id']): {NAME: city[NAME], STATE: city.get(STATE), NATION: city.get(NATION)} for city in cities_list}
 
 
 def update(city_id: str, data: dict):
-    result = dbc.update('cities', {'_id': ObjectId(city_id)}, {
+    result = dbc.update(COLLECTION, {'_id': ObjectId(city_id)}, {
         NAME: data.get(NAME),
         STATE: data.get(STATE),
         NATION: data.get(NATION)
@@ -52,7 +53,7 @@ def update(city_id: str, data: dict):
 
 
 def delete(city_id: str):
-    deleted_count = dbc.delete('cities', {'_id': ObjectId(city_id)})
+    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(city_id)})
     if deleted_count == 0:
         raise KeyError("City not found")
 
@@ -85,7 +86,7 @@ class CityList(Resource):
 class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
-        city = dbc.read_one('cities', {'_id': ObjectId(city_id)})
+        city = dbc.read_one(COLLECTION, {'_id': ObjectId(city_id)})
         if not city:
             api.abort(404, "City not found")
         return {'id': city_id, **city}
@@ -95,7 +96,7 @@ class City(Resource):
     def put(self, city_id):
         try:
             update(city_id, request.json)
-            city = dbc.read_one('cities', {'_id': ObjectId(city_id)})
+            city = dbc.read_one(COLLECTION, {'_id': ObjectId(city_id)})
             return {'id': city_id, **city}
         except KeyError:
             api.abort(404, "City not found")

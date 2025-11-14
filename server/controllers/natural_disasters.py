@@ -2,19 +2,18 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 import data.db_connect as dbc
 
+COLLECTION = 'natural_disasters'
 NAME = 'name'
 DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
 
-NATURAL_DISASTERS_COLLECTION = 'natural_disasters'
-
 
 @dbc.needs_db
 def length():
     """Return the count of disasters in the database."""
-    return dbc.client[dbc.SE_DB][NATURAL_DISASTERS_COLLECTION].count_documents({})
+    return len(dbc.read(COLLECTION, no_id=False))
 
 
 def create(fields: dict) -> str:
@@ -32,14 +31,14 @@ def create(fields: dict) -> str:
         DESCRIPTION: fields.get(DESCRIPTION, '')
     }
     # @needs_db decorator in dbc.create ensures connection
-    result = dbc.create(NATURAL_DISASTERS_COLLECTION, doc)
+    result = dbc.create(COLLECTION, doc)
     return str(result.inserted_id)
 
 
 def read() -> dict:
     """Return all natural disasters as a dictionary."""
     # @needs_db decorator in dbc.read ensures connection
-    disasters_list = dbc.read(NATURAL_DISASTERS_COLLECTION, no_id=False)
+    disasters_list = dbc.read(COLLECTION, no_id=False)
     return {
         str(disaster['_id']): {
             NAME: disaster.get(NAME),
@@ -62,7 +61,7 @@ def update(disaster_id: str, data: dict):
         DESCRIPTION: data.get(DESCRIPTION, '')
     }
     # @needs_db decorator in dbc.update ensures connection
-    result = dbc.update(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
+    result = dbc.update(COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
     if result.matched_count == 0:
         raise KeyError("Disaster not found")
 
@@ -71,7 +70,7 @@ def delete(disaster_id: str):
     """Delete a disaster by ID."""
     from bson.objectid import ObjectId
     # @needs_db decorator in dbc.delete ensures connection
-    deleted_count = dbc.delete(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
+    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(disaster_id)})
     if deleted_count == 0:
         raise KeyError("Disaster not found")
 
@@ -110,7 +109,7 @@ class Disaster(Resource):
         from bson.objectid import ObjectId
         try:
             # @needs_db decorator in dbc.read_one ensures connection
-            disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
+            disaster = dbc.read_one(COLLECTION, {'_id': ObjectId(disaster_id)})
             if not disaster:
                 api.abort(404, "Disaster not found")
             # Remove _id from response, we're including it as 'id' parameter
@@ -127,7 +126,7 @@ class Disaster(Resource):
             update(disaster_id, request.json)
             from bson.objectid import ObjectId
             # @needs_db decorator in dbc.read_one ensures connection
-            disaster = dbc.read_one(NATURAL_DISASTERS_COLLECTION, {'_id': ObjectId(disaster_id)})
+            disaster = dbc.read_one(COLLECTION, {'_id': ObjectId(disaster_id)})
             disaster.pop('_id', None)
             return {'id': disaster_id, **disaster}
         except KeyError:

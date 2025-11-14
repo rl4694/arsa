@@ -4,12 +4,13 @@ from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
 import data.db_connect as dbc
 
+COLLECTION = 'nations'
 NAME = 'name'
 
 
 # Return the number of nations currently stored.
 def length():
-    return len(dbc.read('nations', no_id=False))
+    return len(dbc.read(COLLECTION, no_id=False))
 
 # Create a new nation record and return its id.
 def create(fields: dict, recursive=True) -> str:
@@ -20,31 +21,31 @@ def create(fields: dict, recursive=True) -> str:
 
     # Duplicate check (normalize to lower case and trim whitespace)
     nation_name = fields[NAME].strip().lower()
-    existing = dbc.read_one('nations', {NAME: {"$regex": f"^{nation_name}$", "$options": "i"}})
+    existing = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{nation_name}$", "$options": "i"}})
     if existing:
         if recursive:
             return str(existing['_id'])
         else:
             raise ValueError("Duplicate nation detected and recursive not allowed.")
 
-    result = dbc.create('nations', {NAME: nation_name})
+    result = dbc.create(COLLECTION, {NAME: nation_name})
     return str(result.inserted_id)
 
 # Return the nations store as a dictionary.
 def read() -> dict:
-    items = dbc.read('nations', no_id=False)
+    items = dbc.read(COLLECTION, no_id=False)
     return {str(nation['_id']): {NAME: nation[NAME]} for nation in items}
 
 # Update an existing nation's data.
 # Raises: KeyError: if the nation id does not exist.
 def update(nation_id: str, data: dict):
-    result = dbc.update('nations', {'_id': ObjectId(nation_id)}, {NAME: data.get(NAME)})
+    result = dbc.update(COLLECTION, {'_id': ObjectId(nation_id)}, {NAME: data.get(NAME)})
     if result.matched_count == 0:
         raise KeyError("Nation not found")
 
 # Delete a nation by id.
 def delete(nation_id: str):
-    deleted_count = dbc.delete('nations', {'_id': ObjectId(nation_id)})
+    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(nation_id)})
     if deleted_count == 0:
         raise KeyError("Nation not found")
 
@@ -76,7 +77,7 @@ class NationList(Resource):
 class Nation(Resource):
     @api.doc('get_nation')
     def get(self, nation_id):
-        nation = dbc.read_one('nations', {'_id': ObjectId(nation_id)})
+        nation = dbc.read_one(COLLECTION, {'_id': ObjectId(nation_id)})
         if not nation:
             api.abort(404, "Nation not found")
         return {'id': nation_id, NAME: nation[NAME]}
@@ -86,7 +87,7 @@ class Nation(Resource):
     def put(self, nation_id):
         try:
             update(nation_id, request.json)
-            nation = dbc.read_one('nations', {'_id': ObjectId(nation_id)})
+            nation = dbc.read_one(COLLECTION, {'_id': ObjectId(nation_id)})
             return {'id': nation_id, NAME: nation[NAME]}
         except KeyError:
             api.abort(404, "Nation not found")
