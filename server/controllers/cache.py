@@ -38,16 +38,12 @@ class Cache:
             for key in self.keys:
                 primary_key.append(record.get(key))
             self.data[tuple(primary_key)] = record
+    
 
-
-    def needs_cache(self, func):
+    def read(self):
         """
-        Decorate to ensure cache exists before executing function.
-        Automatically calls reload() if cache is uninitialized.
+        Return the data stored in the cache.
         """
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if not self.data:
-                self.reload()
-            return func(*args, **kwargs)
-        return wrapper
+        if not self.data:
+            self.reload()
+        return self.data

@@ -15,12 +15,10 @@ NATION = 'nation'
 cache = Cache(COLLECTION, (NAME, STATE))
 
 
-@cache.needs_cache
 def length() -> int:
-    return len(cache.data)
+    return len(cache.read())
 
 
-@cache.needs_cache
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
@@ -29,10 +27,11 @@ def create(fields: dict, recursive=True) -> str:
 
     name = fields[NAME].strip().lower()
     state = fields.get(STATE)
+    cities = cache.read()
 
-    if (name, state) in cache.data:
+    if (name, state) in cities:
         if recursive:
-            return str(cache.data[(name, state)]['_id'])
+            return str(cities[(name, state)]['_id'])
         else:
             raise ValueError("Duplicate city detected and recursive not allowed.")
 
@@ -45,12 +44,10 @@ def create(fields: dict, recursive=True) -> str:
     return str(result.inserted_id)
 
 
-@cache.needs_cache
 def read() -> dict:
-    return cache.data
+    return cache.read()
 
 
-@cache.needs_cache
 def update(city_id: str, data: dict):
     result = dbc.update(COLLECTION, {'_id': ObjectId(city_id)}, {
         NAME: data.get(NAME),
@@ -62,7 +59,6 @@ def update(city_id: str, data: dict):
     cache.reload()
 
 
-@cache.needs_cache
 def delete(city_id: str):
     deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(city_id)})
     if deleted_count == 0:
