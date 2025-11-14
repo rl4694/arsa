@@ -1,3 +1,7 @@
+"""
+This file contains common utilities shared between server modules.
+"""
+
 import os
 import json
 from bson.objectid import ObjectId

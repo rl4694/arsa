@@ -1,3 +1,7 @@
+"""
+This file implements caching for the data controllers.
+"""
+
 import data.db_connect as dbc
 from functools import wraps
 
@@ -5,7 +9,7 @@ from functools import wraps
 class Cache:
     def __init__(self, collection: str, keys: tuple):
         """
-        Initialize a cache for the MongoDB collection.
+        Initialize a cache for a MongoDB collection.
 
         Args:
             collection: name of the collection to cache
@@ -39,7 +43,7 @@ class Cache:
     def needs_cache(self, func):
         """
         Decorate to ensure cache exists before executing function.
-        Automatically calls reload() if data is uninitialized.
+        Automatically calls reload() if cache is uninitialized.
         """
         @wraps(func)
         def wrapper(*args, **kwargs):

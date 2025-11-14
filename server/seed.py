@@ -1,7 +1,10 @@
 """
-Run `python3 server/seed.py` to seed our database with starting data from
-various APIs. Be sure to empty the database before running this file.
+This script seeds seeds our data with data from various APIs.
+
+You can run this script with: `python3 server/seed.py`
+Be sure to empty your database before running this file.
 """
+
 import os
 import requests
 import time

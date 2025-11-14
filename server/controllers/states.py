@@ -1,3 +1,7 @@
+"""
+This file implements CRUD operations for states.
+"""
+
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
