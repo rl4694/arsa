@@ -1,7 +1,6 @@
 import pytest
 import server.controllers.cities as ct
 import server.common as common
-import data.db_connect as dbc
 
 SAMPLE_NAME = 'test_city'
 SAMPLE_STATE = 'test_state'
