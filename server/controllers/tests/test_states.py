@@ -4,8 +4,8 @@ import server.controllers.states as st
 import server.common as common
 import data.db_connect as dbc
 
-SAMPLE_NAME = "test_state"
-SAMPLE_NATION = "test_nation"
+SAMPLE_NAME = 'test_state'
+SAMPLE_NATION = 'test_nation'
 SAMPLE_KEY = SAMPLE_NAME
 SAMPLE_STATE = {
     st.NAME: SAMPLE_NAME,
