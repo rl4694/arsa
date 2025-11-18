@@ -5,6 +5,7 @@ This file implements CRUD operations for states.
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
+from server.controllers.cache import Cache
 import server.common as common
 import data.db_connect as dbc
 
@@ -12,9 +13,12 @@ COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
 
+# Cache keyed by (name,)
+cache = Cache(COLLECTION, (NAME,))
+
 
 def length():
-    return len(dbc.read(COLLECTION, no_id=False))
+    return len(cache.read())
 
 
 def create(fields: dict, recursive=True) -> str:
@@ -24,11 +28,12 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
     state_name = fields[NAME].strip().lower()
-    existing_state = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{state_name}$", "$options": "i"}})
+    states = cache.read()
 
-    if existing_state:
+    # cache keys are tuples
+    if (state_name,) in states:
         if recursive:
-            return str(existing_state['_id'])
+            return str(states[(state_name,)]['_id'])
         else:
             raise ValueError("Duplicate state detected and recursive not allowed.")
 
@@ -36,14 +41,14 @@ def create(fields: dict, recursive=True) -> str:
         NAME: state_name,
         NATION: fields.get(NATION)
     })
+    cache.reload()
     if not result or not getattr(result, "inserted_id", None):
         raise RuntimeError("Create failed: no inserted_id")
     return str(result.inserted_id)
 
 
 def read() -> dict:
-    states_list = dbc.read(COLLECTION, no_id=False)
-    return {str(state['_id']): {NAME: state[NAME], NATION: state.get(NATION)} for state in states_list}
+    return cache.read()
 
 
 def update(state_id: str, data: dict):
@@ -53,12 +58,14 @@ def update(state_id: str, data: dict):
     })
     if not result or getattr(result, "matched_count", 0) == 0:
         raise KeyError("State not found")
+    cache.reload()
 
 
 def delete(state_id: str):
     deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(state_id)})
     if deleted_count == 0:
         raise KeyError("State not found")
+    cache.reload()
 
 
 api = Namespace('states', description='States CRUD operations')
