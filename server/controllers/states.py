@@ -1,7 +1,3 @@
-"""
-This file implements CRUD operations for states.
-"""
-
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
@@ -16,11 +12,11 @@ NATION = 'nation'
 # Cache keyed by (name,)
 cache = Cache(COLLECTION, (NAME,))
 
-
+# Return number of cached state records.
 def length():
     return len(cache.read())
 
-
+# Create a new state record.
 def create(fields: dict, recursive=True) -> str:
     if not isinstance(fields, dict):
         raise ValueError(f'Bad type for fields: {type(fields)}')
@@ -30,7 +26,7 @@ def create(fields: dict, recursive=True) -> str:
     state_name = fields[NAME].strip().lower()
     states = cache.read()
 
-    # cache keys are tuples
+    # cache keys are tuples (name,)
     if (state_name,) in states:
         if recursive:
             return str(states[(state_name,)]['_id'])
@@ -41,16 +37,17 @@ def create(fields: dict, recursive=True) -> str:
         NAME: state_name,
         NATION: fields.get(NATION)
     })
+    # Refresh the in-memory cache after a successful write
     cache.reload()
     if not result or not getattr(result, "inserted_id", None):
         raise RuntimeError("Create failed: no inserted_id")
     return str(result.inserted_id)
 
-
+# Return the cached mapping of states.
 def read() -> dict:
     return cache.read()
 
-
+# Update a state by its ObjectId string.
 def update(state_id: str, data: dict):
     result = dbc.update(COLLECTION, {'_id': ObjectId(state_id)}, {
         NAME: data.get(NAME),
@@ -60,13 +57,12 @@ def update(state_id: str, data: dict):
         raise KeyError("State not found")
     cache.reload()
 
-
+# Delete a state by its ObjectId string.
 def delete(state_id: str):
     deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(state_id)})
     if deleted_count == 0:
         raise KeyError("State not found")
     cache.reload()
-
 
 api = Namespace('states', description='States CRUD operations')
 
