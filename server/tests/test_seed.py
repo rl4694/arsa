@@ -4,6 +4,7 @@ import json
 from io import StringIO
 from unittest.mock import patch, MagicMock, call
 from server.controllers import cities as ct
+from server.controllers import states as st
 from server.controllers import nations as nt
 from server import seed as sd
 import data.db_connect as dbc
@@ -38,7 +39,12 @@ def cleanup_seed_data():
             if not _id:
                 continue
             try:
-                dbc.delete(collection, {"_id": _id})
+                if collection == "cities":
+                    ct.delete(_id)
+                elif collection == "states":
+                    st.delete(_id)
+                elif collection == "nations":
+                    nt.delete(_id)
             except Exception:
                 pass
 
