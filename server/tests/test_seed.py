@@ -6,10 +6,11 @@ from unittest.mock import patch, MagicMock, call
 from server.controllers import cities as ct
 from server.controllers import nations as nt
 from server import seed as sd
+import data.db_connect as dbc
 
 
 # Skipping these tests for now because test data isn't being cleaned properly
-pytest.skip(allow_module_level=True)
+# pytest.skip(allow_module_level=True)
 
 
 @pytest.fixture(autouse=True)
@@ -23,6 +24,23 @@ def patch_dependencies():
     ):
         yield
 
+@pytest.fixture(autouse=True)
+def cleanup_seed_data():
+    yield
+    for collection in ("cities", "states", "nations"):
+        try: 
+            docs = dbc.read(collection, no_id=False)
+        except Exception:
+            continue
+
+        for doc in docs:
+            _id = doc.get("_id")
+            if not _id:
+                continue
+            try:
+                dbc.delete(collection, _id)
+            except Exception:
+                pass
 
 class TestSeedNations:
     @patch('server.seed.requests.get', autospec=True)
@@ -666,3 +684,11 @@ class TestSeedLandslides:
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_landslides()
+
+def test_db_is_clean():
+    for collection in ("cities", "states", "nations"):
+        try:
+            docs = dbc.read(collection, no_id=False)
+        except Exception:
+            continue
+        assert not docs, f"Found {len(docs)} docs"
