@@ -38,7 +38,7 @@ def cleanup_seed_data():
             if not _id:
                 continue
             try:
-                dbc.delete(collection, _id)
+                dbc.delete(collection, {"_id": _id})
             except Exception:
                 pass
 

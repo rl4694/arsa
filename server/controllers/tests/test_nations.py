@@ -33,7 +33,7 @@ class TestCreate:
         _id = nt.create(SAMPLE_NATION)
         assert common.is_valid_id(_id)
         nations = nt.read()
-        assert SAMPLE_KEY in nations
+        assert any(doc.get(nt.NAME) == SAMPLE_KEY for doc in nations.values())
         nt.delete(_id)
 
     def test_non_dict(self):
@@ -50,7 +50,7 @@ class TestRead:
         _id = nt.create(SAMPLE_NATION)
         nations = nt.read()
         assert isinstance(nations, dict)
-        assert SAMPLE_KEY in nations
+        assert any(doc.get(nt.NAME) == SAMPLE_KEY for doc in nations.values())
         assert len(nations) > 0
         nt.delete(_id)
 
@@ -61,8 +61,9 @@ class TestUpdate:
         new_name = 'new_nation'
         nt.update(_id, {nt.NAME: new_name})
         nations = nt.read()
-        assert new_name in nations
-        assert nations[new_name][nt.NAME] == new_name
+        assert any(doc.get(nt.NAME) == new_name for doc in nations.values())
+        updated_docs = [doc for doc in nations.values() if doc.get(nt.NAME) == new_name]
+        assert updated_docs and updated_docs[0][nt.NAME] == new_name
         nt.delete(_id)
 
 
@@ -71,4 +72,4 @@ class TestDelete:
         _id = nt.create(SAMPLE_NATION)
         nt.delete(_id)
         nations = nt.read()
-        assert SAMPLE_KEY not in nations
+        assert all(doc.get(nt.NAME) != SAMPLE_KEY for doc in nations.values())
