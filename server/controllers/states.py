@@ -8,8 +8,8 @@ import data.db_connect as dbc
 COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
-
-cache = Cache(COLLECTION, (NAME,))
+KEY = (NAME, NATION)
+cache = Cache(COLLECTION, (NAME, NATION))
 
 def length():
     return len(cache.read())
@@ -47,14 +47,22 @@ def get_by_name(name: str) -> dict:
 def get_cache_stats() -> dict:
     return cache.get_stats()
 
-def update(name: str, nation: str, data: dict):
-    result = dbc.update(COLLECTION, {NAME: name, NATION: nation}, data)
+def update(key: tuple, fields: dict):
+    if not isinstance(fields, dict):
+        raise ValueError(f'Bad type for fields: {type(fields)}')
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
     if not result or getattr(result, "matched_count", 0) == 0:
         raise KeyError("State not found")
     cache.reload()
 
-def delete(name: str, nation: str):
-    deleted_count = dbc.delete(COLLECTION, {NAME: name, NATION: nation})
+def delete(key: tuple):
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
     if deleted_count == 0:
         raise KeyError("State not found")
     cache.reload()

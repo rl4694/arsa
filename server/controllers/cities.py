@@ -12,7 +12,8 @@ COLLECTION = 'cities'
 NAME = 'name'
 STATE = 'state'
 NATION = 'nation'
-cache = Cache(COLLECTION, (NAME, STATE))
+KEY = (NAME, STATE)
+cache = Cache(COLLECTION, KEY)
 
 
 def length() -> int:
@@ -48,15 +49,23 @@ def read() -> dict:
     return cache.read()
 
 
-def update(name: str, state: str, data: dict):
-    result = dbc.update(COLLECTION, {NAME: name, STATE: state}, data)
+def update(key: tuple, fields: dict):
+    if not isinstance(fields, dict):
+        raise ValueError(f'Bad type for fields: {type(fields)}')
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    result = dbc.update(COLLECTION, {NAME: key[0], STATE: key[1]}, fields)
     if result.matched_count == 0:
         raise KeyError("City not found")
     cache.reload()
 
 
-def delete(name: str, state: str):
-    deleted_count = dbc.delete(COLLECTION, {NAME: name, STATE: state})
+def delete(key: tuple):
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    deleted_count = dbc.delete(COLLECTION, {NAME: key[0], STATE: key[1]})
     if deleted_count == 0:
         raise KeyError("City not found")
     cache.reload()

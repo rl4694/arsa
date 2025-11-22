@@ -9,6 +9,7 @@ import data.db_connect as dbc
 
 COLLECTION = 'nations'
 NAME = 'name'
+KEY = (NAME,)
 
 
 # Return the number of nations currently stored.
@@ -40,15 +41,22 @@ def read() -> dict:
     return {str(nation['_id']): {NAME: nation[NAME]} for nation in items}
 
 # Update an existing nation's data.
-# Raises: KeyError: if the nation id does not exist.
-def update(name: str, data: dict):
-    result = dbc.update(COLLECTION, {NAME: name}, data)
+def update(key: tuple, fields: dict):
+    if not isinstance(fields, dict):
+        raise ValueError(f'Bad type for fields: {type(fields)}')
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    result = dbc.update(COLLECTION, {NAME: key[0]}, fields)
     if result.matched_count == 0:
         raise KeyError("Nation not found")
 
 # Delete a nation by id.
-def delete(name: str):
-    deleted_count = dbc.delete(COLLECTION, {NAME: name})
+def delete(key: tuple):
+    if not isinstance(key, tuple) or len(key) < len(KEY):
+        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+    deleted_count = dbc.delete(COLLECTION, {NAME: key[0]})
     if deleted_count == 0:
         raise KeyError("Nation not found")
 
