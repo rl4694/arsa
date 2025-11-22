@@ -5,16 +5,18 @@ This file implements CRUD operations for nations.
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
+from server.controllers.cache import Cache
 import data.db_connect as dbc
 
 COLLECTION = 'nations'
 NAME = 'name'
 KEY = (NAME,)
+cache = Cache(COLLECTION, KEY)
 
 
 # Return the number of nations currently stored.
 def length():
-    return len(dbc.read(COLLECTION, no_id=False))
+    return len(cache.read())
 
 # Create a new nation record and return its id.
 def create(fields: dict, recursive=True) -> str:
@@ -23,22 +25,23 @@ def create(fields: dict, recursive=True) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    # Duplicate check (normalize to lower case and trim whitespace)
-    nation_name = fields[NAME].strip().lower()
-    existing = dbc.read_one(COLLECTION, {NAME: {"$regex": f"^{nation_name}$", "$options": "i"}})
-    if existing:
+    name = fields[NAME].strip().lower()
+    nations = cache.read()
+
+    if (name,) in nations:
         if recursive:
-            return str(existing['_id'])
+            return str(nations[(name,)]['_id'])
         else:
             raise ValueError("Duplicate nation detected and recursive not allowed.")
 
-    result = dbc.create(COLLECTION, {NAME: nation_name})
+    result = dbc.create(COLLECTION, {NAME: name})
+    cache.reload()
     return str(result.inserted_id)
 
 # Return the nations store as a dictionary.
 def read() -> dict:
-    items = dbc.read(COLLECTION, no_id=False)
-    return {str(nation['_id']): {NAME: nation[NAME]} for nation in items}
+    return cache.read()
+
 
 # Update an existing nation's data.
 def update(key: tuple, fields: dict):
@@ -50,6 +53,8 @@ def update(key: tuple, fields: dict):
     result = dbc.update(COLLECTION, {NAME: key[0]}, fields)
     if result.matched_count == 0:
         raise KeyError("Nation not found")
+    cache.reload()
+
 
 # Delete a nation by id.
 def delete(key: tuple):
@@ -59,6 +64,7 @@ def delete(key: tuple):
     deleted_count = dbc.delete(COLLECTION, {NAME: key[0]})
     if deleted_count == 0:
         raise KeyError("Nation not found")
+    cache.reload()
 
 
 api = Namespace('nations', description='Nations CRUD operations')
