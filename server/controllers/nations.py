@@ -41,14 +41,14 @@ def read() -> dict:
 
 # Update an existing nation's data.
 # Raises: KeyError: if the nation id does not exist.
-def update(nation_id: str, data: dict):
-    result = dbc.update(COLLECTION, {'_id': ObjectId(nation_id)}, {NAME: data.get(NAME)})
+def update(name: str, data: dict):
+    result = dbc.update(COLLECTION, {NAME: name}, data)
     if result.matched_count == 0:
         raise KeyError("Nation not found")
 
 # Delete a nation by id.
-def delete(nation_id: str):
-    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(nation_id)})
+def delete(name: str):
+    deleted_count = dbc.delete(COLLECTION, {NAME: name})
     if deleted_count == 0:
         raise KeyError("Nation not found")
 

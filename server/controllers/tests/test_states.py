@@ -17,7 +17,7 @@ class TestLength:
         old_length = st.length()
         _id = st.create(SAMPLE_STATE)
         assert st.length() == old_length + 1
-        st.delete(_id)
+        st.delete(SAMPLE_NAME, SAMPLE_NATION)
         assert st.length() == old_length
 
 
@@ -27,7 +27,7 @@ class TestCreate:
         assert common.is_valid_id(_id)
         states = st.read()
         assert SAMPLE_KEY in states
-        st.delete(_id)
+        st.delete(SAMPLE_NAME, SAMPLE_NATION)
 
     def test_non_dict(self):
         with pytest.raises(ValueError):
@@ -45,23 +45,25 @@ class TestRead:
         assert isinstance(states, dict)
         assert SAMPLE_KEY in states
         assert len(states) > 0
-        st.delete(_id)
+        st.delete(SAMPLE_NAME, SAMPLE_NATION)
 
 
 class TestUpdate:
     def test_basic(self):
         _id = st.create(SAMPLE_STATE)
         new_nation = 'new_nation'
-        st.update(_id, {st.NAME: SAMPLE_NAME, st.NATION: new_nation})
+        st.update(SAMPLE_NAME, SAMPLE_NATION, {st.NATION: new_nation})
         states = st.read()
+        new_state = states[SAMPLE_KEY]
         assert SAMPLE_KEY in states
-        assert states[SAMPLE_KEY][st.NATION] == new_nation
-        st.delete(_id)
+        assert new_state[st.NAME] == SAMPLE_NAME
+        assert new_state[st.NATION] == new_nation
+        st.delete(SAMPLE_NAME, new_nation)
 
 
 class TestDelete:
     def test_basic(self):
         _id = st.create(SAMPLE_STATE)
-        st.delete(_id)
+        st.delete(SAMPLE_NAME, SAMPLE_NATION)
         states = st.read()
         assert SAMPLE_KEY not in states

@@ -24,7 +24,7 @@ class TestLength:
         old_length = nt.length()
         _id = nt.create(SAMPLE_NATION)
         assert nt.length() == old_length + 1
-        nt.delete(_id)
+        nt.delete(SAMPLE_NAME)
         assert nt.length() == old_length
 
 
@@ -34,7 +34,7 @@ class TestCreate:
         assert common.is_valid_id(_id)
         nations = nt.read()
         assert any(doc.get(nt.NAME) == SAMPLE_KEY for doc in nations.values())
-        nt.delete(_id)
+        nt.delete(SAMPLE_NAME)
 
     def test_non_dict(self):
         with pytest.raises(ValueError):
@@ -52,24 +52,24 @@ class TestRead:
         assert isinstance(nations, dict)
         assert any(doc.get(nt.NAME) == SAMPLE_KEY for doc in nations.values())
         assert len(nations) > 0
-        nt.delete(_id)
+        nt.delete(SAMPLE_NAME)
 
 
 class TestUpdate:
     def test_basic(self):
         _id = nt.create(SAMPLE_NATION)
         new_name = 'new_nation'
-        nt.update(_id, {nt.NAME: new_name})
+        nt.update(SAMPLE_NAME, {nt.NAME: new_name})
         nations = nt.read()
         assert any(doc.get(nt.NAME) == new_name for doc in nations.values())
         updated_docs = [doc for doc in nations.values() if doc.get(nt.NAME) == new_name]
         assert updated_docs and updated_docs[0][nt.NAME] == new_name
-        nt.delete(_id)
+        nt.delete(new_name)
 
 
 class TestDelete:
     def test_basic(self):
         _id = nt.create(SAMPLE_NATION)
-        nt.delete(_id)
+        nt.delete(SAMPLE_NAME)
         nations = nt.read()
         assert all(doc.get(nt.NAME) != SAMPLE_KEY for doc in nations.values())

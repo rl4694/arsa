@@ -47,17 +47,14 @@ def get_by_name(name: str) -> dict:
 def get_cache_stats() -> dict:
     return cache.get_stats()
 
-def update(state_id: str, data: dict):
-    result = dbc.update(COLLECTION, {'_id': ObjectId(state_id)}, {
-        NAME: data.get(NAME),
-        NATION: data.get(NATION)
-    })
+def update(name: str, nation: str, data: dict):
+    result = dbc.update(COLLECTION, {NAME: name, NATION: nation}, data)
     if not result or getattr(result, "matched_count", 0) == 0:
         raise KeyError("State not found")
     cache.reload()
 
-def delete(state_id: str):
-    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(state_id)})
+def delete(name: str, nation: str):
+    deleted_count = dbc.delete(COLLECTION, {NAME: name, NATION: nation})
     if deleted_count == 0:
         raise KeyError("State not found")
     cache.reload()

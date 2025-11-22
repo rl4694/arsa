@@ -26,7 +26,7 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
     name = fields[NAME].strip().lower()
-    state = fields.get(STATE)
+    state = fields.get(STATE, "").strip().lower()
     cities = cache.read()
 
     if (name, state) in cities:
@@ -48,19 +48,15 @@ def read() -> dict:
     return cache.read()
 
 
-def update(city_id: str, data: dict):
-    result = dbc.update(COLLECTION, {'_id': ObjectId(city_id)}, {
-        NAME: data.get(NAME),
-        STATE: data.get(STATE),
-        NATION: data.get(NATION)
-    })
+def update(name: str, state: str, data: dict):
+    result = dbc.update(COLLECTION, {NAME: name, STATE: state}, data)
     if result.matched_count == 0:
         raise KeyError("City not found")
     cache.reload()
 
 
-def delete(city_id: str):
-    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(city_id)})
+def delete(name: str, state: str):
+    deleted_count = dbc.delete(COLLECTION, {NAME: name, STATE: state})
     if deleted_count == 0:
         raise KeyError("City not found")
     cache.reload()
