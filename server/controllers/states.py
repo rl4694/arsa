@@ -9,7 +9,7 @@ COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
 KEY = (NAME, NATION)
-cache = Cache(COLLECTION, (NAME, NATION))
+cache = Cache(COLLECTION, KEY)
 
 def length():
     return len(cache.read())
@@ -20,26 +20,25 @@ def create(fields: dict, recursive=True) -> str:
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
 
-    state_name = fields[NAME].strip().lower()
-    states = cache.read_flat()
+    name = fields[NAME].strip().lower()
+    nation = fields.get(NATION, "").strip().lower()
+    states = cache.read()
 
-    if state_name in states:
+    if (name, nation) in states:
         if recursive:
-            return str(states[state_name]['_id'])
+            return str(states[(name, nation)]['_id'])
         else:
             raise ValueError("Duplicate state detected and recursive not allowed.")
 
     result = dbc.create(COLLECTION, {
-        NAME: state_name,
+        NAME: name,
         NATION: fields.get(NATION)
     })
     cache.reload()
-    if not result or not getattr(result, "inserted_id", None):
-        raise RuntimeError("Create failed: no inserted_id")
     return str(result.inserted_id)
 
 def read() -> dict:
-    return cache.read_flat()
+    return cache.read()
 
 def get_by_name(name: str) -> dict:
     return cache.get(name.strip().lower())
@@ -54,7 +53,7 @@ def update(key: tuple, fields: dict):
         raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
 
     result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
-    if not result or getattr(result, "matched_count", 0) == 0:
+    if result.matched_count == 0:
         raise KeyError("State not found")
     cache.reload()
 
@@ -66,6 +65,7 @@ def delete(key: tuple):
     if deleted_count == 0:
         raise KeyError("State not found")
     cache.reload()
+
 
 api = Namespace('states', description='States CRUD operations')
 
