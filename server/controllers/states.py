@@ -19,9 +19,11 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+    if not fields.get(NATION):
+        raise ValueError(f'Nation missing in fields: {fields.get(NATION)}')
 
     name = fields[NAME].strip().lower()
-    nation = fields.get(NATION, "").strip().lower()
+    nation = fields[NATION].strip().lower()
     states = cache.read()
 
     if (name, nation) in states:
@@ -30,10 +32,7 @@ def create(fields: dict, recursive=True) -> str:
         else:
             raise ValueError("Duplicate state detected and recursive not allowed.")
 
-    result = dbc.create(COLLECTION, {
-        NAME: name,
-        NATION: fields.get(NATION)
-    })
+    result = dbc.create(COLLECTION, { NAME: name, NATION: nation })
     cache.reload()
     return str(result.inserted_id)
 

@@ -25,9 +25,11 @@ def create(fields: dict, recursive=True) -> str:
         raise ValueError(f'Bad type for fields: {type(fields)}')
     if not fields.get(NAME):
         raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
+    if not fields.get(STATE):
+        raise ValueError(f'State missing in fields: {fields.get(STATE)}')
 
     name = fields[NAME].strip().lower()
-    state = fields.get(STATE, "").strip().lower()
+    state = fields[STATE].strip().lower()
     cities = cache.read()
 
     if (name, state) in cities:
@@ -38,8 +40,8 @@ def create(fields: dict, recursive=True) -> str:
 
     result = dbc.create(COLLECTION, {
         NAME: name,
-        STATE: fields.get(STATE),
-        NATION: fields.get(NATION)
+        STATE: state,
+        NATION: fields.get(NATION),
     })
     cache.reload()
     return str(result.inserted_id)

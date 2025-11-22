@@ -35,7 +35,11 @@ class TestCreate:
 
     def test_missing_name(self):
         with pytest.raises(ValueError):
-            st.create({})
+            st.create({st.NATION: SAMPLE_NATION})
+
+    def test_missing_nation(self):
+        with pytest.raises(ValueError):
+            st.create({st.NAME: SAMPLE_NAME})
 
 
 class TestRead:

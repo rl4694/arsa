@@ -36,7 +36,11 @@ class TestCreate:
 
     def test_missing_name(self):
         with pytest.raises(ValueError):
-            ct.create({})
+            ct.create({ct.STATE: SAMPLE_STATE})
+
+    def test_missing_state(self):
+        with pytest.raises(ValueError):
+            ct.create({ct.NAME: SAMPLE_NAME})
 
 
 class TestRead:

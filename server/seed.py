@@ -147,13 +147,13 @@ def create_loc_from_coordinates(lat: float, lon: float):
     if state_name:
         state_id = st.create({
             st.NAME: state_name,
-            st.NATION: nation_id
+            st.NATION: nation_name
         })
     print(f"Created state: {state_name}, {nation_name}")
     city_id = ct.create({
         ct.NAME: city_name,
-        ct.STATE: state_id,
-        ct.NATION: nation_id,
+        ct.STATE: state_name,
+        ct.NATION: nation_name,
     })
     print(f"Created city: {city_name} ({state_name}, {nation_name})")
     return {
