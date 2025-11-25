@@ -4,7 +4,9 @@ This file implements CRUD operations for natural disasters.
 
 from flask import request
 from flask_restx import Resource, Namespace, fields
+from server.controllers.cache import Cache
 import data.db_connect as dbc
+from bson.objectid import ObjectId
 
 COLLECTION = 'natural_disasters'
 NAME = 'name'
@@ -12,12 +14,14 @@ DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
+KEY = (NAME, DATE, LOCATION)
+cache = Cache(COLLECTION, KEY)
 
 
 @dbc.needs_db
 def length():
     """Return the count of disasters in the database."""
-    return len(dbc.read(COLLECTION, no_id=False))
+    return len(cache.read())
 
 
 def create(fields: dict) -> str:
@@ -36,27 +40,23 @@ def create(fields: dict) -> str:
     }
     # @needs_db decorator in dbc.create ensures connection
     result = dbc.create(COLLECTION, doc)
+    cache.reload()
     return str(result.inserted_id)
 
 
 def read() -> dict:
     """Return all natural disasters as a dictionary."""
     # @needs_db decorator in dbc.read ensures connection
-    disasters_list = dbc.read(COLLECTION, no_id=False)
-    return {
-        str(disaster['_id']): {
-            NAME: disaster.get(NAME),
-            DISASTER_TYPE: disaster.get(DISASTER_TYPE),
-            DATE: disaster.get(DATE),
-            LOCATION: disaster.get(LOCATION),
-            DESCRIPTION: disaster.get(DESCRIPTION, '')
-        } for disaster in disasters_list
-    }
+    disasters_dict = {}
+    for _key, disaster in cache.read().items():
+        dcopy = disaster.copy()
+        _id = str(dcopy.pop('_id'))
+        disasters_dict[_id] = dcopy
+    return disasters_dict
 
 
 def update(disaster_id: str, data: dict):
     """Update an existing disaster's data."""
-    from bson.objectid import ObjectId
     update_dict = {
         NAME: data.get(NAME),
         DISASTER_TYPE: data.get(DISASTER_TYPE),
@@ -68,15 +68,16 @@ def update(disaster_id: str, data: dict):
     result = dbc.update(COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
     if result.matched_count == 0:
         raise KeyError("Disaster not found")
+    cache.reload()
 
 
 def delete(disaster_id: str):
     """Delete a disaster by ID."""
-    from bson.objectid import ObjectId
     # @needs_db decorator in dbc.delete ensures connection
     deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(disaster_id)})
     if deleted_count == 0:
         raise KeyError("Disaster not found")
+    cache.reload()
 
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
