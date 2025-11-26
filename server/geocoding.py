@@ -2,10 +2,16 @@
 Geocoding module for converting coordinates to location data.
 Uses OpenStreetMap Nominatim service via geopy.
 """
+import math
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from geopy.extra.rate_limiter import RateLimiter
+
+# Initialize geocoder with a user agent (required by Nominatim)
+geolocator = Nominatim(user_agent="geodata-app")
+_reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0, max_retries=1)
 
 # Create namespace for geocoding endpoints
 api = Namespace('geocode', description='Geocoding operations')
@@ -47,12 +53,33 @@ def reverse_geocode(lat: float, lon: float) -> dict:
     if not -180 <= lon <= 180:
         raise ValueError(f"Longitude must be between -180 and 180, got {lon}")
 
-    # Initialize geocoder with a user agent (required by Nominatim)
-    geolocator = Nominatim(user_agent="geodata-app")
-
     try:
         # Reverse geocode the coordinates
-        location = geolocator.reverse(f"{lat}, {lon}", language='en')
+        location = _reverse((lat, lon), language="en")
+
+        # Increase search radius if not found
+        if location is None:
+            for search_km in (1, 5, 20, 50, 100):
+                # make fix relating to curvature away from equator
+                dlat = search_km / 110.574 # more accurate latitude measurements
+                cos_lat = math.cos(math.radians(lat))
+                if abs(cos_lat) < 0.01:   # account for poles
+                    cos_lat = 0.01
+                dlon = search_km / (111.320 * cos_lat)
+                
+                candidates = [
+                    (lat + dlat, lon), (lat - dlat, lon),
+                    (lat, lon + dlon), (lat, lon - dlon),
+                    (lat + dlat, lon + dlon), (lat + dlat, lon - dlon),
+                    (lat - dlat, lon + dlon), (lat - dlat, lon - dlon),
+                ]
+                for clat, clon in candidates:
+                    if -90 <= clat <= 90 and -180 <= clon <= 180:
+                        location = _reverse((clat, clon), language="en")
+                        if location is not None:
+                            break
+                if location is not None:
+                    break
 
         if location is None:
             return {
