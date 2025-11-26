@@ -1,7 +1,7 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
-from server.controllers.cache import Cache
+from server.controllers.crud import CRUDController
 import server.common as common
 import data.db_connect as dbc
 
@@ -9,61 +9,47 @@ COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
 KEY = (NAME, NATION)
-cache = Cache(COLLECTION, KEY)
+
+# Use the shared CRUDController to centralize cache + DB logic.
+controller = CRUDController(
+    COLLECTION,
+    KEY,
+    required_fields=(NAME, NATION),
+    normalize_fields=(NAME, NATION),
+)
+
 
 def length():
-    return len(cache.read())
+    return controller.length()
+
 
 def create(fields: dict, recursive=True) -> str:
-    if not isinstance(fields, dict):
-        raise ValueError(f'Bad type for fields: {type(fields)}')
-    if not fields.get(NAME):
-        raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-    if not fields.get(NATION):
-        raise ValueError(f'Nation missing in fields: {fields.get(NATION)}')
+    return controller.create(fields, recursive=recursive)
 
-    name = fields[NAME].strip().lower()
-    nation = fields[NATION].strip().lower()
-    states = cache.read()
-
-    if (name, nation) in states:
-        if recursive:
-            return str(states[(name, nation)]['_id'])
-        else:
-            raise ValueError("Duplicate state detected and recursive not allowed.")
-
-    result = dbc.create(COLLECTION, { NAME: name, NATION: nation })
-    cache.reload()
-    return str(result.inserted_id)
 
 def read() -> dict:
-    return cache.read()
+    return controller.read()
+
 
 def get_by_name(name: str) -> dict:
-    return cache.get(name.strip().lower())
+    n = name.strip().lower()
+    matches = {}
+    for k, rec in controller.cache.read().items():
+        if k[0] == n:
+            matches[k] = rec
+    return matches
+
 
 def get_cache_stats() -> dict:
-    return cache.get_stats()
+    return controller.cache.get_stats()
 
-def update(key: tuple, fields: dict):
-    if not isinstance(fields, dict):
-        raise ValueError(f'Bad type for fields: {type(fields)}')
-    if not isinstance(key, tuple) or len(key) < len(KEY):
-        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
 
-    result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
-    if result.matched_count == 0:
-        raise KeyError("State not found")
-    cache.reload()
+def update(state_id: str, fields: dict):
+    return controller.update(state_id, fields)
 
-def delete(key: tuple):
-    if not isinstance(key, tuple) or len(key) < len(KEY):
-        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
 
-    deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
-    if deleted_count == 0:
-        raise KeyError("State not found")
-    cache.reload()
+def delete(state_id: str):
+    return controller.delete(state_id)
 
 
 api = Namespace('states', description='States CRUD operations')
