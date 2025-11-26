@@ -8,11 +8,11 @@ from server.controllers import states as st
 from server.controllers import nations as nt
 from server import seed as sd
 import data.db_connect as dbc
+from functools import wraps
 
 
 # Skipping these tests for now because test data isn't being cleaned properly
-pytest.skip(allow_module_level=True)
-
+# pytest.skip(allow_module_level=True)
 
 @pytest.fixture(autouse=True)
 def patch_dependencies():
@@ -25,28 +25,50 @@ def patch_dependencies():
     ):
         yield
 
+@pytest.fixture
+def created_ids():
+    return {"cities": set(), "states": set(), "nations": set()}
+
+@pytest.fixture(autouse=True)
+def track_creates(monkeypatch, created_ids):
+    def wrap_create(module, bucket):
+        real_create = module.create
+
+        @wraps(real_create)
+        def wrapped_create(fields: dict):
+            _id = real_create(fields)
+            if _id:
+                created_ids[bucket].add(_id)
+            return _id
+
+        monkeypatch.setattr(module, "create", wrapped_create)
+
+    wrap_create(ct, "cities")
+    wrap_create(st, "states")
+    wrap_create(nt, "nations")
+    yield
+
 @pytest.fixture(autouse=True)
 def cleanup_seed_data():
     yield
-    for collection in ("cities", "states", "nations"):
-        try: 
-            docs = dbc.read(collection, no_id=False)
-        except Exception:
-            continue
 
-        for doc in docs:
-            _id = doc.get("_id")
-            if not _id:
-                continue
-            try:
-                if collection == "cities":
-                    ct.delete(_id)
-                elif collection == "states":
-                    st.delete(_id)
-                elif collection == "nations":
-                    nt.delete(_id)
-            except Exception:
-                pass
+    for _id in list(created_ids["cities"]):
+        try:
+            ct.delete(_id)
+        except Exception:
+            pass
+
+    for _id in list(created_ids["states"]):
+        try:
+            st.delete(_id)
+        except Exception:
+            pass
+
+    for _id in list(created_ids["nations"]):
+        try:
+            nt.delete(_id)
+        except Exception:
+            pass
 
 class TestSeedNations:
     @patch('server.seed.requests.get', autospec=True)
@@ -690,11 +712,3 @@ class TestSeedLandslides:
         mock_open.side_effect = FileNotFoundError("file not found")
         with pytest.raises(ConnectionError):
             sd.seed_landslides()
-
-def test_db_is_clean():
-    for collection in ("cities", "states", "nations"):
-        try:
-            docs = dbc.read(collection, no_id=False)
-        except Exception:
-            continue
-        assert not docs, f"Found {len(docs)} docs"
