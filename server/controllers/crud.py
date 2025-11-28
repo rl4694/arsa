@@ -73,19 +73,30 @@ class CRUDController:
     def read(self) -> dict:
         return self.cache.read()
 
-    def read_one_by_id(self, id_str: str) -> Optional[dict]:
-        return dbc.read_one(self.collection, {'_id': ObjectId(id_str)})
+    def _ensure_objectid(self, id_or_str):
+        """Return an ObjectId instance for a string or pass through ObjectId."""
+        if isinstance(id_or_str, ObjectId):
+            return id_or_str
+        if isinstance(id_or_str, str):
+            return ObjectId(id_or_str)
+        raise TypeError('id must be an instance of (bytes, str, ObjectId)')
 
-    def update(self, id_str: str, data: dict):
+    def read_one_by_id(self, id_or_str) -> Optional[dict]:
+        oid = self._ensure_objectid(id_or_str)
+        return dbc.read_one(self.collection, {'_id': oid})
+
+    def update(self, id_or_str, data: dict):
         if not isinstance(data, dict):
             raise ValueError(f'Bad type for data: {type(data)}')
-        result = dbc.update(self.collection, {'_id': ObjectId(id_str)}, data)
+        oid = self._ensure_objectid(id_or_str)
+        result = dbc.update(self.collection, {'_id': oid}, data)
         if not result or getattr(result, 'matched_count', 0) == 0:
             raise KeyError('Record not found')
         self.cache.reload()
 
-    def delete(self, id_str: str):
-        deleted = dbc.delete(self.collection, {'_id': ObjectId(id_str)})
+    def delete(self, id_or_str):
+        oid = self._ensure_objectid(id_or_str)
+        deleted = dbc.delete(self.collection, {'_id': oid})
         if deleted == 0:
             raise KeyError('Record not found')
         self.cache.reload()
