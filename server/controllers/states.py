@@ -44,12 +44,48 @@ def get_cache_stats() -> dict:
     return controller.cache.get_stats()
 
 
-def update(state_id: str, fields: dict):
-    return controller.update(state_id, fields)
+def update(key_or_id, fields: dict):
+    """Support either tuple-key updates (name,nation) used by tests,
+    or id-string updates used by the HTTP endpoints.
+    """
+    # key tuple path
+    if isinstance(key_or_id, tuple):
+        key = key_or_id
+        if not isinstance(fields, dict):
+            raise ValueError(f'Bad type for fields: {type(fields)}')
+        if not isinstance(key, tuple) or len(key) < len(KEY):
+            raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+        result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
+        if result.matched_count == 0:
+            raise KeyError("State not found")
+        controller.cache.reload()
+        return
+
+    # id-string path
+    if isinstance(key_or_id, str):
+        return controller.update(key_or_id, fields)
+
+    raise ValueError('First argument must be a key tuple or id string')
 
 
-def delete(state_id: str):
-    return controller.delete(state_id)
+def delete(key_or_id):
+    """Delete by key tuple or by id string."""
+    if isinstance(key_or_id, tuple):
+        key = key_or_id
+        if not isinstance(key, tuple) or len(key) < len(KEY):
+            raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+
+        deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
+        if deleted_count == 0:
+            raise KeyError("State not found")
+        controller.cache.reload()
+        return
+
+    if isinstance(key_or_id, str):
+        return controller.delete(key_or_id)
+
+    raise ValueError('Argument must be a key tuple or id string')
 
 
 api = Namespace('states', description='States CRUD operations')
@@ -72,7 +108,8 @@ class StateList(Resource):
         data = request.json or {}
         recursive = data.get('recursive', True)
         state_id = create(data, recursive=recursive)
-        return {'id': state_id, **data}, 201
+        state = controller.read_one_by_id(state_id)
+        return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}, 201
 
 
 @api.route('/cache/stats')
@@ -88,13 +125,7 @@ class State(Resource):
     def get(self, state_id):
         if not common.is_valid_id(state_id):
             api.abort(404, "State not found")
-        
-        states = cache.read_flat()
-        for state in states.values():
-            if str(state.get('_id')) == state_id:
-                return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
-        
-        state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
+        state = controller.read_one_by_id(state_id)
         if not state:
             api.abort(404, "State not found")
         return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
@@ -105,8 +136,8 @@ class State(Resource):
     def put(self, state_id):
         try:
             update(state_id, request.json)
-            state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
-            return {'id': state_id, **state}
+            state = controller.read_one_by_id(state_id)
+            return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
         except KeyError:
             api.abort(404, "State not found")
 
