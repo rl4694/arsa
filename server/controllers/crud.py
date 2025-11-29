@@ -9,6 +9,7 @@ cache after writes.
 from typing import Iterable, Optional, Tuple
 from bson.objectid import ObjectId
 from server.controllers.cache import Cache
+import server.common as common
 import data.db_connect as dbc
 
 
@@ -51,9 +52,9 @@ class CRUD:
                     raise KeyError(f'Missing required field: {attribute}')
                 if isinstance(field, str):
                     field = field.strip().lower()
+                cache_key.append(field)
             # Add the field
             new_record[attribute] = field
-            cache_key.append(field)
 
         # Check if record already exists
         cache_key = tuple(cache_key)
@@ -83,21 +84,26 @@ class CRUD:
         """
         return self.cache.read()
 
-    def select(self, query: tuple) -> dict:
+    def select(self, _id: str) -> dict:
         """
         Return a record matching the query.
         """
+        if not common.is_valid_id(_id):
+            raise ValueError(f'Invalid id: {_id}')
         records = self.cache.read()
-        if query not in records:
-            raise KeyError(f'Record not found: {query}')
-        return records[query]
+        for record in records.values():
+            if record['_id'] == _id:
+                return record
+        raise KeyError(f'Record not found: {query}')
 
-    def update(self, query: tuple, fields: dict):
+    def update(self, _id: str, fields: dict):
         """
         Update the fields for the record matching the query.
         """
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for data: {type(fields)}')
+        if not common.is_valid_id(_id):
+            raise ValueError(f'Invalid id: {_id}')
 
         # Build the record from the fields
         record = {}
@@ -112,18 +118,19 @@ class CRUD:
             record[attribute] = field
 
         # Update the record
-        filt = {key: query[i] for i, key in enumerate(self.keys)}
-        result = dbc.update(self.collection, filt, record)
+        result = dbc.update(self.collection, {'_id': ObjectId(_id)}, record)
         if not result or getattr(result, 'matched_count', 0) == 0:
-            raise KeyError(f'Record not found: {query}')
+            raise KeyError(f'Record not found: {_id}')
         self.cache.reload()
 
-    def delete(self, query: tuple):
+    def delete(self, _id: str):
         """
         Delete the record matching the query.
         """
-        filt = {key: query[i] for i, key in enumerate(self.keys)}
-        deleted = dbc.delete(self.collection, filt)
+        if not common.is_valid_id(_id):
+            raise ValueError(f'Invalid id: {_id}')
+
+        deleted = dbc.delete(self.collection, {'_id': ObjectId(_id)})
         if deleted == 0:
-            raise KeyError(f'Record not found: {query}')
+            raise KeyError(f'Record not found: {_id}')
         self.cache.reload()

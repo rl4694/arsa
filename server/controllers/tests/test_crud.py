@@ -27,7 +27,7 @@ def temp_record():
     _id = crud.create(SAMPLE_RECORD)
     yield _id
     try:
-        crud.delete((SAMPLE_FIELD1, SAMPLE_FIELD2))
+        crud.delete(_id)
     except ValueError:
         print('The record was already deleted.')
 
@@ -37,34 +37,35 @@ class TestCreate:
         _id = crud.create(SAMPLE_RECORD)
         assert common.is_valid_id(_id)
         records = crud.read()
-        record = records[SAMPLE_KEY]
         assert SAMPLE_KEY in records
+        record = records[SAMPLE_KEY]
         assert record[FIELD1] == SAMPLE_FIELD1
         assert record[FIELD2] == SAMPLE_FIELD2
         assert record[FIELD3] == SAMPLE_FIELD3
-        crud.delete(SAMPLE_KEY)
+        print(record)
+        crud.delete(_id)
 
     def test_non_normalized_key(self):
         key = ('first', 'sec ond.')
         _id = crud.create({FIELD1: ' FIRST  ', FIELD2: ' Sec ond. ' })
         assert common.is_valid_id(_id)
         records = crud.read()
-        record = records[key]
         assert key in records
+        record = records[key]
         assert record[FIELD1] == 'first'
         assert record[FIELD2] == 'sec ond.'
-        crud.delete(key)
+        crud.delete(_id)
 
     def test_empty_key(self):
         key = (SAMPLE_FIELD1, '')
         _id = crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: '' })
         assert common.is_valid_id(_id)
         records = crud.read()
-        record = records[key]
         assert key in records
+        record = records[key]
         assert record[FIELD1] == SAMPLE_FIELD1
         assert record[FIELD2] == ''
-        crud.delete(key)
+        crud.delete(_id)
 
     def test_bad_recursive_type(self):
         with pytest.raises(ValueError):
@@ -88,7 +89,7 @@ class TestCount:
         old_count = crud.count()
         _id = crud.create(SAMPLE_RECORD)
         assert crud.count() == old_count + 1
-        crud.delete(SAMPLE_KEY)
+        crud.delete(_id)
         assert crud.count() == old_count
 
 
@@ -102,14 +103,14 @@ class TestRead:
 
 class TestSelect:
     def test_basic(self, temp_record):
-        record = crud.select(SAMPLE_KEY)
+        record = crud.select(temp_record)
         assert record[FIELD1] == SAMPLE_FIELD1
         assert record[FIELD2] == SAMPLE_FIELD2
         assert record[FIELD3] == SAMPLE_FIELD3
 
-    def test_nonexistent(self):
-        with pytest.raises(KeyError):
-            record = crud.select(SAMPLE_KEY)
+    def test_invalid_id(self):
+        with pytest.raises(ValueError):
+            record = crud.select('invalid')
 
 
 class TestUpdate:
@@ -117,7 +118,7 @@ class TestUpdate:
         _id = crud.create(SAMPLE_RECORD)
         new_field1 = 'new_field1'
         new_key = (new_field1, SAMPLE_FIELD2)
-        crud.update(SAMPLE_KEY, {FIELD1: new_field1})
+        crud.update(_id, {FIELD1: new_field1})
         records = crud.read()
         new_record = records[new_key]
 
@@ -125,12 +126,12 @@ class TestUpdate:
         assert new_record[FIELD1] == new_field1
         assert new_record[FIELD2] == SAMPLE_FIELD2
         assert new_record[FIELD3] == SAMPLE_FIELD3
-        crud.delete(new_key)
+        crud.delete(_id)
 
     def test_non_normalized_key(self):
         _id = crud.create(SAMPLE_RECORD)
         new_key = ('first.', SAMPLE_FIELD2)
-        crud.update(SAMPLE_KEY, {FIELD1: ' First. '})
+        crud.update(_id, {FIELD1: ' First. '})
         records = crud.read()
         new_record = records[new_key]
 
@@ -138,15 +139,15 @@ class TestUpdate:
         assert new_record[FIELD1] == 'first.'
         assert new_record[FIELD2] == SAMPLE_FIELD2
         assert new_record[FIELD3] == SAMPLE_FIELD3
-        crud.delete(new_key)
+        crud.delete(_id)
 
-    def test_non_dict(self):
+    def test_non_dict(self, temp_record):
         with pytest.raises(ValueError):
-            crud.update(SAMPLE_KEY, 123)
+            crud.update(temp_record, 123)
 
     def test_invalid_key(self):
-        with pytest.raises(KeyError):
-            crud.update((SAMPLE_FIELD1), {})
+        with pytest.raises(ValueError):
+            crud.update(123, {})
 
 
 class TestDelete:
@@ -154,10 +155,10 @@ class TestDelete:
         _id = crud.create(SAMPLE_RECORD)
         records = crud.read()
         assert SAMPLE_KEY in records
-        crud.delete(SAMPLE_KEY)
+        crud.delete(_id)
         records = crud.read()
         assert SAMPLE_KEY not in records
 
     def test_invalid_key(self):
-        with pytest.raises(KeyError):
-            crud.delete((SAMPLE_FIELD1))
+        with pytest.raises(ValueError):
+            crud.delete(123)
