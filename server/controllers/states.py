@@ -1,7 +1,7 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from bson.objectid import ObjectId
-from server.controllers.crud import CRUDController
+from server.controllers.crud import CRUD
 import server.common as common
 import data.db_connect as dbc
 
@@ -10,78 +10,86 @@ NAME = 'name'
 NATION = 'nation'
 KEY = (NAME, NATION)
 
-# Use the shared CRUDController to centralize cache + DB logic.
-controller = CRUDController(
-    COLLECTION,
-    KEY,
-    required_fields=(NAME, NATION),
-    normalize_fields=(NAME, NATION),
-)
+class States(CRUD):
+    def __init__(self):
+        fields = {
+            NAME: str,
+            NATION: str,
+        }
+        super(COLLECTION, KEY, fields)
+
+# Use the shared Crud to centralize cache + DB logic.
+# controller = CRUD(
+#     COLLECTION,
+#     KEY,
+#     required_fields=(NAME, NATION),
+#     normalize_fields=(NAME, NATION),
+# )
 
 
-def length():
-    return controller.length()
+# def length():
+#     return controller.length()
 
 
-def create(fields: dict, recursive=True) -> str:
-    return controller.create(fields, recursive=recursive)
+# def create(fields: dict, recursive=True) -> str:
+#     return controller.create(fields, recursive=recursive)
 
 
-def read() -> dict:
-    return controller.read()
+# def read() -> dict:
+#     return controller.read()
 
 
-def get_by_name(name: str) -> dict:
-    n = name.strip().lower()
-    matches = {}
-    for k, rec in controller.cache.read().items():
-        if k[0] == n:
-            matches[k] = rec
-    return matches
+# def get_by_name(name: str) -> dict:
+#     n = name.strip().lower()
+#     matches = {}
+#     for k, rec in controller.cache.read().items():
+#         if k[0] == n:
+#             matches[k] = rec
+#     return matches
 
 
-def update(key_or_id, fields: dict):
-    """Support either tuple-key updates (name,nation) used by tests,
-    or id-string updates used by the HTTP endpoints.
-    """
-    # key tuple path
-    if isinstance(key_or_id, tuple):
-        key = key_or_id
-        if not isinstance(fields, dict):
-            raise ValueError(f'Bad type for fields: {type(fields)}')
-        if not isinstance(key, tuple) or len(key) < len(KEY):
-            raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+# def update(key_or_id, fields: dict):
+#     """Support either tuple-key updates (name,nation) used by tests,
+#     or id-string updates used by the HTTP endpoints.
+#     """
+#     # key tuple path
+#     if isinstance(key_or_id, tuple):
+#         key = key_or_id
+#         if not isinstance(fields, dict):
+#             raise ValueError(f'Bad type for fields: {type(fields)}')
+#         if not isinstance(key, tuple) or len(key) < len(KEY):
+#             raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
 
-        result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
-        if result.matched_count == 0:
-            raise KeyError("State not found")
-        controller.cache.reload()
-        return
+#         result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
+#         if result.matched_count == 0:
+#             raise KeyError("State not found")
+#         controller.cache.reload()
+#         return
 
-    # id-string path
-    if isinstance(key_or_id, str):
-        return controller.update(key_or_id, fields)
+#     # id-string path
+#     if isinstance(key_or_id, str):
+#         return controller.update(key_or_id, fields)
 
-    raise ValueError('First argument must be a key tuple or id string')
+#     raise ValueError('First argument must be a key tuple or id string')
 
 
-def delete(key_or_id):
-    """Delete by key tuple or by id string."""
-    if isinstance(key_or_id, tuple):
-        key = key_or_id
-        if not isinstance(key, tuple) or len(key) < len(KEY):
-            raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
+# def delete(key_or_id):
+#     """Delete by key tuple or by id string."""
+#     if isinstance(key_or_id, tuple):
+#         key = key_or_id
+#         if not isinstance(key, tuple) or len(key) < len(KEY):
+#             raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
 
-        deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
-        if deleted_count == 0:
-            raise KeyError("State not found")
-        controller.cache.reload()
-        return
+#         deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
+#         if deleted_count == 0:
+#             raise KeyError("State not found")
+#         controller.cache.reload()
+#         return
 
-    if isinstance(key_or_id, str):
-        return controller.delete(key_or_id)
+#     if isinstance(key_or_id, str):
+#         return controller.delete(key_or_id)
 
-    raise ValueError('Argument must be a key tuple or id string')
+#     raise ValueError('Argument must be a key tuple or id string')
 
 
 api = Namespace('states', description='States CRUD operations')

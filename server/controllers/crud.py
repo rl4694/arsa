@@ -12,35 +12,36 @@ from server.controllers.cache import Cache
 import data.db_connect as dbc
 
 
-class CRUDController:
-    def __init__(self, collection: str, key_fields: Iterable[str], *,
-                 required_fields: Optional[Iterable[str]] = None,
-                 normalize_fields: Optional[Iterable[str]] = None):
+class CRUD:
+    def __init__(self, collection: str, keys: tuple, attributes: dict):
+        # Validate parameters
         if not isinstance(collection, str):
             raise ValueError('collection must be a string')
-        try:
-            iter(key_fields)
-        except TypeError:
-            raise ValueError('key_fields must be iterable')
+        for key in keys:
+            if key not in attributes:
+                raise ValueError(f'{key} not in attributes')
 
         self.collection = collection
-        self.key_fields = tuple(key_fields)
-        self.required_fields = tuple(required_fields) if required_fields else ()
-        self.normalize_fields = tuple(normalize_fields) if normalize_fields else ()
-        self.cache = Cache(collection, self.key_fields)
+        self.attributes = attributes
+        self.keys = tuple(keys)
+        self.cache = Cache(collection, self.keys)
 
-    def _normalize(self, fields: dict) -> dict:
-        out = {}
-        for k, v in fields.items():
-            if k in self.normalize_fields and isinstance(v, str):
-                out[k] = v.strip().lower()
-            else:
-                out[k] = v
-        return out
+    def get_cache_key(self, fields: dict):
+        cache_key = []
+        for key in self.keys:
+            if not fields.get(key):
+                raise ValueError(f'{key} missing in fields: {fields}')
+            value = fields[key]
+            if self.attributes[key] == str and isinstance(fields[key], str):
+                value = fields[key].strip().lower()
+            cache_key.append(value)
+        return tuple(cache_key)
 
-    def _key_from_fields(self, fields: dict) -> Tuple:
-        nf = self._normalize(fields)
-        return tuple(nf.get(k) for k in self.key_fields)
+    def get_db_key(self, query: tuple):
+        db_key = {}
+        for i, key in enumerate(self.keys):
+            db_key[key] = query[i]
+        return db_key
 
     def length(self) -> int:
         return len(self.cache.read())
@@ -48,12 +49,8 @@ class CRUDController:
     def create(self, fields: dict, recursive: bool = True) -> str:
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for fields: {type(fields)}')
-        for r in self.required_fields:
-            if not fields.get(r):
-                raise ValueError(f'{r} missing in fields: {fields.get(r)}')
 
-        normalized = self._normalize(fields)
-        key = self._key_from_fields(normalized)
+        key = self.get_cache_key(fields)
         store = self.cache.read()
 
         if key in store:
@@ -62,7 +59,7 @@ class CRUDController:
             else:
                 raise ValueError('Duplicate detected and recursive not allowed.')
 
-        result = dbc.create(self.collection, normalized)
+        result = dbc.create(self.collection, fields)
         # refresh cache after mutations
         self.cache.reload()
         if not result or not getattr(result, 'inserted_id', None):
@@ -72,30 +69,21 @@ class CRUDController:
     def read(self) -> dict:
         return self.cache.read()
 
-    def _ensure_objectid(self, id_or_str):
-        """Return an ObjectId instance for a string or pass through ObjectId."""
-        if isinstance(id_or_str, ObjectId):
-            return id_or_str
-        if isinstance(id_or_str, str):
-            return ObjectId(id_or_str)
-        raise TypeError('id must be an instance of (bytes, str, ObjectId)')
-
     def read_one_by_id(self, id_or_str) -> Optional[dict]:
         oid = self._ensure_objectid(id_or_str)
         return dbc.read_one(self.collection, {'_id': oid})
 
-    def update(self, id_or_str, data: dict):
+    def update(self, query: tuple, data: dict):
         if not isinstance(data, dict):
             raise ValueError(f'Bad type for data: {type(data)}')
-        oid = self._ensure_objectid(id_or_str)
-        result = dbc.update(self.collection, {'_id': oid}, data)
+        
+        result = dbc.update(self.collection, self.get_db_key(query), data)
         if not result or getattr(result, 'matched_count', 0) == 0:
-            raise KeyError('Record not found')
+            raise KeyError(f'Record not found: {query}')
         self.cache.reload()
 
-    def delete(self, id_or_str):
-        oid = self._ensure_objectid(id_or_str)
-        deleted = dbc.delete(self.collection, {'_id': oid})
+    def delete(self, query: tuple):
+        deleted = dbc.delete(self.collection, self.get_db_key(query))
         if deleted == 0:
-            raise KeyError('Record not found')
+            raise KeyError(f'Record not found: {query}')
         self.cache.reload()

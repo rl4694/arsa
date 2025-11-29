@@ -9,6 +9,9 @@ from typing import Optional
 
 class Cache:
     def __init__(self, collection: str, keys: tuple):
+        """
+        Validate and initialize the cache parameters.
+        """
         # Check if arguments are valid
         if not isinstance(collection, str):
             raise ValueError(f'Bad type for collection: {type(collection)}')
