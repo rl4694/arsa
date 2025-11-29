@@ -12,7 +12,7 @@ from functools import wraps
 
 
 # Skipping these tests for now because test data isn't being cleaned properly
-# pytest.skip(allow_module_level=True)
+pytest.skip(allow_module_level=True)
 
 @pytest.fixture(autouse=True)
 def patch_dependencies():

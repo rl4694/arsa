@@ -299,15 +299,16 @@ def seed_tsunamis():
     os.remove(TSUNAMI_FILE)
 
 
-if __name__ == '__main__':
+def main():
     if not is_json_populated(NATIONS_JSON_FILE):
         seed_nations()
-    
-    if not is_json_populated(CITIES_JSON_FILE) or not is_json_populated(STATES_JSON_FILE):
+
+    if (not is_json_populated(CITIES_JSON_FILE) or
+            not is_json_populated(STATES_JSON_FILE)):
         print("Seeding cities and states from disaster data...")
         seed_earthquakes()
         seed_landslides()
-        
+
         # Save cities and states to JSON files
         try:
             cities_data = ct.read()
@@ -315,12 +316,17 @@ if __name__ == '__main__':
             print(f"Saved {len(cities_data)} cities to {CITIES_JSON_FILE}")
         except Exception as e:
             print(f"Warning: Could not save cities to JSON: {e}")
-        
+
         try:
             states_data = st.read()
             save_json(STATES_JSON_FILE, states_data)
             print(f"Saved {len(states_data)} states to {STATES_JSON_FILE}")
         except Exception as e:
             print(f"Warning: Could not save states to JSON: {e}")
-        
-        print(f"Seeding complete: {len(cities_data)} cities, {len(states_data)} states")
+
+        print(f"Seeding complete: {len(cities_data)} cities,"
+              f"{len(states_data)} states")
+
+
+if __name__ == '__main__':
+    main()

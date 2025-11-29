@@ -11,7 +11,8 @@ from geopy.extra.rate_limiter import RateLimiter
 
 # Initialize geocoder with a user agent (required by Nominatim)
 geolocator = Nominatim(user_agent="geodata-app")
-_reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0, max_retries=1)
+_reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0,
+                       max_retries=1)
 
 # Create namespace for geocoding endpoints
 api = Namespace('geocode', description='Geocoding operations')
@@ -61,12 +62,13 @@ def reverse_geocode(lat: float, lon: float) -> dict:
         if location is None:
             for search_km in (1, 5, 20, 50, 100):
                 # make fix relating to curvature away from equator
-                dlat = search_km / 110.574 # more accurate latitude measurements
+                # more accurate latitude measurements
+                dlat = search_km / 110.574
                 cos_lat = math.cos(math.radians(lat))
                 if abs(cos_lat) < 0.01:   # account for poles
                     cos_lat = 0.01
                 dlon = search_km / (111.320 * cos_lat)
-                
+
                 candidates = [
                     (lat + dlat, lon), (lat - dlat, lon),
                     (lat, lon + dlon), (lat, lon - dlon),
