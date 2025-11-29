@@ -11,9 +11,9 @@ import time
 import csv
 import zipfile
 from dotenv import load_dotenv
-from server.controllers import cities as ct
-from server.controllers import states as st
-from server.controllers import nations as nt
+from server.controllers.cities import cities as ct
+from server.controllers.states import states as st
+from server.controllers.nations import nations as nt
 from server.controllers import natural_disasters as nd
 from server.common import is_json_populated, save_json
 from server.geocoding import reverse_geocode
@@ -110,7 +110,7 @@ def seed_nations() -> list:
 
         # Print status
         num_nations = output['metadata']['totalCount']
-        completion_percent = nt.length() * 100 // max(num_nations, 1)
+        completion_percent = nt.count() * 100 // max(num_nations, 1)
         print(f"Seeding countries: {completion_percent}%")
 
         # Wait for rate-limit to wear off

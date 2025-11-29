@@ -3,9 +3,9 @@ import time
 import json
 from io import StringIO
 from unittest.mock import patch, MagicMock, call
-from server.controllers import cities as ct
-from server.controllers import states as st
-from server.controllers import nations as nt
+from server.controllers.cities import cities as ct
+from server.controllers.states import states as st
+from server.controllers.nations import nations as nt
 from server import seed as sd
 import data.db_connect as dbc
 from functools import wraps
@@ -83,9 +83,9 @@ class TestSeedNations:
             },
         }
 
-        old_count = nt.length()
+        old_count = nt.count()
         ids = sd.seed_nations()
-        assert nt.length() >= old_count
+        assert nt.count() >= old_count
         for _id in ids:
             nt.delete(_id)
 
@@ -141,12 +141,12 @@ class TestSeedNations:
         ]
 
         
-        old_count = nt.length()
+        old_count = nt.count()
         ids = sd.seed_nations()
         
         # Verify multiple nations were created
         assert len(ids) == 5
-        assert nt.length() >= old_count + 5
+        assert nt.count() >= old_count + 5
         
         # Verify pagination was used correctly
         assert mock_get.call_count == 3
@@ -168,12 +168,12 @@ class TestSeedNations:
             },
         }
 
-        old_count = nt.length()
+        old_count = nt.count()
         ids = sd.seed_nations()
         
         # Should ignore nations with empty names
         assert len(ids) == 0
-        assert nt.length() >= old_count
+        assert nt.count() >= old_count
         
         # Clean up
         for _id in ids:
@@ -195,12 +195,12 @@ class TestSeedNations:
             },
         }
 
-        old_count = nt.length()
+        old_count = nt.count()
         ids = sd.seed_nations()
         
         # Should handle extra fields gracefully
         assert len(ids) == 1
-        assert nt.length() >= old_count
+        assert nt.count() >= old_count
         
         # Clean up
         for _id in ids:
@@ -255,9 +255,9 @@ class TestSeedEarthquakes:
         )
         mock_open.return_value.__enter__.return_value = StringIO(data)
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
         # TODO: check if earthquakes are created
 
     @patch("builtins.open", new_callable=MagicMock)
@@ -283,12 +283,12 @@ class TestSeedEarthquakes:
             'country': 'United States',
         }
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Verify reverse_geocode was called with correct coordinates
         mock_geocode.assert_called_once_with(40.7128, -74.0060)
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -307,11 +307,11 @@ class TestSeedEarthquakes:
             'country': None,
         }
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should skip entries without city
-        assert ct.length() == old_count
+        assert ct.count() == old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -330,11 +330,11 @@ class TestSeedEarthquakes:
             'country': 'United Kingdom',
         }
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should handle missing state gracefully
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -357,7 +357,7 @@ class TestSeedEarthquakes:
             Exception("Geocoding service error")
         ]
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should continue processing despite error
@@ -380,8 +380,8 @@ class TestSeedEarthquakes:
             'country': 'Japan',
         }
 
-        old_count_nations = nt.length()
-        old_count_cities = ct.length()
+        old_count_nations = nt.count()
+        old_count_cities = ct.count()
         
         sd.seed_earthquakes()
         
@@ -389,7 +389,7 @@ class TestSeedEarthquakes:
         mock_geocode.assert_called_with(35.6762, 139.6503)
         
         # Verify data was created
-        assert ct.length() >= old_count_cities
+        assert ct.count() >= old_count_cities
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -408,12 +408,12 @@ class TestSeedEarthquakes:
             'country': 'United States',
         }
         
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Verify reverse_geocode was called with correct coordinates
         mock_geocode.assert_called_once_with(40.7128, -74.0060)
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -432,11 +432,11 @@ class TestSeedEarthquakes:
             'country': None,
         }
         
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should skip this entry when no city found
-        assert ct.length() == old_count
+        assert ct.count() == old_count
         mock_geocode.assert_called_once()
 
     @patch('server.seed.reverse_geocode')
@@ -456,14 +456,14 @@ class TestSeedEarthquakes:
             'country': 'United States',
         }
         
-        old_count_cities = ct.length()
-        old_count_nations = nt.length()
+        old_count_cities = ct.count()
+        old_count_nations = nt.count()
         
         sd.seed_earthquakes()
         
         # Verify entities were created
-        assert ct.length() >= old_count_cities
-        assert nt.length() >= old_count_nations
+        assert ct.count() >= old_count_cities
+        assert nt.count() >= old_count_nations
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -482,11 +482,11 @@ class TestSeedEarthquakes:
             'country': 'France',
         }
         
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should handle missing state gracefully
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -501,12 +501,12 @@ class TestSeedEarthquakes:
         # Mock geocoding failure
         mock_geocode.side_effect = Exception("Geocoding service error")
         
-        old_count = ct.length()
+        old_count = ct.count()
         # Should continue without crashing
         sd.seed_earthquakes()
         
         # No cities should be added due to error
-        assert ct.length() == old_count
+        assert ct.count() == old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -527,12 +527,12 @@ class TestSeedEarthquakes:
             {'city': 'London', 'state': None, 'country': 'United Kingdom'},
         ]
         
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Verify all coordinates were processed
         assert mock_geocode.call_count == 3
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -559,7 +559,7 @@ class TestSeedEarthquakes:
             },
         ]
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Verify reverse_geocode was called with correct coordinates
@@ -568,7 +568,7 @@ class TestSeedEarthquakes:
         mock_geocode.assert_any_call(34.0522, -118.2437)
         
         # Verify cities were created
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -587,11 +587,11 @@ class TestSeedEarthquakes:
             'country': 'Some Country',
         }
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Verify city count unchanged (no city created)
-        assert ct.length() == old_count
+        assert ct.count() == old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -610,11 +610,11 @@ class TestSeedEarthquakes:
             'country': 'United Kingdom',
         }
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should still create city even without state
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -637,11 +637,11 @@ class TestSeedEarthquakes:
             },
         ]
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_earthquakes()
         
         # Should continue processing after exception
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
 
     @patch('server.seed.reverse_geocode')
     @patch("builtins.open", new_callable=MagicMock)
@@ -660,14 +660,14 @@ class TestSeedEarthquakes:
             'country': 'Japan',
         }
 
-        old_nations = nt.length()
-        old_cities = ct.length()
+        old_nations = nt.count()
+        old_cities = ct.count()
         
         sd.seed_earthquakes()
         
         # Verify hierarchical creation (nation, state, city)
-        assert nt.length() >= old_nations
-        assert ct.length() >= old_cities
+        assert nt.count() >= old_nations
+        assert ct.count() >= old_cities
         
         # Verify correct coordinates were passed
         mock_geocode.assert_called_once_with(35.6762, 139.6503)
@@ -687,9 +687,9 @@ class TestSeedLandslides:
             'state': 'New York',
             'country': 'United States'
         }
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_landslides()
-        assert ct.length() >= old_count
+        assert ct.count() >= old_count
         mock_geocode.assert_called_once_with(1, 1)
 
     @patch('server.seed.reverse_geocode')
@@ -702,9 +702,9 @@ class TestSeedLandslides:
         mock_open.return_value.__enter__.return_value = StringIO(data)
         mock_geocode.side_effect = Exception("A")
 
-        old_count = ct.length()
+        old_count = ct.count()
         sd.seed_landslides()
-        assert ct.length() == old_count
+        assert ct.count() == old_count
         mock_geocode.assert_called_once_with(1.0, 2.0)
 
     @patch("builtins.open", new_callable=MagicMock)
