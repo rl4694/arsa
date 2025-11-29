@@ -32,30 +32,64 @@ def temp_record():
         print('The record was already deleted.')
 
 
-class TestLength:
-    def test_basic(self):
-        old_length = crud.length()
-        _id = crud.create(SAMPLE_RECORD)
-        assert crud.length() == old_length + 1
-        crud.delete(SAMPLE_KEY)
-        assert crud.length() == old_length
-
-
 class TestCreate:
     def test_valid(self):
         _id = crud.create(SAMPLE_RECORD)
         assert common.is_valid_id(_id)
         records = crud.read()
+        record = records[SAMPLE_KEY]
         assert SAMPLE_KEY in records
+        assert record[FIELD1] == SAMPLE_FIELD1
+        assert record[FIELD2] == SAMPLE_FIELD2
+        assert record[FIELD3] == SAMPLE_FIELD3
         crud.delete(SAMPLE_KEY)
 
-    def test_non_dict(self):
+    def test_non_normalized_key(self):
+        key = ('first', 'sec ond.')
+        _id = crud.create({FIELD1: ' FIRST  ', FIELD2: ' Sec ond. ' })
+        assert common.is_valid_id(_id)
+        records = crud.read()
+        record = records[key]
+        assert key in records
+        assert record[FIELD1] == 'first'
+        assert record[FIELD2] == 'sec ond.'
+        crud.delete(key)
+
+    def test_empty_key(self):
+        key = (SAMPLE_FIELD1, '')
+        _id = crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: '' })
+        assert common.is_valid_id(_id)
+        records = crud.read()
+        record = records[key]
+        assert key in records
+        assert record[FIELD1] == SAMPLE_FIELD1
+        assert record[FIELD2] == ''
+        crud.delete(key)
+
+    def test_bad_recursive_type(self):
         with pytest.raises(ValueError):
-            crud.create(10)
+            crud.create(SAMPLE_RECORD, 123)
+
+    def test_bad_fields_type(self):
+        with pytest.raises(ValueError):
+            crud.create(123)
+
+    def test_bad_field_type(self):
+        with pytest.raises(ValueError):
+            crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: 123})
 
     def test_missing_key(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(KeyError):
             crud.create({FIELD1: SAMPLE_FIELD1})
+
+
+class TestCount:
+    def test_basic(self):
+        old_count = crud.count()
+        _id = crud.create(SAMPLE_RECORD)
+        assert crud.count() == old_count + 1
+        crud.delete(SAMPLE_KEY)
+        assert crud.count() == old_count
 
 
 class TestRead:
@@ -64,6 +98,18 @@ class TestRead:
         assert isinstance(records, dict)
         assert SAMPLE_KEY in records
         assert len(records) > 0
+
+
+class TestSelect:
+    def test_basic(self, temp_record):
+        record = crud.select(SAMPLE_KEY)
+        assert record[FIELD1] == SAMPLE_FIELD1
+        assert record[FIELD2] == SAMPLE_FIELD2
+        assert record[FIELD3] == SAMPLE_FIELD3
+
+    def test_nonexistent(self):
+        with pytest.raises(KeyError):
+            record = crud.select(SAMPLE_KEY)
 
 
 class TestUpdate:
@@ -77,6 +123,19 @@ class TestUpdate:
 
         assert new_key in records
         assert new_record[FIELD1] == new_field1
+        assert new_record[FIELD2] == SAMPLE_FIELD2
+        assert new_record[FIELD3] == SAMPLE_FIELD3
+        crud.delete(new_key)
+
+    def test_non_normalized_key(self):
+        _id = crud.create(SAMPLE_RECORD)
+        new_key = ('first.', SAMPLE_FIELD2)
+        crud.update(SAMPLE_KEY, {FIELD1: ' First. '})
+        records = crud.read()
+        new_record = records[new_key]
+
+        assert new_key in records
+        assert new_record[FIELD1] == 'first.'
         assert new_record[FIELD2] == SAMPLE_FIELD2
         assert new_record[FIELD3] == SAMPLE_FIELD3
         crud.delete(new_key)
