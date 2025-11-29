@@ -15,8 +15,7 @@ import data.db_connect as dbc
 class CRUDController:
     def __init__(self, collection: str, key_fields: Iterable[str], *,
                  required_fields: Optional[Iterable[str]] = None,
-                 normalize_fields: Optional[Iterable[str]] = None,
-                 ttl: Optional[float] = None):
+                 normalize_fields: Optional[Iterable[str]] = None):
         if not isinstance(collection, str):
             raise ValueError('collection must be a string')
         try:
@@ -28,7 +27,7 @@ class CRUDController:
         self.key_fields = tuple(key_fields)
         self.required_fields = tuple(required_fields) if required_fields else ()
         self.normalize_fields = tuple(normalize_fields) if normalize_fields else ()
-        self.cache = Cache(collection, self.key_fields, ttl)
+        self.cache = Cache(collection, self.key_fields)
 
     def _normalize(self, fields: dict) -> dict:
         out = {}

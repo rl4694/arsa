@@ -40,10 +40,6 @@ def get_by_name(name: str) -> dict:
     return matches
 
 
-def get_cache_stats() -> dict:
-    return controller.cache.get_stats()
-
-
 def update(key_or_id, fields: dict):
     """Support either tuple-key updates (name,nation) used by tests,
     or id-string updates used by the HTTP endpoints.
@@ -110,13 +106,6 @@ class StateList(Resource):
         state_id = create(data, recursive=recursive)
         state = controller.read_one_by_id(state_id)
         return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}, 201
-
-
-@api.route('/cache/stats')
-class CacheStats(Resource):
-    @api.doc('get_cache_stats')
-    def get(self):
-        return get_cache_stats()
 
 
 @api.route('/<string:state_id>')
