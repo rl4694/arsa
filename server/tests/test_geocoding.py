@@ -8,13 +8,9 @@ import server.geocoding as geo
 class TestReverseGeocode:
     """Test the reverse_geocode function."""
     
-    @patch('server.geocoding.Nominatim')
-    def test_valid_coordinates(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_valid_coordinates(self, mock_reverse):
         """Test reverse geocoding with valid coordinates."""
-        # Mock the geocoder
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        
         # Mock the location response
         mock_location = MagicMock()
         mock_location.address = "New York City Hall, 260, Broadway, Manhattan"
@@ -25,7 +21,7 @@ class TestReverseGeocode:
                 'country': 'United States'
             }
         }
-        mock_geolocator.reverse.return_value = mock_location
+        mock_reverse.return_value = mock_location
         
         result = geo.reverse_geocode(40.7128, -74.0060)
         
@@ -36,12 +32,9 @@ class TestReverseGeocode:
         assert result['longitude'] == -74.0060
         assert 'display_name' in result
     
-    @patch('server.geocoding.Nominatim')
-    def test_location_with_town_instead_of_city(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_location_with_town_instead_of_city(self, mock_reverse):
         """Test that town is used when city is not available."""
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        
         mock_location = MagicMock()
         mock_location.address = "Small Town Address"
         mock_location.raw = {
@@ -51,19 +44,16 @@ class TestReverseGeocode:
                 'country': 'United States'
             }
         }
-        mock_geolocator.reverse.return_value = mock_location
+        mock_reverse.return_value = mock_location
         
         result = geo.reverse_geocode(44.26, -72.58)
         
         assert result['city'] == 'Small Town'
         assert result['state'] == 'Vermont'
     
-    @patch('server.geocoding.Nominatim')
-    def test_location_with_province_instead_of_state(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_location_with_province_instead_of_state(self, mock_reverse):
         """Test that province is used when state is not available."""
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        
         mock_location = MagicMock()
         mock_location.address = "Toronto, Ontario, Canada"
         mock_location.raw = {
@@ -73,7 +63,7 @@ class TestReverseGeocode:
                 'country': 'Canada'
             }
         }
-        mock_geolocator.reverse.return_value = mock_location
+        mock_reverse.return_value = mock_location
         
         result = geo.reverse_geocode(43.65, -79.38)
         
@@ -81,12 +71,10 @@ class TestReverseGeocode:
         assert result['state'] == 'Ontario'
         assert result['country'] == 'Canada'
     
-    @patch('server.geocoding.Nominatim')
-    def test_location_not_found(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_location_not_found(self, mock_reverse):
         """Test when coordinates don't map to any location."""
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        mock_geolocator.reverse.return_value = None
+        mock_reverse.return_value = None
         
         result = geo.reverse_geocode(0.0, 0.0)
         
@@ -131,22 +119,18 @@ class TestReverseGeocode:
             geo.reverse_geocode(0.0, "not a number")
         assert "must be numbers" in str(exc_info.value)
     
-    @patch('server.geocoding.Nominatim')
-    def test_geocoder_timeout(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_geocoder_timeout(self, mock_reverse):
         """Test handling of geocoder timeout."""
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        mock_geolocator.reverse.side_effect = GeocoderTimedOut()
+        mock_reverse.side_effect = GeocoderTimedOut()
         
         with pytest.raises(GeocoderTimedOut):
             geo.reverse_geocode(40.7128, -74.0060)
     
-    @patch('server.geocoding.Nominatim')
-    def test_geocoder_service_error(self, mock_nominatim):
+    @patch('server.geocoding._reverse')
+    def test_geocoder_service_error(self, mock_reverse):
         """Test handling of geocoder service error."""
-        mock_geolocator = MagicMock()
-        mock_nominatim.return_value = mock_geolocator
-        mock_geolocator.reverse.side_effect = GeocoderServiceError("Service unavailable")
+        mock_reverse.side_effect = GeocoderServiceError("Service unavailable")
         
         with pytest.raises(GeocoderServiceError):
             geo.reverse_geocode(40.7128, -74.0060)

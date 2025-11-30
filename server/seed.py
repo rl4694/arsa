@@ -11,9 +11,9 @@ import time
 import csv
 import zipfile
 from dotenv import load_dotenv
-from server.controllers import cities as ct
-from server.controllers import states as st
-from server.controllers import nations as nt
+from server.controllers.cities import cities as ct
+from server.controllers.states import states as st
+from server.controllers.nations import nations as nt
 from server.controllers import natural_disasters as nd
 from server.common import is_json_populated, save_json
 from server.geocoding import reverse_geocode
@@ -110,7 +110,7 @@ def seed_nations() -> list:
 
         # Print status
         num_nations = output['metadata']['totalCount']
-        completion_percent = nt.length() * 100 // max(num_nations, 1)
+        completion_percent = nt.count() * 100 // max(num_nations, 1)
         print(f"Seeding countries: {completion_percent}%")
 
         # Wait for rate-limit to wear off
@@ -299,15 +299,16 @@ def seed_tsunamis():
     os.remove(TSUNAMI_FILE)
 
 
-if __name__ == '__main__':
+def main():
     if not is_json_populated(NATIONS_JSON_FILE):
         seed_nations()
-    
-    if not is_json_populated(CITIES_JSON_FILE) or not is_json_populated(STATES_JSON_FILE):
+
+    if (not is_json_populated(CITIES_JSON_FILE) or
+            not is_json_populated(STATES_JSON_FILE)):
         print("Seeding cities and states from disaster data...")
         seed_earthquakes()
         seed_landslides()
-        
+
         # Save cities and states to JSON files
         try:
             cities_data = ct.read()
@@ -315,12 +316,17 @@ if __name__ == '__main__':
             print(f"Saved {len(cities_data)} cities to {CITIES_JSON_FILE}")
         except Exception as e:
             print(f"Warning: Could not save cities to JSON: {e}")
-        
+
         try:
             states_data = st.read()
             save_json(STATES_JSON_FILE, states_data)
             print(f"Saved {len(states_data)} states to {STATES_JSON_FILE}")
         except Exception as e:
             print(f"Warning: Could not save states to JSON: {e}")
-        
-        print(f"Seeding complete: {len(cities_data)} cities, {len(states_data)} states")
+
+        print(f"Seeding complete: {len(cities_data)} cities,"
+              f"{len(states_data)} states")
+
+
+if __name__ == '__main__':
+    main()

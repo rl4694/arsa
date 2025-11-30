@@ -1,68 +1,21 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
-from bson.objectid import ObjectId
-from server.controllers.cache import Cache
-import server.common as common
-import data.db_connect as dbc
+from server.controllers.crud import CRUD
 
+STATES_RESP = 'states'
 COLLECTION = 'states'
 NAME = 'name'
 NATION = 'nation'
 KEY = (NAME, NATION)
-cache = Cache(COLLECTION, KEY)
 
-def length():
-    return len(cache.read())
-
-def create(fields: dict, recursive=True) -> str:
-    if not isinstance(fields, dict):
-        raise ValueError(f'Bad type for fields: {type(fields)}')
-    if not fields.get(NAME):
-        raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-    if not fields.get(NATION):
-        raise ValueError(f'Nation missing in fields: {fields.get(NATION)}')
-
-    name = fields[NAME].strip().lower()
-    nation = fields[NATION].strip().lower()
-    states = cache.read()
-
-    if (name, nation) in states:
-        if recursive:
-            return str(states[(name, nation)]['_id'])
-        else:
-            raise ValueError("Duplicate state detected and recursive not allowed.")
-
-    result = dbc.create(COLLECTION, { NAME: name, NATION: nation })
-    cache.reload()
-    return str(result.inserted_id)
-
-def read() -> dict:
-    return cache.read()
-
-def get_by_name(name: str, nation: str) -> dict:
-    key = (name.strip().lower(), nation.strip().lower())
-    states = cache.read()
-    return states.get(key)
-
-def update(key: tuple, fields: dict):
-    if not isinstance(fields, dict):
-        raise ValueError(f'Bad type for fields: {type(fields)}')
-    if not isinstance(key, tuple) or len(key) < len(KEY):
-        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
-
-    result = dbc.update(COLLECTION, {NAME: key[0], NATION: key[1]}, fields)
-    if result.matched_count == 0:
-        raise KeyError("State not found")
-    cache.reload()
-
-def delete(key: tuple):
-    if not isinstance(key, tuple) or len(key) < len(KEY):
-        raise ValueError(f'Key must be a tuple of length {len(KEY)}: {key}')
-
-    deleted_count = dbc.delete(COLLECTION, {NAME: key[0], NATION: key[1]})
-    if deleted_count == 0:
-        raise KeyError("State not found")
-    cache.reload()
+states = CRUD(
+    COLLECTION,
+    KEY,
+    {
+        NAME: str,
+        NATION: str,
+    }
+)
 
 
 api = Namespace('states', description='States CRUD operations')
@@ -77,49 +30,42 @@ state_model = api.model('State', {
 class StateList(Resource):
     @api.doc('list_states')
     def get(self):
-        return {'states': read()}
+        records = states.read()
+        return {STATES_RESP: list(records.values())}
 
     @api.expect(state_model)
     @api.doc('create_state')
     def post(self):
         data = request.json or {}
-        recursive = data.get('recursive', True)
-        state_id = create(data, recursive=recursive)
-        return {'id': state_id, **data}, 201
+        _id = states.create(data, recursive=False)
+        created = states.select(_id)
+        return {STATES_RESP: created}, 201
 
 
 @api.route('/<string:state_id>')
 class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
-        if not common.is_valid_id(state_id):
+        try:
+            record = states.select(state_id)
+            return {STATES_RESP: record}
+        except:
             api.abort(404, "State not found")
-        
-        states = cache.read()
-        for state in states.values():
-            if str(state.get('_id')) == state_id:
-                return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
-        
-        state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
-        if not state:
-            api.abort(404, "State not found")
-        return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
-
 
     @api.expect(state_model)
     @api.doc('update_state')
     def put(self, state_id):
         try:
-            update(state_id, request.json)
-            state = dbc.read_one(COLLECTION, {'_id': ObjectId(state_id)})
-            return {'id': state_id, **state}
+            states.update(state_id, request.json)
+            record = states.select(state_id)
+            return {STATES_RESP: record}
         except KeyError:
             api.abort(404, "State not found")
 
     @api.doc('delete_state')
     def delete(self, state_id):
         try:
-            delete(state_id)
+            states.delete(state_id)
             return '', 204
         except KeyError:
             api.abort(404, "State not found")

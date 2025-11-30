@@ -4,79 +4,28 @@ This file implements CRUD operations for natural disasters.
 
 from flask import request
 from flask_restx import Resource, Namespace, fields
-import data.db_connect as dbc
+from server.controllers.crud import CRUD
 
+DISASTERS_RESP = 'disasters'
 COLLECTION = 'natural_disasters'
 NAME = 'name'
 DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
+KEY = (NAME, DATE, LOCATION)
 
-
-@dbc.needs_db
-def length():
-    """Return the count of disasters in the database."""
-    return len(dbc.read(COLLECTION, no_id=False))
-
-
-def create(fields: dict) -> str:
-    """Create a new natural disaster record and return its ID."""
-    if not isinstance(fields, dict):
-        raise ValueError(f'Bad type for fields: {type(fields)}')
-    if not fields.get(NAME):
-        raise ValueError(f'Name missing in fields: {fields.get(NAME)}')
-    
-    doc = {
-        NAME: fields.get(NAME),
-        DISASTER_TYPE: fields.get(DISASTER_TYPE),
-        DATE: fields.get(DATE),
-        LOCATION: fields.get(LOCATION),
-        DESCRIPTION: fields.get(DESCRIPTION, '')
+disasters = CRUD(
+    COLLECTION,
+    KEY,
+    {
+        NAME: str,
+        DISASTER_TYPE: str,
+        DATE: str,
+        LOCATION: str,
+        DESCRIPTION: str,
     }
-    # @needs_db decorator in dbc.create ensures connection
-    result = dbc.create(COLLECTION, doc)
-    return str(result.inserted_id)
-
-
-def read() -> dict:
-    """Return all natural disasters as a dictionary."""
-    # @needs_db decorator in dbc.read ensures connection
-    disasters_list = dbc.read(COLLECTION, no_id=False)
-    return {
-        str(disaster['_id']): {
-            NAME: disaster.get(NAME),
-            DISASTER_TYPE: disaster.get(DISASTER_TYPE),
-            DATE: disaster.get(DATE),
-            LOCATION: disaster.get(LOCATION),
-            DESCRIPTION: disaster.get(DESCRIPTION, '')
-        } for disaster in disasters_list
-    }
-
-
-def update(disaster_id: str, data: dict):
-    """Update an existing disaster's data."""
-    from bson.objectid import ObjectId
-    update_dict = {
-        NAME: data.get(NAME),
-        DISASTER_TYPE: data.get(DISASTER_TYPE),
-        DATE: data.get(DATE),
-        LOCATION: data.get(LOCATION),
-        DESCRIPTION: data.get(DESCRIPTION, '')
-    }
-    # @needs_db decorator in dbc.update ensures connection
-    result = dbc.update(COLLECTION, {'_id': ObjectId(disaster_id)}, update_dict)
-    if result.matched_count == 0:
-        raise KeyError("Disaster not found")
-
-
-def delete(disaster_id: str):
-    """Delete a disaster by ID."""
-    from bson.objectid import ObjectId
-    # @needs_db decorator in dbc.delete ensures connection
-    deleted_count = dbc.delete(COLLECTION, {'_id': ObjectId(disaster_id)})
-    if deleted_count == 0:
-        raise KeyError("Disaster not found")
+)
 
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
@@ -94,15 +43,17 @@ class DisasterList(Resource):
     @api.doc('list_disasters')
     def get(self):
         """Get all natural disasters."""
-        return {'disasters': read()}
+        records = disasters.read()
+        return {DISASTERS_RESP: list(records.values())}
 
     @api.expect(disaster_model)
     @api.doc('create_disaster')
     def post(self):
         """Create a new natural disaster."""
         data = request.json
-        disaster_id = create(data)
-        return {'id': disaster_id, **data}, 201
+        _id = disasters.create(data)
+        created = disasters.select(_id)
+        return {DISASTERS_RESP: created}, 201
 
 
 @api.route('/<string:disaster_id>')
@@ -110,15 +61,9 @@ class Disaster(Resource):
     @api.doc('get_disaster')
     def get(self, disaster_id):
         """Get a specific disaster by ID."""
-        from bson.objectid import ObjectId
         try:
-            # @needs_db decorator in dbc.read_one ensures connection
-            disaster = dbc.read_one(COLLECTION, {'_id': ObjectId(disaster_id)})
-            if not disaster:
-                api.abort(404, "Disaster not found")
-            # Remove _id from response, we're including it as 'id' parameter
-            disaster.pop('_id', None)
-            return {'id': disaster_id, **disaster}
+            record = disasters.select(disaster_id)
+            return {DISASTERS_RESP: record}
         except Exception:
             api.abort(404, "Disaster not found")
 
@@ -127,12 +72,9 @@ class Disaster(Resource):
     def put(self, disaster_id):
         """Update an existing disaster."""
         try:
-            update(disaster_id, request.json)
-            from bson.objectid import ObjectId
-            # @needs_db decorator in dbc.read_one ensures connection
-            disaster = dbc.read_one(COLLECTION, {'_id': ObjectId(disaster_id)})
-            disaster.pop('_id', None)
-            return {'id': disaster_id, **disaster}
+            disasters.update(disaster_id, request.json)
+            record = disasters.select(disaster_id)
+            return {DISASTERS_RESP: record}
         except KeyError:
             api.abort(404, "Disaster not found")
         except Exception:
@@ -142,7 +84,7 @@ class Disaster(Resource):
     def delete(self, disaster_id):
         """Delete a disaster by ID."""
         try:
-            delete(disaster_id)
+            disasters.delete(disaster_id)
             return '', 204
         except KeyError:
             api.abort(404, "Disaster not found")
