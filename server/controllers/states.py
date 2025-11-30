@@ -39,11 +39,10 @@ def create(fields: dict, recursive=True) -> str:
 def read() -> dict:
     return cache.read()
 
-def get_by_name(name: str) -> dict:
-    return cache.get(name.strip().lower())
-
-def get_cache_stats() -> dict:
-    return cache.get_stats()
+def get_by_name(name: str, nation: str) -> dict:
+    key = (name.strip().lower(), nation.strip().lower())
+    states = cache.read()
+    return states.get(key)
 
 def update(key: tuple, fields: dict):
     if not isinstance(fields, dict):
@@ -89,13 +88,6 @@ class StateList(Resource):
         return {'id': state_id, **data}, 201
 
 
-@api.route('/cache/stats')
-class CacheStats(Resource):
-    @api.doc('get_cache_stats')
-    def get(self):
-        return get_cache_stats()
-
-
 @api.route('/<string:state_id>')
 class State(Resource):
     @api.doc('get_state')
@@ -103,7 +95,7 @@ class State(Resource):
         if not common.is_valid_id(state_id):
             api.abort(404, "State not found")
         
-        states = cache.read_flat()
+        states = cache.read()
         for state in states.values():
             if str(state.get('_id')) == state_id:
                 return {'id': state_id, NAME: state[NAME], NATION: state.get(NATION)}
