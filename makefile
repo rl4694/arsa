@@ -27,5 +27,8 @@ dev_env: FORCE
 	@echo "You should set PYTHONPATH to: "
 	@echo $(shell pwd)
 
+prod_env: FORCE
+	pip install -r $(REQ_DIR)/requirements.txt
+
 docs: FORCE
 	cd $(API_DIR); make docs
