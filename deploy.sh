@@ -2,7 +2,7 @@
 # This shell script deploys a new version to a server.
 
 PROJ_DIR=arsa
-VENV=arsa/.virtualenvs/arsa
+VENV=arsa
 PA_DOMAIN="arsa.pythonanywhere.com"
 PA_USER='arsa'
 echo "Project dir = $PROJ_DIR"
