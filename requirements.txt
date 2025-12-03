@@ -45,3 +45,4 @@ typing_extensions==4.15.0
 urllib3==2.5.0
 webencodings==0.5.1
 Werkzeug==3.0.6
+pycountry==24.6.1
