@@ -16,7 +16,15 @@ MONGO_ID = '_id'
 def needs_db(func):
     """
     Decorator to ensure database connection before executing function.
-    Automatically calls connect_db() if client is not connected.
+    
+    This decorator automatically establishes a database connection
+    if one doesn't exist before executing the decorated function.
+    
+    Example:
+        @needs_db
+        def my_function():
+            # database connection guaranteed here
+            pass
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -27,11 +35,17 @@ def needs_db(func):
 
 def connect_db():
     """
-    This provides a uniform way to connect to the DB across all uses.
-    Returns a mongo client object... maybe we shouldn't?
-    Also set global client variable.
-    We should probably either return a client OR set a
-    client global.
+    Connect to MongoDB (either local or cloud based on environment variables).
+    
+    Uses CLOUD_MONGO environment variable to determine connection type:
+    - CLOUD_MONGO=1: Connect to MongoDB Atlas using MONGO_URL
+    - CLOUD_MONGO=0 or unset: Connect to local MongoDB instance
+    
+    Returns:
+        pymongo.MongoClient: Connected MongoDB client instance
+    
+    Raises:
+        ValueError: If CLOUD_MONGO=1 but MONGO_URL is not set
     """
     global client
     if client is None:
@@ -50,6 +64,15 @@ def connect_db():
 
 
 def convert_mongo_id(doc: dict):
+    """
+    Convert MongoDB ObjectId to string for JSON serialization.
+    
+    Args:
+        doc (dict): Document containing MongoDB '_id' field
+    
+    Note:
+        Modifies the document in-place.
+    """
     if MONGO_ID in doc:
         # Convert mongo ID to a string so it works as JSON
         if doc and MONGO_ID in doc:
