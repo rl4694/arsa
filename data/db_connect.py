@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import pymongo as pm
 import certifi
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 LOCAL = "0"
 CLOUD = "1"
