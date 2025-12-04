@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 import pymongo as pm
 import certifi
 
+load_dotenv()
+
 LOCAL = "0"
 CLOUD = "1"
 SE_DB = 'seDB'
