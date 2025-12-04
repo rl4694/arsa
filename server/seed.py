@@ -53,23 +53,52 @@ STATES_JSON_FILE = 'server/json/states.json'
 
 def get_kaggle_api():
     """
-    Return an authenticated Kaggle API which can retrieve datasets
+    Return an authenticated Kaggle API which can retrieve datasets.
+
+    Returns:
+        KaggleApi: Authenticated Kaggle API client
+
+    Raises:
+        OSError: If Kaggle credentials are not configured
+        
+    Note:
+        Requires ~/.kaggle/kaggle.json with API credentials.
+        Get credentials from: https://www.kaggle.com/settings/account
     """
     # Kaggle automatically authenticates during import, so it breaks tests
     # if left in the module scope
     from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: E402
-    api = KaggleApi()
-    api.authenticate()
-    return api
+    
+    try:
+        api = KaggleApi()
+        api.authenticate()
+        return api
+    except OSError as e:
+        raise OSError(
+            "Kaggle API authentication failed. "
+            "Please ensure ~/.kaggle/kaggle.json exists with valid credentials. "
+            f"Error: {e}"
+        ) from e
 
 
 def seed_nations() -> list:
     """
-    Add initial nation data from GeoDB nations API to our database
+    Add initial nation data from GeoDB nations API to our database.
 
     Returns:
-        List of nation IDs created
+        list: List of nation IDs created
+
+    Raises:
+        ConnectionError: If API is unreachable or returns error
+        ValueError: If API response format is invalid
+        KeyError: If required environment variable RAPID_API_KEY is not set
     """
+    # Validate API key is present
+    api_key = os.getenv('RAPID_API_KEY')
+    if not api_key:
+        raise KeyError("RAPID_API_KEY environment variable is not set. "
+                      "Please add it to your .env file.")
+
     offset = 0
     num_nations = None
     result = []
@@ -81,7 +110,7 @@ def seed_nations() -> list:
         }
         headers = {
             'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
-            'x-rapidapi-key': os.getenv('RAPID_API_KEY'),
+            'x-rapidapi-key': api_key,
         }
         try:
             res = requests.get(NATIONS_URL, headers=headers, params=params)
@@ -130,32 +159,69 @@ def seed_nations() -> list:
 
 def create_loc_from_coordinates(lat: float, lon: float):
     """
-    Use reverse geocoding to resolve coordinates into nation, state, city
+    Use reverse geocoding to resolve coordinates into nation, state, city.
 
     Args:
-        lat (float): Latitude
-        lon (float): Longitude
+        lat (float): Latitude (-90 to 90)
+        lon (float): Longitude (-180 to 180)
+
+    Returns:
+        dict: Dictionary containing created IDs and location names
+
+    Raises:
+        ValueError: If coordinates are invalid or city cannot be found
+        ConnectionError: If geocoding service is unavailable
     """
-    loc = reverse_geocode(lat, lon)
+    # Validate coordinates
+    if not (-90 <= lat <= 90):
+        raise ValueError(f"Invalid latitude: {lat}. Must be between -90 and 90")
+    if not (-180 <= lon <= 180):
+        raise ValueError(f"Invalid longitude: {lon}. Must be between -180 and 180")
+
+    # Attempt reverse geocoding with error handling
+    try:
+        loc = reverse_geocode(lat, lon)
+    except Exception as e:
+        raise ConnectionError(f"Geocoding failed for ({lat}, {lon}): {e}") from e
+
     city_name = loc.get('city')
     state_name = loc.get('state')
     nation_name = loc.get('country')
+
     if not city_name:
-        raise ValueError(f"No city found for ({lat}, {lon})")
-    nation_id = (nt.create({nt.NAME: nation_name}) if nation_name else None)
+        raise ValueError(f"No city found for coordinates ({lat}, {lon})")
+
+    # Create nation (if provided)
+    nation_id = None
+    if nation_name:
+        try:
+            nation_id = nt.create({nt.NAME: nation_name})
+        except Exception as e:
+            print(f"Warning: Failed to create nation '{nation_name}': {e}")
+
+    # Create state (if provided)
     state_id = None
-    if state_name:
-        state_id = st.create({
-            st.NAME: state_name,
-            st.NATION: nation_name
+    if state_name and nation_name:
+        try:
+            state_id = st.create({
+                st.NAME: state_name,
+                st.NATION: nation_name
+            })
+            print(f"Created state: {state_name}, {nation_name}")
+        except Exception as e:
+            print(f"Warning: Failed to create state '{state_name}': {e}")
+
+    # Create city
+    try:
+        city_id = ct.create({
+            ct.NAME: city_name,
+            ct.STATE: state_name,
+            ct.NATION: nation_name,
         })
-    print(f"Created state: {state_name}, {nation_name}")
-    city_id = ct.create({
-        ct.NAME: city_name,
-        ct.STATE: state_name,
-        ct.NATION: nation_name,
-    })
-    print(f"Created city: {city_name} ({state_name}, {nation_name})")
+        print(f"Created city: {city_name} ({state_name}, {nation_name})")
+    except Exception as e:
+        raise RuntimeError(f"Failed to create city '{city_name}': {e}") from e
+
     return {
         'city': city_id,
         'state': state_id,
