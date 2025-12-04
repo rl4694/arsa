@@ -4,8 +4,11 @@ We may be required to use a new database at any point.
 """
 import os
 from functools import wraps
+from dotenv import load_dotenv
 import pymongo as pm
 import certifi
+
+load_dotenv()
 
 LOCAL = "0"
 CLOUD = "1"
