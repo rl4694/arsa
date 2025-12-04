@@ -5,12 +5,24 @@ We may be required to use a new database at any point.
 import os
 from functools import wraps
 import pymongo as pm
+import certifi
 
 LOCAL = "0"
 CLOUD = "1"
 SE_DB = 'seDB'
 client = None
 MONGO_ID = '_id'
+
+CONN_TIMEOUT = 'connectTimeoutMS'
+SOCK_TIMEOUT = 'socketTimeoutMS'
+CONNECT = 'connect'
+MAX_POOL_SIZE = 'maxPoolSize'
+PA_SETTINGS = {
+    CONN_TIMEOUT: os.getenv('MONGO_CONN_TIMEOUT', 30000),
+    SOCK_TIMEOUT: os.getenv('MONGO_SOCK_TIMEOUT', None),
+    CONNECT: os.getenv('MONGO_CONNECT', False),
+    MAX_POOL_SIZE: os.getenv('MONGO_MAX_POOL_SIZE', 1),
+}
 
 
 def needs_db(func):
@@ -56,7 +68,9 @@ def connect_db():
                 raise ValueError('You must set the MONGO_URL env variable '
                                  + 'to use Mongo in the cloud.')
             print('Connecting to Mongo in the cloud.')
-            client = pm.MongoClient(mongo_url)
+            client = pm.MongoClient(mongo_url,
+                                    tlsCAFile=certifi.where(),
+                                    **PA_SETTINGS)
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()

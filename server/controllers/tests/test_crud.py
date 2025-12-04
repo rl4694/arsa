@@ -42,7 +42,6 @@ class TestCreate:
         assert record[FIELD1] == SAMPLE_FIELD1
         assert record[FIELD2] == SAMPLE_FIELD2
         assert record[FIELD3] == SAMPLE_FIELD3
-        print(record)
         crud.delete(_id)
 
     def test_non_normalized_key(self):

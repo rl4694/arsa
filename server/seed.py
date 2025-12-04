@@ -60,7 +60,7 @@ def get_kaggle_api():
 
     Raises:
         OSError: If Kaggle credentials are not configured
-        
+
     Note:
         Requires ~/.kaggle/kaggle.json with API credentials.
         Get credentials from: https://www.kaggle.com/settings/account
@@ -68,7 +68,7 @@ def get_kaggle_api():
     # Kaggle automatically authenticates during import, so it breaks tests
     # if left in the module scope
     from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: E402
-    
+
     try:
         api = KaggleApi()
         api.authenticate()
@@ -76,7 +76,7 @@ def get_kaggle_api():
     except OSError as e:
         raise OSError(
             "Kaggle API authentication failed. "
-            "Please ensure ~/.kaggle/kaggle.json exists with valid credentials. "
+            "Ensure ~/.kaggle/kaggle.json exists with valid credentials."
             f"Error: {e}"
         ) from e
 
@@ -97,7 +97,7 @@ def seed_nations() -> list:
     api_key = os.getenv('RAPID_API_KEY')
     if not api_key:
         raise KeyError("RAPID_API_KEY environment variable is not set. "
-                      "Please add it to your .env file.")
+                       "Please add it to your .env file.")
 
     offset = 0
     num_nations = None
@@ -174,15 +174,15 @@ def create_loc_from_coordinates(lat: float, lon: float):
     """
     # Validate coordinates
     if not (-90 <= lat <= 90):
-        raise ValueError(f"Invalid latitude: {lat}. Must be between -90 and 90")
+        raise ValueError(f"latitude not between -90 and 90: {lat}.")
     if not (-180 <= lon <= 180):
-        raise ValueError(f"Invalid longitude: {lon}. Must be between -180 and 180")
+        raise ValueError(f"longitude not between -180 and 180: {lon}.")
 
     # Attempt reverse geocoding with error handling
     try:
         loc = reverse_geocode(lat, lon)
     except Exception as e:
-        raise ConnectionError(f"Geocoding failed for ({lat}, {lon}): {e}") from e
+        raise ConnectionError(f"Geocoding failed for ({lat}, {lon}): {e}")
 
     city_name = loc.get('city')
     state_name = loc.get('state')
