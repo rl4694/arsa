@@ -1,23 +1,17 @@
-#!/usr/bin/env python3
-
 import sys
 import csv
 import server.controllers.nations as nt
 
-NATIONS_FILE = 'server/etl/nations.csv'
 
-def extract() -> list:
+def extract(filename: str) -> list:
     """Extract nation data from its CSV file"""
-    extracted = []
     try:
-        with open(NATIONS_FILE) as f:
-            reader = csv.reader(f, delimiter='\t')
-            for row in reader:
-                extracted.append(row)
+        with open(filename) as f:
+            extracted = csv.DictReader(f, delimiter='\t')
+            return list(extracted)
     except Exception as e:
         print(f'Problem reading csv file: {str(e)}')
         exit(1)
-    return extracted
 
 
 def transform(raw: list) -> list:
@@ -25,8 +19,8 @@ def transform(raw: list) -> list:
     transformed = []
     for nation in raw:
         transformed.append({
-            nt.CODE: nation[0],
-            nt.NAME: nation[1],
+            nt.CODE: nation['code'],
+            nt.NAME: nation['name'],
         })
     return transformed
 
@@ -37,12 +31,8 @@ def load(transformed: list):
         nt.nations.create(nation)
 
 
-def seed_nations():
+def seed_nations(filename: str):
     """Main seed function to be exported"""
-    raw = extract()
+    raw = extract(filename)
     transformed = transform(raw)
     load(transformed)
-
-
-if __name__ == '__main__':
-    seed_nations()

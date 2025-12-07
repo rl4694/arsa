@@ -11,7 +11,7 @@ COLLECTION = 'cities'
 NAME = 'name'
 STATE_NAME = 'state_name'
 NATION_NAME = 'nation_name'
-KEY = (NAME, STATE_NAME)
+KEY = (NAME,)
 
 cities = CRUD(
     COLLECTION,

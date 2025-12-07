@@ -93,8 +93,7 @@ def reverse_geocode(lat: float, lon: float) -> dict:
         # Try multiple fields for state
         state = (address.get('state') or
                  address.get('province') or
-                 address.get('region') or
-                 '')
+                 address.get('region'))
 
         country = address.get('country')
         country_code = address.get('country_code')

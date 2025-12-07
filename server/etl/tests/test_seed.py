@@ -19,9 +19,7 @@ def patch_dependencies():
     with (
         patch('time.sleep') as mock_sleep,
         patch('server.seed.save_json') as mock_save_json,
-        patch('server.seed.get_kaggle_api') as mock_kaggle_api,
         patch('server.seed.os.remove') as mock_remove,
-        patch('server.seed.zipfile.ZipFile') as mock_zip,
     ):
         yield
 
