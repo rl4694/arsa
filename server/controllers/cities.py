@@ -9,17 +9,17 @@ from server.controllers.crud import CRUD
 CITIES_RESP = 'cities'
 COLLECTION = 'cities'
 NAME = 'name'
-STATE = 'state'
-NATION = 'nation'
-KEY = (NAME, STATE)
+STATE_NAME = 'state_name'
+NATION_NAME = 'nation_name'
+KEY = (NAME, STATE_NAME)
 
 cities = CRUD(
     COLLECTION,
     KEY,
     {
         NAME: str,
-        STATE: str,
-        NATION: str,
+        STATE_NAME: str,
+        NATION_NAME: str,
     }
 )
 

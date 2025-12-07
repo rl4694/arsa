@@ -1,7 +1,7 @@
 """
 This script seeds seeds our data with data from various APIs.
 
-You can run this script with: `python3 server/seed.py`
+You can run this script with: `python3 server/etl/seed.py`
 Be sure to empty your database before running this file.
 """
 
@@ -25,30 +25,20 @@ load_dotenv()
 
 
 # Initialize constants
-EARTHQUAKES_DATASET = 'warcoder/earthquake-dataset'
-EARTHQUAKES_FILE = 'earthquake_data.csv'
-
-LANDSLIDE_DATASET = 'kazushiadachi/global-landslide-data'
-LANDSLIDE_ZIP = 'global-landslide-data.zip'
-LANDSLIDE_FILE = 'Global_Landslide_Catalog_Export.csv'
+ETL_PATH = 'server/etl/'
+EARTHQUAKES_FILE = ETL_PATH + 'earthquakes.csv'
+LANDSLIDE_FILE = ETL_PATH + 'landslides.csv'
+TSUNAMI_FILE = ETL_PATH + 'tsunamis.csv'
+CITIES_JSON_FILE = ETL_PATH + 'cities.json'
+STATES_JSON_FILE = ETL_PATH + 'states.json'
+DISASTERS_JSON_FILE = ETL_PATH + 'disasters.json'
 
 # Potential ones to work on
-TSUNAMI_DATASET = 'andrewmvd/tsunami-dataset'
-TSUNAMI_FILE = 'tsunami_dataset.csv'
-
 WILDFIRES_DATASET = 'rtatman/188-million-us-wildfires'
 WILDFIRES_FILE = 'FPA_FOD_20170508.sqlite'
 
 VOLCANO_DATASET = 'smithsonian/volcanic-eruptions'
 VOLCANO_FILE = 'eruptions.csv'
-
-NATIONS_URL = 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries'
-RESULTS_PER_PAGE = 10
-COOLDOWN_SEC = 1.5
-
-# JSON file paths
-CITIES_JSON_FILE = 'server/etl/cities.json'
-STATES_JSON_FILE = 'server/etl/states.json'
 
 
 def get_kaggle_api():
@@ -81,7 +71,7 @@ def get_kaggle_api():
         ) from e
 
 
-def create_loc_from_coordinates(lat: float, lon: float):
+def seed_location(lat: float, lon: float):
     """
     Use reverse geocoding to resolve coordinates into nation, state, city.
 
@@ -111,15 +101,20 @@ def create_loc_from_coordinates(lat: float, lon: float):
     city_name = loc.get('city')
     state_name = loc.get('state')
     nation_name = loc.get('country')
+    nation_code = loc.get('country_code')
 
     if not city_name:
+
         raise ValueError(f"No city found for coordinates ({lat}, {lon})")
 
     # Create nation (if provided)
     nation_id = None
     if nation_name:
         try:
-            nation_id = nt.nations.create({nt.NAME: nation_name})
+            nation_id = nt.nations.create({
+                nt.CODE: nation_code,
+                nt.NAME: nation_name
+            })
         except Exception as e:
             print(f"Warning: Failed to create nation '{nation_name}': {e}")
 
@@ -129,7 +124,7 @@ def create_loc_from_coordinates(lat: float, lon: float):
         try:
             state_id = st.states.create({
                 st.NAME: state_name,
-                st.NATION: nation_name
+                st.NATION_NAME: nation_name
             })
             print(f"Created state: {state_name}, {nation_name}")
         except Exception as e:
@@ -139,12 +134,12 @@ def create_loc_from_coordinates(lat: float, lon: float):
     try:
         city_id = ct.cities.create({
             ct.NAME: city_name,
-            ct.STATE: state_name,
-            ct.NATION: nation_name,
+            ct.STATE_NAME: state_name,
+            ct.NATION_NAME: nation_name,
         })
         print(f"Created city: {city_name} ({state_name}, {nation_name})")
     except Exception as e:
-        raise RuntimeError(f"Failed to create city '{city_name}': {e}") from e
+        raise RuntimeError(f"Warning: Failed to create city '{city_name}': {e}") from e
 
     return {
         'city': city_id,
@@ -161,37 +156,37 @@ def seed_earthquakes():
     Add initial earthquake data from Kaggle to our database
     """
     try:
-        kaggle_api = get_kaggle_api()
-        kaggle_api.dataset_download_file(EARTHQUAKES_DATASET, EARTHQUAKES_FILE)
+        rows = []
         with open(EARTHQUAKES_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            for row in rows:
-                # Use coordinate data to create nation, state, cities
-                lat = float(row['latitude'])
-                lon = float(row['longitude'])
 
-                # We'll probably turn this into a separate function soon -RJ
-                try:
-                    loc_data = create_loc_from_coordinates(lat, lon)
-                    city_name = loc_data['city_name']
+        for i, row in enumerate(rows):
+            print(f'{i} out of {len(rows)} seeded.')
+            # Use coordinate data to create nation, state, cities
+            lat = float(row['latitude'])
+            lon = float(row['longitude'])
 
-                    # Create Natural Disaster (Earthquake)
-                    disaster_id = nd.disasters.create({
-                        nd.NAME: f"Earthquake at {city_name}",
-                        nd.DISASTER_TYPE: 'earthquake',
-                        nd.DATE: row.get('time', ''),
-                        nd.LOCATION: f"{lat}, {lon}",
-                        nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
-                                        f"Depth: {row.get('depth', 'N/A')} km"
-                    })
-                    print(f"Created earthquake disaster: {disaster_id}")
+            # We'll probably turn this into a separate function soon -RJ
+            try:
+                loc_data = seed_location(lat, lon)
+                city_name = loc_data['city_name']
 
-                except Exception as e:
-                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
+                # Create Natural Disaster (Earthquake)
+                disaster_id = nd.disasters.create({
+                    nd.NAME: f"Earthquake at {city_name}",
+                    nd.DISASTER_TYPE: 'earthquake',
+                    nd.DATE: row.get('time', ''),
+                    nd.LOCATION: f"{lat}, {lon}",
+                    nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
+                                    f"Depth: {row.get('depth', 'N/A')} km"
+                })
+                print(f"Created earthquake disaster: {disaster_id}")
+
+            except Exception as e:
+                print(e)
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve earthquake CSV file.')
-    os.remove(EARTHQUAKES_FILE)
 
 
 def seed_landslides():
@@ -199,45 +194,36 @@ def seed_landslides():
     Add initial landslide data from Kaggle to our database
     """
     try:
-        kaggle_api = get_kaggle_api()
-        # Unzip CSV file
-        kaggle_api.dataset_download_files(LANDSLIDE_DATASET)
-        with zipfile.ZipFile(LANDSLIDE_ZIP, 'r') as z:
-            z.extractall('.')
-
-        # ignored_words = (
-        #     r'\b(road|roads|highway|route|trail|in|near|of|on|and|street|rd)\b'
-        # )
+        rows = []
         with open(LANDSLIDE_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            for row in rows:
-                # Use coordinate data to create nation, state, cities
-                lat = float(row['latitude'])
-                lon = float(row['longitude'])
 
-                # We'll probably turn this into a separate function soon -RJ
-                try:
-                    loc_data = create_loc_from_coordinates(lat, lon)
-                    city_name = loc_data['city_name']
+        for row in rows:
+            # Use coordinate data to create nation, state, cities
+            lat = float(row['latitude'])
+            lon = float(row['longitude'])
 
-                    # Create Natural Disaster (Landslide)
-                    size = row.get('landslide_size', 'N/A')
-                    trigger = row.get('trigger', 'N/A')
-                    disaster_id = nd.disasters.create({
-                        nd.NAME: f"Landslide at {city_name}",
-                        nd.DISASTER_TYPE: 'landslide',
-                        nd.DATE: row.get('event_date', ''),
-                        nd.LOCATION: f"{lat}, {lon}",
-                        nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
-                    })
-                    print(f"Created landslide: {disaster_id} at {lat}, {lon}")
+            # We'll probably turn this into a separate function soon -RJ
+            try:
+                loc_data = seed_location(lat, lon)
+                city_name = loc_data['city_name']
 
-                except Exception as e:
-                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
+                # Create Natural Disaster (Landslide)
+                size = row.get('landslide_size', 'N/A')
+                trigger = row.get('trigger', 'N/A')
+                disaster_id = nd.disasters.create({
+                    nd.NAME: f"Landslide at {city_name}",
+                    nd.DISASTER_TYPE: 'landslide',
+                    nd.DATE: row.get('event_date', ''),
+                    nd.LOCATION: f"{lat}, {lon}",
+                    nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
+                })
+                print(f"Created landslide: {disaster_id} at {lat}, {lon}")
+
+            except Exception as e:
+                print(f"Error creating disaster for ({lat}, {lon}): {e}")
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
-    os.remove(LANDSLIDE_ZIP)
-    os.remove(LANDSLIDE_FILE)
 
 
 # We should try and standardize a format for new disasters
@@ -246,47 +232,46 @@ def seed_tsunamis():
     Add initial tsunami data from Kaggle to our database
     """
     try:
-        kaggle_api = get_kaggle_api()
-        kaggle_api.dataset_download_file(TSUNAMI_DATASET, TSUNAMI_FILE)
+        rows = []
         with open(TSUNAMI_FILE, mode='r', encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
-            for row in rows:
-                # general long and lat parser module
-                lat_str = (
-                    row.get('latitude') or row.get('Latitude') or
-                    row.get('lat') or row.get('Lat')
-                )
-                lon_str = (
-                    row.get('longitude') or row.get('Longitude') or
-                    row.get('lon') or row.get('Lon') or row.get('lng')
-                )
 
-                if not lat_str or not lon_str:
-                    continue
+        for row in rows:
+            # general long and lat parser module
+            lat_str = (
+                row.get('latitude') or row.get('Latitude') or
+                row.get('lat') or row.get('Lat')
+            )
+            lon_str = (
+                row.get('longitude') or row.get('Longitude') or
+                row.get('lon') or row.get('Lon') or row.get('lng')
+            )
 
-                lat = float(str(lat_str).strip())
-                lon = float(str(lon_str).strip())
+            if not lat_str or not lon_str:
+                continue
 
-                try:
-                    loc_data = create_loc_from_coordinates(lat, lon)
-                    city_name = loc_data['city_name']
+            lat = float(str(lat_str).strip())
+            lon = float(str(lon_str).strip())
 
-                    # Create Natural Disaster (Tsunami)
-                    disaster_id = nd.disasters.create({
-                        nd.NAME: f"Tsunami at {city_name}",
-                        nd.DISASTER_TYPE: 'tsunami',
-                        nd.DATE: row.get('time', ''),
-                        nd.LOCATION: f"{lat}, {lon}"
-                        # nd.DESCRIPTION:
-                    })
-                    print(f"Created tsunami disaster: {disaster_id}")
+            try:
+                loc_data = seed_location(lat, lon)
+                city_name = loc_data['city_name']
 
-                except Exception as e:
-                    print(f"Error creating disaster for ({lat}, {lon}): {e}")
+                # Create Natural Disaster (Tsunami)
+                disaster_id = nd.disasters.create({
+                    nd.NAME: f"Tsunami at {city_name}",
+                    nd.DISASTER_TYPE: 'tsunami',
+                    nd.DATE: row.get('time', ''),
+                    nd.LOCATION: f"{lat}, {lon}"
+                    # nd.DESCRIPTION:
+                })
+                print(f"Created tsunami disaster: {disaster_id}")
+
+            except Exception as e:
+                print(f"Error creating disaster for ({lat}, {lon}): {e}")
 
     except FileNotFoundError:
         raise ConnectionError('Could not retrieve tsunami CSV file.')
-    os.remove(TSUNAMI_FILE)
 
 
 def main():
@@ -297,24 +282,31 @@ def main():
         print("Seeding cities and states from disaster data...")
         seed_earthquakes()
         seed_landslides()
+        seed_tsunamis()
 
-        # Save cities and states to JSON files
-        try:
-            cities_data = ct.cities.read()
-            save_json(CITIES_JSON_FILE, cities_data)
-            print(f"Saved {len(cities_data)} cities to {CITIES_JSON_FILE}")
-        except Exception as e:
-            print(f"Warning: Could not save cities to JSON: {e}")
+    # Save cities and states to JSON files
+    try:
+        cities_data = ct.cities.read()
+        save_json(CITIES_JSON_FILE, cities_data)
+        print(f"Saved {len(cities_data)} cities to {CITIES_JSON_FILE}")
+    except Exception as e:
+        print(f"Warning: Could not save cities to JSON: {e}")
 
-        try:
-            states_data = st.states.read()
-            save_json(STATES_JSON_FILE, states_data)
-            print(f"Saved {len(states_data)} states to {STATES_JSON_FILE}")
-        except Exception as e:
-            print(f"Warning: Could not save states to JSON: {e}")
+    try:
+        states_data = st.states.read()
+        save_json(STATES_JSON_FILE, states_data)
+        print(f"Saved {len(states_data)} states to {STATES_JSON_FILE}")
+    except Exception as e:
+        print(f"Warning: Could not save states to JSON: {e}")
 
-        print(f"Seeding complete: {len(cities_data)} cities,"
-              f"{len(states_data)} states")
+    try:
+        disasters_data = nd.disasters.read()
+        save_json(DISASTERS_JSON_FILE, disasters_data)
+        print(f"Saved {len(disasters_data)} states to {DISASTERS_JSON_FILE}")
+    except Exception as e:
+        print(f"Warning: Could not save states to JSON: {e}")
+
+    print("Seeding complete")
 
 
 if __name__ == '__main__':

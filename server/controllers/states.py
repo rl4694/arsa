@@ -6,19 +6,15 @@ import pycountry
 STATES_RESP = 'states'
 COLLECTION = 'states'
 NAME = 'name'
-STATE_CODE = 'code'
-NATION_CODE = 'nation_code'
-STATE_ID = 'state_id'
-KEY = (STATE_ID,)
+NATION_NAME = 'nation_name'
+KEY = (NAME, NATION_NAME)
 
 states = CRUD(
     COLLECTION,
     KEY,
     {
-        STATE_ID: str,
-        STATE_CODE: str,
         NAME: str,
-        NATION_CODE: str,
+        NATION_NAME: str,
     }
 )
 

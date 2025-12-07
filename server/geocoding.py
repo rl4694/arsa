@@ -11,21 +11,9 @@ from geopy.extra.rate_limiter import RateLimiter
 
 # Initialize geocoder with a user agent (required by Nominatim)
 geolocator = Nominatim(user_agent="geodata-app")
-_reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0,
-                       max_retries=1)
-
-# Create namespace for geocoding endpoints
-api = Namespace('geocode', description='Geocoding operations')
-
-# Response model
-location_model = api.model('Location', {
-    'city': fields.String(description='City name'),
-    'state': fields.String(description='State/Province name'),
-    'country': fields.String(description='Country name'),
-    'latitude': fields.Float(description='Latitude'),
-    'longitude': fields.Float(description='Longitude'),
-    'display_name': fields.String(description='Full address')
-})
+reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0, max_retries=1)
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1.0, max_retries=1)
+SEARCH_KM = 100
 
 
 def reverse_geocode(lat: float, lon: float) -> dict:
@@ -56,38 +44,37 @@ def reverse_geocode(lat: float, lon: float) -> dict:
 
     try:
         # Reverse geocode the coordinates
-        location = _reverse((lat, lon), language="en")
+        location = reverse((lat, lon), language="en")
 
         # Increase search radius if not found
-        if location is None:
-            for search_km in (1, 5, 20, 50, 100):
-                # make fix relating to curvature away from equator
-                # more accurate latitude measurements
-                dlat = search_km / 110.574
-                cos_lat = math.cos(math.radians(lat))
-                if abs(cos_lat) < 0.01:   # account for poles
-                    cos_lat = 0.01
-                dlon = search_km / (111.320 * cos_lat)
+        if location is None or 'city' not in location.raw.get('address', {}):
+            # make fix relating to curvature away from equator
+            # more accurate latitude measurements
+            dlat = SEARCH_KM / 110.574
+            cos_lat = math.cos(math.radians(lat))
+            if abs(cos_lat) < 0.01:   # account for poles
+                cos_lat = 0.01
+            dlon = SEARCH_KM / (111.320 * cos_lat)
 
-                candidates = [
-                    (lat + dlat, lon), (lat - dlat, lon),
-                    (lat, lon + dlon), (lat, lon - dlon),
-                    (lat + dlat, lon + dlon), (lat + dlat, lon - dlon),
-                    (lat - dlat, lon + dlon), (lat - dlat, lon - dlon),
-                ]
-                for clat, clon in candidates:
-                    if -90 <= clat <= 90 and -180 <= clon <= 180:
-                        location = _reverse((clat, clon), language="en")
-                        if location is not None:
-                            break
-                if location is not None:
-                    break
+            viewbox = [
+                max(lat - dlat, -90),
+                max(lon - dlon, -180),
+                min(lat + dlat, 90),
+                min(lon + dlon, 180),
+            ]
+            location = geolocator.geocode(
+                query="city",
+                bounded=True,
+                viewbox=[(viewbox[0], viewbox[1]), (viewbox[2], viewbox[3])],
+                addressdetails=True,
+            )
 
         if location is None:
             return {
                 'city': None,
                 'state': None,
                 'country': None,
+                'country_code': None,
                 'latitude': lat,
                 'longitude': lon,
                 'display_name': 'Location not found'
@@ -106,14 +93,17 @@ def reverse_geocode(lat: float, lon: float) -> dict:
         # Try multiple fields for state
         state = (address.get('state') or
                  address.get('province') or
-                 address.get('region'))
+                 address.get('region') or
+                 '')
 
         country = address.get('country')
+        country_code = address.get('country_code')
 
         return {
             'city': city,
             'state': state,
             'country': country,
+            'country_code': country_code,
             'latitude': lat,
             'longitude': lon,
             'display_name': location.address
@@ -125,6 +115,20 @@ def reverse_geocode(lat: float, lon: float) -> dict:
         )
     except GeocoderServiceError as e:
         raise GeocoderServiceError(f"Geocoding service error: {str(e)}")
+
+
+# Create namespace for geocoding endpoints
+api = Namespace('geocode', description='Geocoding operations')
+
+# Response model
+location_model = api.model('Location', {
+    'city': fields.String(description='City name'),
+    'state': fields.String(description='State/Province name'),
+    'country': fields.String(description='Country name'),
+    'latitude': fields.Float(description='Latitude'),
+    'longitude': fields.Float(description='Longitude'),
+    'display_name': fields.String(description='Full address')
+})
 
 
 # API ENDPOINT
