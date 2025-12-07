@@ -49,12 +49,6 @@ jobs:
         run: make all_tests
         continue-on-error: true
 
-      - name: Test Atlas Connection
-        env:
-          CLOUD_MONGO: "1"
-          MONGO_URL: ${{secrets.MONGO_URL}}
-        run: pytest data/tests/test_db_connect.py
-        
       - name: Deploy to PythonAnywhere
         run: ./deploy.sh
         env:

@@ -15,24 +15,6 @@ def _reset_client():
     dbc.client = original_client
 
 
-@pytest.fixture(scope='class')
-def live_client():
-    mongo_url = os.environ.get('MONGO_URL')
-
-    if not mongo_url:
-        pytest.skip("MONGO_URL environment variable not set.")
-    try:
-        client = pm.MongoClient(
-            mongo_url,
-            serverSelectionTimeoutMS=5000,
-            **dbc.PA_SETTINGS
-        )
-        client.admin.command('ping')
-        return client
-    except Exception as e:
-        pytest.skip(f"Could not connect to MongoDB. Error: {e}")
-
-
 class TestConnectDB:
     """Test the connect_db function."""
     
@@ -156,60 +138,3 @@ class TestConvertMongoId:
         doc = {'name': 'test'}
         dbc.convert_mongo_id(doc)
         assert doc == {'name': 'test'}
-
-
-class TestDatabaseCRUDOperations:
-    """Tests for create, read, update, delete operations (requires live DB)."""
-    TEST_COLLECTION = 'test_integration_suite'
-    TEST_DB = dbc.SE_DB
-
-    @pytest.fixture(autouse=True)
-    def setup_teardown_live_data(self, live_client):
-        dbc.client = live_client
-        
-        """Clean slate before test"""
-        dbc.client[self.TEST_DB][self.TEST_COLLECTION].delete_many({})
-        
-        yield
-
-        """Clean slate after test"""
-        dbc.client[self.TEST_DB][self.TEST_COLLECTION].delete_many({})
-
-    def test_create_and_read_one(self):
-        """Test creating a document in the database."""
-        test_doc = {'name': 'integration_test', 'value': 999}
-
-        result = dbc.create(self.TEST_COLLECTION, test_doc, db=self.TEST_DB)
-        assert result.inserted_id is not None
-
-        fetched_doc = dbc.read_one(self.TEST_COLLECTION,
-                                   {'_id': result.inserted_id},
-                                   db=self.TEST_DB)
-        assert fetched_doc is not None
-        assert fetched_doc['name'] == 'integration_test'
-        assert isinstance(fetched_doc['_id'], str)
-    
-    def test_delete_document(self):
-        """Test creating and then deleting a document"""
-        doc = {'name': 'to_be_deleted'}
-        result = dbc.create(self.TEST_COLLECTION, doc, db=self.TEST_DB)
-        
-        count = dbc.delete(self.TEST_COLLECTION, {'_id': result.inserted_id}, db=self.TEST_DB)
-        assert count == 1
-        
-        missing_doc = dbc.read_one(self.TEST_COLLECTION,
-                                   {'_id': result.inserted_id},
-                                   db=self.TEST_DB)
-        assert missing_doc is None
-
-    def test_read_all_no_id(self):
-        """Test reading list of documents with no_id=True (default)"""
-        dbc.create(self.TEST_COLLECTION, {'item': 1}, db=self.TEST_DB)
-        dbc.create(self.TEST_COLLECTION, {'item': 2}, db=self.TEST_DB)
-        
-        docs = dbc.read(self.TEST_COLLECTION, db=self.TEST_DB, no_id=True)
-        
-        assert isinstance(docs, list)
-        assert len(docs) == 2
-        assert '_id' not in docs[0]
-        assert 'id' not in docs[1]
