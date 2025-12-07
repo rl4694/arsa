@@ -101,7 +101,6 @@ def create(collection, doc, db=SE_DB):
     """
     Insert a single doc into collection.
     """
-    print(f'{db=}')
     return client[db][collection].insert_one(doc)
 
 
@@ -122,7 +121,6 @@ def delete(collection: str, filt: dict, db=SE_DB):
     """
     Find with a filter and return on the first doc found.
     """
-    print(f'{filt=}')
     del_result = client[db][collection].delete_one(filt)
     return del_result.deleted_count
 
