@@ -14,6 +14,7 @@ from server.etl.seed_nations import seed_nations
 EARTHQUAKE = 'earthquake'
 LANDSLIDE = 'landslide'
 TSUNAMI = 'tsunami'
+HURRICANE = 'hurricane'
 
 
 def extract(filename: str) -> list:
@@ -78,6 +79,25 @@ def transform_tsunami(row: list) -> list:
             nd.DISASTER_TYPE: 'tsunami',
             nd.DATE: row.get('time', ''),
             nd.LOCATION: f"{lat}, {lon}"
+        }
+    except Exception as e:
+        print(e)
+
+
+def transform_hurricane(row: list) -> list:
+    """Transform hurricane data into format CRUD API can understand"""
+    try:
+        lat = float(row.get('latitude', 0))
+        lon = float(row.get('longitude', 0))
+        loc_data = load_location(lat, lon)
+        wind_speed = row.get('wind_speed', 'N/A')
+        category = row.get('category', 'N/A')
+        return {
+            nd.NAME: f"Hurricane at {loc_data['city_name']}",
+            nd.DISASTER_TYPE: 'hurricane',
+            nd.DATE: row.get('date', ''),
+            nd.LOCATION: f"{lat}, {lon}",
+            nd.DESCRIPTION: f"Category: {category}, Wind Speed: {wind_speed} mph"
         }
     except Exception as e:
         print(e)
@@ -171,6 +191,7 @@ def seed_disasters(filename: str, disaster_type: str):
         EARTHQUAKE: transform_earthquake,
         LANDSLIDE: transform_landslide,
         TSUNAMI: transform_tsunami,
+        HURRICANE: transform_hurricane,
     }
     if disaster_type not in transforms:
         raise ValueError(f'Unrecognized disaster_type: {disaster_type}')

@@ -23,6 +23,7 @@ NATIONS_FILE = ETL_PATH + 'nations.csv'
 EARTHQUAKES_FILE = ETL_PATH + 'earthquakes.csv'
 LANDSLIDE_FILE = ETL_PATH + 'landslides.csv'
 TSUNAMI_FILE = ETL_PATH + 'tsunamis.csv'
+HURRICANES_FILE = ETL_PATH + 'hurricanes.csv'
 CITIES_JSON_FILE = ETL_PATH + 'cities.json'
 STATES_JSON_FILE = ETL_PATH + 'states.json'
 DISASTERS_JSON_FILE = ETL_PATH + 'disasters.json'
@@ -47,6 +48,7 @@ def main():
         sd.seed_disasters(EARTHQUAKES_FILE, sd.EARTHQUAKE)
         sd.seed_disasters(LANDSLIDE_FILE, sd.LANDSLIDE)
         sd.seed_disasters(TSUNAMI_FILE, sd.TSUNAMI)
+        sd.seed_disasters(HURRICANES_FILE, sd.HURRICANE)
 
     # Save to JSON files
     try:
