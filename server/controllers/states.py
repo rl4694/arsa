@@ -50,23 +50,23 @@ class StateList(Resource):
         created = states.select(_id)
         return {STATES_RESP: created}, 201
 
-@api.route('/<string:state_id>')
+@api.route('/<string:_id>')
 class State(Resource):
     @api.doc('get_state')
-    def get(self, state_id):
+    def get(self, _id):
         try:
-            record = states.select(state_id)
+            record = states.select(_id)
             return {STATES_RESP: record}
         except:
             api.abort(404, "State not found")
 
     @api.expect(state_model)
     @api.doc('update_state')
-    def put(self, state_id):
+    def put(self, _id):
         payload = request.json or {}
         if 'name' in payload or 'nation_code' in payload:
             try:
-                state = states.select(state_id)
+                state = states.select(_id)
                 subs = pycountry.subdivisions.get(
                     country_code=(payload.get("nation_code") or state["nation_code"] or "").upper() or None
                 )
@@ -76,26 +76,26 @@ class State(Resource):
             except:
                 api.abort(400, "Invalid state or nation in update")
 
-            new_payload = {**states.select(state_id), **payload}
+            new_payload = {**states.select(_id), **payload}
             new_payload['code'] = new_code
             new_payload['state_id'] = f"{new_payload['nation_code']}-{new_code}"
 
-            states.delete(state_id)
+            states.delete(_id)
             new_id = states.create(new_payload, recursive=False)
             record = states.select(new_id)
             return {STATES_RESP: record}
 
         try:
-            states.update(state_id, request.json)
-            record = states.select(state_id)
+            states.update(_id, request.json)
+            record = states.select(_id)
             return {STATES_RESP: record}
         except KeyError:
             api.abort(404, "State not found")
 
     @api.doc('delete_state')
-    def delete(self, state_id):
+    def delete(self, _id):
         try:
-            states.delete(state_id)
+            states.delete(_id)
             return '', 204
         except KeyError:
             api.abort(404, "State not found")
