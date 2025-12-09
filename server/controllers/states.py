@@ -6,19 +6,15 @@ import pycountry
 STATES_RESP = 'states'
 COLLECTION = 'states'
 NAME = 'name'
-NATION_CODE = 'nation_code'
-STATE_CODE = 'code'
-STATE_ID = 'state_id'
-KEY = (STATE_ID,)
+NATION_NAME = 'nation_name'
+KEY = (NAME, NATION_NAME)
 
 states = CRUD(
     COLLECTION,
     KEY,
     {
-        STATE_ID: str,
-        STATE_CODE: str,
         NAME: str,
-        NATION_CODE: str,
+        NATION_NAME: str,
     }
 )
 
@@ -82,7 +78,6 @@ class State(Resource):
 
             new_payload = {**states.select(state_id), **payload}
             new_payload['code'] = new_code
-            new_payload['nation_code'] = new_payload['nation_code'].upper()
             new_payload['state_id'] = f"{new_payload['nation_code']}-{new_code}"
 
             states.delete(state_id)
