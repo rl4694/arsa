@@ -50,8 +50,9 @@ class CRUD:
             if attribute in self.keys:
                 if field is None:
                     raise KeyError(f'Missing required field: {attribute}')
-                if isinstance(field, str):
-                    field = field.strip().lower()
+                # Side effect that will likely be removed soon
+                # if isinstance(field, str):
+                #     field = field.strip().lower()
                 cache_key.append(field)
             # Add the field
             new_record[attribute] = field

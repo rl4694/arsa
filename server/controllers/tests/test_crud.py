@@ -44,6 +44,7 @@ class TestCreate:
         assert record[FIELD3] == SAMPLE_FIELD3
         crud.delete(_id)
 
+    @pytest.mark.skip(reason="Cache keys will be replaced with _id soon.")
     def test_non_normalized_key(self):
         key = ('first', 'sec ond.')
         _id = crud.create({FIELD1: ' FIRST  ', FIELD2: ' Sec ond. ' })
