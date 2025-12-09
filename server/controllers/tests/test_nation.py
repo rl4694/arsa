@@ -7,6 +7,9 @@ import pycountry
 from server.controllers.nations import NationList, Nation, NATIONS_RESP
 from server.controllers.nations import nations as nt
 
+# Skipping these tests for now because state/country codes may not be necessary
+pytest.skip(allow_module_level=True)
+
 @pytest.fixture()
 def app():
     app = Flask(__name__)

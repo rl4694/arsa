@@ -5,7 +5,6 @@ This file implements CRUD operations for nations.
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
-import pycountry
 
 NATIONS_RESP = 'nations'
 COLLECTION = 'nations'
@@ -26,7 +25,8 @@ nations = CRUD(
 api = Namespace('nations', description='Nations CRUD operations')
 
 nation_model = api.model('Nation', {
-    'name': fields.String(required=True, description='Nation Name')
+    CODE: fields.String(required=True, description='Nation Code'),
+    NAME: fields.String(required=True, description='Nation Name'),
 })
 
 
@@ -43,14 +43,14 @@ class NationList(Resource):
     def post(self):
         data = request.json
 
-        try:
-            country = pycountry.countries.get(name=data['name'])
-            code = country.alpha_2
-        except:
-            api.abort(400, f"Invalid nation name: {data['name']}")
+        # try:
+        #     country = pycountry.countries.get(name=data['name'])
+        #     code = country.alpha_2
+        # except:
+        #     api.abort(400, f"Invalid nation name: {data['name']}")
 
-        data['code'] = code
-        data['_id'] = code
+        # data['code'] = code
+        # data['_id'] = code
 
         _id = nations.create(data, recursive=False)
         created = nations.select(_id)
@@ -72,16 +72,16 @@ class Nation(Resource):
     def put(self, nation_id):
         try:
             payload = request.json
-            if 'name' in payload:
-                try:
-                    country = pycountry.countries.get(name=payload['name'])
-                    payload['code'] = country.alpha_2
-                except:
-                    api.abort(400, f"Invalid nation name: {payload['name']}")
-                nations.delete(nation_id)
-                new_id = nations.create(payload, recursive=False)
-                record = nations.select(new_id)
-                return {NATIONS_RESP: record}
+            # if 'name' in payload:
+            #     try:
+            #         country = pycountry.countries.get(name=payload['name'])
+            #         payload['code'] = country.alpha_2
+            #     except:
+            #         api.abort(400, f"Invalid nation name: {payload['name']}")
+            #     nations.delete(nation_id)
+            #     new_id = nations.create(payload, recursive=False)
+            #     record = nations.select(new_id)
+            #     return {NATIONS_RESP: record}
 
             nations.update(nation_id, payload)
             record = nations.select(nation_id)

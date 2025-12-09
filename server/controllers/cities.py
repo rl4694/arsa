@@ -27,9 +27,9 @@ cities = CRUD(
 api = Namespace('cities', description='Cities CRUD operations')
 
 city_model = api.model('City', {
-    'name': fields.String(required=True, description='City Name'),
-    'state': fields.String(description='State Name'),
-    'nation': fields.String(description='Nation Name')
+    NAME: fields.String(required=True, description='City Name'),
+    STATE_NAME: fields.String(description='State Name'),
+    NATION_NAME: fields.String(description='Nation Name')
 })
 
 
