@@ -23,7 +23,7 @@ jobs:
           pip install pillow requests
 
       - name: Generate Disaster Map
-        run: python3 scripts/generate_test_map.py
+        run: python3 scripts/generate_map.py
 
       - name: Commit map update
         run: |
@@ -39,4 +39,5 @@ jobs:
           fi
 
           git commit -m "Automated update: natural_disasters_map.png"
+
           git push origin HEAD:${{ github.ref_name }}
