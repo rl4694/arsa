@@ -3,6 +3,7 @@
 
 import requests
 from PIL import Image, ImageDraw
+from pathlib import Path
 
 API_URL = "https://arsa.pythonanywhere.com/natural_disasters/"
 # These can be changed accordingly
@@ -91,3 +92,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
