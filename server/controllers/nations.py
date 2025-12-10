@@ -35,8 +35,7 @@ nation_model = api.model('Nation', {
 class NationList(Resource):
     @api.doc('list_nations')
     def get(self):
-        records = nations.read()
-        return {NATIONS_RESP: list(records.values())}
+        return {NATIONS_RESP: nations.read()}
 
     @api.expect(nation_model)
     @api.doc('create_nation')

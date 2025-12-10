@@ -8,21 +8,16 @@ from typing import Optional
 
 
 class Cache:
-    def __init__(self, collection: str, keys: tuple):
+    def __init__(self, collection: str):
         """
         Validate and initialize the cache parameters.
         """
         # Check if arguments are valid
         if not isinstance(collection, str):
             raise ValueError(f'Bad type for collection: {type(collection)}')
-        try:
-            iter(keys)
-        except TypeError:
-            raise ValueError(f'Keys is not iterable: {type(keys)}')
 
         # Initialize members
         self.collection = collection
-        self.keys = keys
         self.data = None
 
     def reload(self):
@@ -32,12 +27,7 @@ class Cache:
         self.data = {}
         records = dbc.read(self.collection, no_id=False) or []
         for record in records:
-            # Build primary key
-            primary_key = []
-            for key in self.keys:
-                primary_key.append(record.get(key))
-            # Add record (identified by its primary key) to the cache
-            self.data[tuple(primary_key)] = record
+            self.data[record.get('_id')] = record
 
     def read(self) -> dict:
         """

@@ -11,7 +11,7 @@ COLLECTION = 'cities'
 NAME = 'name'
 STATE_NAME = 'state_name'
 NATION_NAME = 'nation_name'
-KEY = (NAME,)
+KEY = (NAME, STATE_NAME)
 
 cities = CRUD(
     COLLECTION,
@@ -37,8 +37,7 @@ city_model = api.model('City', {
 class CityList(Resource):
     @api.doc('list_cities')
     def get(self):
-        records = cities.read()
-        return {CITIES_RESP: list(records.values())}
+        return {CITIES_RESP: cities.read()}
 
     @api.expect(city_model)
     @api.doc('create_city')

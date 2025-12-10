@@ -43,8 +43,7 @@ class DisasterList(Resource):
     @api.doc('list_disasters')
     def get(self):
         """Get all natural disasters."""
-        records = disasters.read()
-        return {DISASTERS_RESP: list(records.values())}
+        return {DISASTERS_RESP: disasters.read()}
 
     @api.expect(disaster_model)
     @api.doc('create_disaster')
