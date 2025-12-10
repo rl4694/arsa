@@ -5,6 +5,7 @@ import server.controllers.states as st
 import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 from server.geocoding import reverse_geocode
+from datetime import datetime
 
 
 def extract(filename: str) -> list:
@@ -24,11 +25,12 @@ def transform_earthquake(row: list) -> list:
     try:
         lat = float(row['latitude'])
         lon = float(row['longitude'])
+        date = datetime.strptime(row.get('date_time'), "%d-%m-%Y %H:%M")
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Earthquake at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.EARTHQUAKE,
-            nd.DATE: row.get('time', ''),
+            nd.DATE: date.strftime("%Y-%m-%d"),
             nd.LOCATION: f"{lat}, {lon}",
             nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
                             f"Depth: {row.get('depth', 'N/A')} km"
@@ -45,11 +47,12 @@ def transform_landslide(row: list) -> list:
         lon = float(row['longitude'])
         size = row.get('landslide_size', 'N/A')
         trigger = row.get('trigger', 'N/A')
+        date = datetime.strptime(row.get('event_date'), "%m/%d/%Y %I:%M:%S %p")
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Landslide at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.LANDSLIDE,
-            nd.DATE: row.get('event_date', ''),
+            nd.DATE: date.strftime("%Y-%m-%d"),
             nd.LOCATION: f"{lat}, {lon}",
             nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
         }
@@ -63,11 +66,15 @@ def transform_tsunami(row: list) -> list:
     try:
         lat = float(row['LATITUDE'])
         lon = float(row['LONGITUDE'])
+        # Default to '01' if field is an empty string
+        date = (f'{row.get('YEAR') or '01'}'
+                f'-{int(float(row.get('MONTH') or 1)):02d}'
+                f'-{int(float(row.get('DAY') or 1)):02d}')
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Tsunami at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.TSUNAMI,
-            nd.DATE: row.get('time', ''),
+            nd.DATE: date,
             nd.LOCATION: f"{lat}, {lon}"
         }
     except Exception as e:
@@ -188,7 +195,7 @@ def seed_disasters(filename: str, disaster_type: str):
 
     rows = extract(filename)
     transform_func = transforms[disaster_type]
-    for i, row in enumerate(rows):
+    for row in rows:
         transformed = transform_func(row)
         if transformed is not None:
             load_disaster(transformed)
