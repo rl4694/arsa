@@ -1,20 +1,10 @@
 import os
-import requests
-import time
 import csv
 import server.controllers.cities as ct
 import server.controllers.states as st
 import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
-from server.common import is_json_populated, save_json
 from server.geocoding import reverse_geocode
-from server.etl.seed_nations import seed_nations
-
-
-EARTHQUAKE = 'earthquake'
-LANDSLIDE = 'landslide'
-TSUNAMI = 'tsunami'
-HURRICANE = 'hurricane'
 
 
 def extract(filename: str) -> list:
@@ -37,7 +27,7 @@ def transform_earthquake(row: list) -> list:
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Earthquake at {loc_data['city_name']}",
-            nd.DISASTER_TYPE: 'earthquake',
+            nd.DISASTER_TYPE: nd.EARTHQUAKE,
             nd.DATE: row.get('time', ''),
             nd.LOCATION: f"{lat}, {lon}",
             nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
@@ -58,7 +48,7 @@ def transform_landslide(row: list) -> list:
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Landslide at {loc_data['city_name']}",
-            nd.DISASTER_TYPE: 'landslide',
+            nd.DISASTER_TYPE: nd.LANDSLIDE,
             nd.DATE: row.get('event_date', ''),
             nd.LOCATION: f"{lat}, {lon}",
             nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
@@ -76,7 +66,7 @@ def transform_tsunami(row: list) -> list:
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Tsunami at {loc_data['city_name']}",
-            nd.DISASTER_TYPE: 'tsunami',
+            nd.DISASTER_TYPE: nd.TSUNAMI,
             nd.DATE: row.get('time', ''),
             nd.LOCATION: f"{lat}, {lon}"
         }
@@ -94,7 +84,7 @@ def transform_hurricane(row: list) -> list:
         category = row.get('category', 'N/A')
         return {
             nd.NAME: f"Hurricane at {loc_data['city_name']}",
-            nd.DISASTER_TYPE: 'hurricane',
+            nd.DISASTER_TYPE: nd.HURRICANE,
             nd.DATE: row.get('date', ''),
             nd.LOCATION: f"{lat}, {lon}",
             nd.DESCRIPTION: f"Category: {category}, Wind Speed: {wind_speed} mph"
@@ -188,10 +178,10 @@ def seed_disasters(filename: str, disaster_type: str):
     """Main seed function to be exported"""
     # Get the right transformation function
     transforms = {
-        EARTHQUAKE: transform_earthquake,
-        LANDSLIDE: transform_landslide,
-        TSUNAMI: transform_tsunami,
-        HURRICANE: transform_hurricane,
+        nd.EARTHQUAKE: transform_earthquake,
+        nd.LANDSLIDE: transform_landslide,
+        nd.TSUNAMI: transform_tsunami,
+        nd.HURRICANE: transform_hurricane,
     }
     if disaster_type not in transforms:
         raise ValueError(f'Unrecognized disaster_type: {disaster_type}')

@@ -13,6 +13,12 @@ DISASTER_TYPE = 'type'
 DATE = 'date'
 LOCATION = 'location'
 DESCRIPTION = 'description'
+
+EARTHQUAKE = 'earthquake'
+LANDSLIDE = 'landslide'
+TSUNAMI = 'tsunami'
+HURRICANE = 'hurricane'
+DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE]
 KEY = (NAME, DATE, LOCATION)
 
 disasters = CRUD(
