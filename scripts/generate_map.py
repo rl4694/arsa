@@ -7,7 +7,7 @@ from pathlib import Path
 
 API_URL = "https://arsa.pythonanywhere.com/natural_disasters/"
 # These can be changed accordingly
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent
 MAP_FILE = ROOT / "world_map.png"
 OUTPUT = ROOT / "natural_disasters_map.png"
 

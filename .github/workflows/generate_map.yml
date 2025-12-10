@@ -30,7 +30,7 @@ jobs:
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
           git config --global user.name "${{ secrets.GIT_USERNAME }}"
 
-          git add natural_disasters_map.png
+          git add scripts/natural_disasters_map.png
 
           # If no changes, skip commit
           if git diff --cached --quiet; then
