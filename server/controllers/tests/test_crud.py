@@ -1,6 +1,6 @@
 # server/controllers/tests/test_crud.py
 import pytest
-import server.common as common
+from server.controllers.crud import is_valid_id
 from server.controllers.crud import CRUD
 
 FIELD1 = 'field1'
@@ -48,7 +48,7 @@ class TestFindDuplicate:
 class TestCreate:
     def test_valid(self):
         _id = crud.create(SAMPLE_RECORD)
-        assert common.is_valid_id(_id)
+        assert is_valid_id(_id)
         records = crud.read()
         assert _id in records
         record = records[_id]

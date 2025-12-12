@@ -9,8 +9,12 @@ cache after writes.
 from typing import Iterable, Optional, Tuple
 from bson.objectid import ObjectId
 from server.controllers.cache import Cache
-import server.common as common
 import data.db_connect as dbc
+
+
+def is_valid_id(_id: str) -> bool:
+    """Return whether _id is a valid document id"""
+    return isinstance(_id, str) and ObjectId.is_valid(_id)
 
 
 class CRUD:
@@ -90,7 +94,7 @@ class CRUD:
         """
         Return a record matching the query.
         """
-        if not common.is_valid_id(_id):
+        if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
         records = self.cache.read()
         for record in records.values():
@@ -104,7 +108,7 @@ class CRUD:
         """
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for data: {type(fields)}')
-        if not common.is_valid_id(_id):
+        if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
 
         # Build the record from the fields
@@ -131,7 +135,7 @@ class CRUD:
         """
         Delete the record matching the query.
         """
-        if not common.is_valid_id(_id):
+        if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
 
         deleted = dbc.delete(self.collection, {'_id': ObjectId(_id)})
