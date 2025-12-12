@@ -1,3 +1,4 @@
+"""Tests for shared helper functions used across the server."""
 import pytest
 from server.controllers.crud import is_valid_id
 
