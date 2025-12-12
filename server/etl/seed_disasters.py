@@ -4,7 +4,7 @@ import server.controllers.cities as ct
 import server.controllers.states as st
 import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
-from server.geocoding import reverse_geocode
+from server.etl.geocoding import reverse_geocode
 from datetime import datetime
 
 

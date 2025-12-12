@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
-import server.geocoding as geo
+import server.etl.geocoding as geo
 
 
 @pytest.fixture(autouse=True)
@@ -131,7 +131,7 @@ class TestGeocodeEndpoint:
         from server.endpoints import app
         self.client = app.test_client()
     
-    @patch('server.geocoding.reverse_geocode')
+    @patch('server.etl.geocoding.reverse_geocode')
     def test_get_with_valid_params(self, mock_reverse_geocode):
         """Test GET request with valid lat/lon parameters."""
         mock_reverse_geocode.return_value = {
@@ -189,7 +189,7 @@ class TestGeocodeEndpoint:
         data = response.get_json()
         assert 'valid numbers' in data['message'].lower()
     
-    @patch('server.geocoding.reverse_geocode')
+    @patch('server.etl.geocoding.reverse_geocode')
     def test_get_out_of_range_coordinates(self, mock_reverse_geocode):
         """Test GET request with out-of-range coordinates."""
         mock_reverse_geocode.side_effect = ValueError("Latitude must be between -90 and 90")
@@ -198,7 +198,7 @@ class TestGeocodeEndpoint:
         
         assert response.status_code == 400
     
-    @patch('server.geocoding.reverse_geocode')
+    @patch('server.etl.geocoding.reverse_geocode')
     def test_get_service_timeout(self, mock_reverse_geocode):
         """Test handling when geocoding service times out."""
         mock_reverse_geocode.side_effect = GeocoderTimedOut()
@@ -207,7 +207,7 @@ class TestGeocodeEndpoint:
         
         assert response.status_code == 503
     
-    @patch('server.geocoding.reverse_geocode')
+    @patch('server.etl.geocoding.reverse_geocode')
     def test_get_service_error(self, mock_reverse_geocode):
         """Test handling when geocoding service fails."""
         mock_reverse_geocode.side_effect = GeocoderServiceError("Service error")
