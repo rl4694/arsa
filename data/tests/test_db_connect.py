@@ -34,7 +34,7 @@ class TestConnectDB:
     
     @patch('data.db_connect.pm.MongoClient')
     @patch.dict('os.environ',
-                {'CLOUD_MONGO: '1',
+                {'CLOUD_MONGO': '1',
                  'MONGO_URL': 'mongodb+srv://mock_user:mock_pass@cluster.mongodb.net/test'},
                 clear=False)
     
