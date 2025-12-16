@@ -14,6 +14,7 @@ location_model = api.model('Location', {
     'city': fields.String(description='City name'),
     'state': fields.String(description='State/Province name'),
     'country': fields.String(description='Country name'),
+    'country_code': fields.String(description='Country code'),
     'latitude': fields.Float(description='Latitude'),
     'longitude': fields.Float(description='Longitude'),
     'display_name': fields.String(description='Full address')
