@@ -70,6 +70,7 @@ class TestReverseGeocode:
         assert result['city'] is None
         assert result['state'] is None
         assert result['country'] is None
+        assert result['country_code'] is None
         assert result['display_name'] == 'Location not found'
     
     def test_invalid_latitude_too_high(self):
@@ -153,6 +154,7 @@ class TestGeocodeEndpoint:
         assert data['city'] == 'New York'
         assert data['state'] == 'New York'
         assert data['country'] == 'United States'
+        assert data['country_code'] == 'us'
     
     def test_get_missing_lat_param(self):
         """Test GET request missing lat parameter."""
