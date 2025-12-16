@@ -24,7 +24,7 @@ class TestReverseGeocode:
             'address': {
                 'city': 'New York',
                 'state': 'New York',
-                'country': 'United States'
+                'country': 'United States',
                 'country_code': 'us'
             }
         }
@@ -48,7 +48,7 @@ class TestReverseGeocode:
             'address': {
                 'city': 'Toronto',
                 'province': 'Ontario',
-                'country': 'Canada'
+                'country': 'Canada',
                 'country_code': 'ca'
             }
         }
