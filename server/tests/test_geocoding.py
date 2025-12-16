@@ -7,14 +7,14 @@ import server.etl.geocoding as geo
 
 @pytest.fixture(autouse=True)
 def patch_dependencies():
-    with patch('server.geocoding.geocode') as mock_geocode:
+    with patch('server.etl.geocoding.geocode') as mock_geocode:
         yield
 
 
 class TestReverseGeocode:
     """Test the reverse_geocode function."""
     
-    @patch('server.geocoding.reverse')
+    @patch('server.etl.geocoding.reverse')
     def test_valid_coordinates(self, mock_reverse):
         """Test reverse geocoding with valid coordinates."""
         # Mock the location response
@@ -25,6 +25,7 @@ class TestReverseGeocode:
                 'city': 'New York',
                 'state': 'New York',
                 'country': 'United States'
+                'country_code': 'us'
             }
         }
         mock_reverse.return_value = mock_location
@@ -38,7 +39,7 @@ class TestReverseGeocode:
         assert result['longitude'] == -74.0060
         assert 'display_name' in result
     
-    @patch('server.geocoding.reverse')
+    @patch('server.etl.geocoding.reverse')
     def test_location_with_province_instead_of_state(self, mock_reverse):
         """Test that province is used when state is not available."""
         mock_location = MagicMock()
@@ -48,6 +49,7 @@ class TestReverseGeocode:
                 'city': 'Toronto',
                 'province': 'Ontario',
                 'country': 'Canada'
+                'country_code': 'ca'
             }
         }
         mock_reverse.return_value = mock_location
@@ -58,7 +60,7 @@ class TestReverseGeocode:
         assert result['state'] == 'Ontario'
         assert result['country'] == 'Canada'
     
-    @patch('server.geocoding.reverse')
+    @patch('server.etl.geocoding.reverse')
     def test_location_not_found(self, mock_reverse):
         """Test when coordinates don't map to any location."""
         mock_reverse.return_value = None
@@ -106,7 +108,7 @@ class TestReverseGeocode:
             geo.reverse_geocode(0.0, "not a number")
         assert "must be numbers" in str(exc_info.value)
     
-    @patch('server.geocoding.reverse')
+    @patch('server.etl.geocoding.reverse')
     def test_geocoder_timeout(self, mock_reverse):
         """Test handling of geocoder timeout."""
         mock_reverse.side_effect = GeocoderTimedOut()
@@ -114,7 +116,7 @@ class TestReverseGeocode:
         with pytest.raises(GeocoderTimedOut):
             geo.reverse_geocode(40.7128, -74.0060)
     
-    @patch('server.geocoding.reverse')
+    @patch('server.etl.geocoding.reverse')
     def test_geocoder_service_error(self, mock_reverse):
         """Test handling of geocoder service error."""
         mock_reverse.side_effect = GeocoderServiceError("Service unavailable")
@@ -138,6 +140,7 @@ class TestGeocodeEndpoint:
             'city': 'New York',
             'state': 'New York',
             'country': 'United States',
+            'country_code': 'us',
             'latitude': 40.7128,
             'longitude': -74.0060,
             'display_name': 'New York, NY, USA'
@@ -227,4 +230,3 @@ class TestGeocodeEndpoint:
             ]
         })
         assert response.status_code == 200
-
