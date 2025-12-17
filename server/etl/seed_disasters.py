@@ -73,9 +73,9 @@ def transform_tsunami(row: dict) -> list:
         lat = float(row['LATITUDE'])
         lon = float(row['LONGITUDE'])
         # Default to '01' if field is an empty string
-        date = (f'{int(float(row.get('YEAR') or 1)):02d}'
-                f'-{int(float(row.get('MONTH') or 1)):02d}'
-                f'-{int(float(row.get('DAY') or 1)):02d}')
+        date = (f"{int(float(row.get('YEAR') or 1)):02d}"
+                f"-{int(float(row.get('MONTH') or 1)):02d}"
+                f"-{int(float(row.get('DAY') or 1)):02d}")
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Tsunami at {loc_data['city_name']}",
