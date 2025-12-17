@@ -31,10 +31,10 @@ PA_SETTINGS = {
 def needs_db(func):
     """
     Decorator to ensure database connection before executing function.
-    
+
     This decorator automatically establishes a database connection
     if one doesn't exist before executing the decorated function.
-    
+
     Example:
         @needs_db
         def my_function():
@@ -51,14 +51,14 @@ def needs_db(func):
 def connect_db():
     """
     Connect to MongoDB (either local or cloud based on environment variables).
-    
+
     Uses CLOUD_MONGO environment variable to determine connection type:
     - CLOUD_MONGO=1: Connect to MongoDB Atlas using MONGO_URL
     - CLOUD_MONGO=0 or unset: Connect to local MongoDB instance
-    
+
     Returns:
         pymongo.MongoClient: Connected MongoDB client instance
-    
+
     Raises:
         ValueError: If CLOUD_MONGO=1 but MONGO_URL is not set
     """
@@ -83,10 +83,10 @@ def connect_db():
 def convert_mongo_id(doc: dict):
     """
     Convert MongoDB ObjectId to string for JSON serialization.
-    
+
     Args:
         doc (dict): Document containing MongoDB '_id' field
-    
+
     Note:
         Modifies the document in-place.
     """
