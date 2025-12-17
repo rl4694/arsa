@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
-
+from server.endpoints import GEOCODE_EP
 import server.etl.geocoding as geo
 
 
@@ -59,11 +59,13 @@ class TestReverseGeocode:
         assert result['city'] == 'Toronto'
         assert result['state'] == 'Ontario'
         assert result['country'] == 'Canada'
-    
+
+    @patch('server.etl.geocoding.geocode')
     @patch('server.etl.geocoding.reverse')
-    def test_location_not_found(self, mock_reverse):
+    def test_location_not_found(self, mock_reverse, mock_geocode):
         """Test when coordinates don't map to any location."""
         mock_reverse.return_value = None
+        mock_geocode.return_value = None
         
         result = geo.reverse_geocode(0.0, 0.0)
         
@@ -134,7 +136,7 @@ class TestGeocodeEndpoint:
         from server.endpoints import app
         self.client = app.test_client()
     
-    @patch('server.etl.geocoding.reverse_geocode')
+    @patch('server.endpoints.reverse_geocode')
     def test_get_with_valid_params(self, mock_reverse_geocode):
         """Test GET request with valid lat/lon parameters."""
         mock_reverse_geocode.return_value = {
@@ -147,7 +149,7 @@ class TestGeocodeEndpoint:
             'display_name': 'New York, NY, USA'
         }
         
-        response = self.client.get('/geocode/?lat=40.7128&lon=-74.0060')
+        response = self.client.get(GEOCODE_EP + '?lat=40.7128&lon=-74.0060')
         
         assert response.status_code == 200
         data = response.get_json()
@@ -158,7 +160,7 @@ class TestGeocodeEndpoint:
     
     def test_get_missing_lat_param(self):
         """Test GET request missing lat parameter."""
-        response = self.client.get('/geocode/?lon=-74.0060')
+        response = self.client.get(GEOCODE_EP + '?lon=-74.0060')
         
         assert response.status_code == 400
         data = response.get_json()
@@ -166,7 +168,7 @@ class TestGeocodeEndpoint:
     
     def test_get_missing_lon_param(self):
         """Test GET request missing lon parameter."""
-        response = self.client.get('/geocode/?lat=40.7128')
+        response = self.client.get(GEOCODE_EP + '?lat=40.7128')
         
         assert response.status_code == 400
         data = response.get_json()
@@ -174,13 +176,13 @@ class TestGeocodeEndpoint:
     
     def test_get_missing_both_params(self):
         """Test GET request missing both parameters."""
-        response = self.client.get('/geocode/')
+        response = self.client.get(GEOCODE_EP)
         
         assert response.status_code == 400
     
     def test_get_invalid_lat_format(self):
         """Test GET request with non-numeric latitude."""
-        response = self.client.get('/geocode/?lat=abc&lon=-74.0060')
+        response = self.client.get(GEOCODE_EP + '?lat=abc&lon=-74.0060')
         
         assert response.status_code == 400
         data = response.get_json()
@@ -188,36 +190,36 @@ class TestGeocodeEndpoint:
     
     def test_get_invalid_lon_format(self):
         """Test GET request with non-numeric longitude."""
-        response = self.client.get('/geocode/?lat=40.7128&lon=xyz')
+        response = self.client.get(GEOCODE_EP + '?lat=40.7128&lon=xyz')
         
         assert response.status_code == 400
         data = response.get_json()
         assert 'valid numbers' in data['message'].lower()
     
-    @patch('server.etl.geocoding.reverse_geocode')
+    @patch('server.endpoints.reverse_geocode')
     def test_get_out_of_range_coordinates(self, mock_reverse_geocode):
         """Test GET request with out-of-range coordinates."""
         mock_reverse_geocode.side_effect = ValueError("Latitude must be between -90 and 90")
         
-        response = self.client.get('/geocode/?lat=100&lon=0')
+        response = self.client.get(GEOCODE_EP + '?lat=100&lon=0')
         
         assert response.status_code == 400
     
-    @patch('server.etl.geocoding.reverse_geocode')
+    @patch('server.endpoints.reverse_geocode')
     def test_get_service_timeout(self, mock_reverse_geocode):
         """Test handling when geocoding service times out."""
         mock_reverse_geocode.side_effect = GeocoderTimedOut()
         
-        response = self.client.get('/geocode/?lat=40.7128&lon=-74.0060')
+        response = self.client.get(GEOCODE_EP + '?lat=40.7128&lon=-74.0060')
         
         assert response.status_code == 503
     
-    @patch('server.etl.geocoding.reverse_geocode')
+    @patch('server.endpoints.reverse_geocode')
     def test_get_service_error(self, mock_reverse_geocode):
         """Test handling when geocoding service fails."""
         mock_reverse_geocode.side_effect = GeocoderServiceError("Service error")
         
-        response = self.client.get('/geocode/?lat=40.7128&lon=-74.0060')
+        response = self.client.get(GEOCODE_EP + '?lat=40.7128&lon=-74.0060')
         
         assert response.status_code == 503
     

@@ -60,7 +60,7 @@ def reverse_geocode(lat: float, lon: float) -> dict:
                 min(lat + dlat, 90),
                 min(lon + dlon, 180),
             ]
-            location = geolocator.geocode(
+            location = geocode(
                 query="city",
                 bounded=True,
                 viewbox=[(viewbox[0], viewbox[1]), (viewbox[2], viewbox[3])],
