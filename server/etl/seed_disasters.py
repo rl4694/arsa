@@ -19,10 +19,12 @@ def extract(filename: str) -> list:
         exit(1)
 
 
-def transform_earthquake(row: list) -> list:
+def transform_earthquake(row: dict) -> list:
     """Transform earthquake data into format CRUD API can understand"""
     # Use coordinate data to create nation, state, cities
     try:
+        if not isinstance(row, dict):
+            raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['latitude'])
         lon = float(row['longitude'])
         date = datetime.strptime(row.get('date_time'), "%d-%m-%Y %H:%M")
@@ -39,10 +41,12 @@ def transform_earthquake(row: list) -> list:
         print(e)
 
 
-def transform_landslide(row: list) -> list:
+def transform_landslide(row: dict) -> list:
     """Transform landslide data into format CRUD API can understand"""
     # Use coordinate data to create nation, state, cities
     try:
+        if not isinstance(row, dict):
+            raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['latitude'])
         lon = float(row['longitude'])
         size = row.get('landslide_size', 'N/A')
@@ -60,14 +64,16 @@ def transform_landslide(row: list) -> list:
         print(e)
 
 
-def transform_tsunami(row: list) -> list:
+def transform_tsunami(row: dict) -> list:
     """Transform tsunami data into format CRUD API can understand"""
     # Use coordinate data to create nation, state, cities
     try:
+        if not isinstance(row, dict):
+            raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['LATITUDE'])
         lon = float(row['LONGITUDE'])
         # Default to '01' if field is an empty string
-        date = (f'{row.get('YEAR') or '01'}'
+        date = (f'{int(float(row.get('YEAR') or 1)):02d}'
                 f'-{int(float(row.get('MONTH') or 1)):02d}'
                 f'-{int(float(row.get('DAY') or 1)):02d}')
         loc_data = load_location(lat, lon)
@@ -81,9 +87,11 @@ def transform_tsunami(row: list) -> list:
         print(e)
 
 
-def transform_hurricane(row: list) -> list:
+def transform_hurricane(row: dict) -> list:
     """Transform hurricane data into format CRUD API can understand"""
     try:
+        if not isinstance(row, dict):
+            raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row.get('latitude', 0))
         lon = float(row.get('longitude', 0))
         loc_data = load_location(lat, lon)
