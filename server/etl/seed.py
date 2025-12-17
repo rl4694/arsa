@@ -113,9 +113,9 @@ def main():
             counts[disaster_type] += 1
     # Use API calls otherwise
     else:
-        sd.seed_disasters(EARTHQUAKES_FILE, sd.EARTHQUAKE)
-        sd.seed_disasters(LANDSLIDE_FILE, sd.LANDSLIDE)
-        sd.seed_disasters(TSUNAMI_FILE, sd.TSUNAMI)
+        sd.seed_disasters(EARTHQUAKES_FILE, nd.EARTHQUAKE)
+        sd.seed_disasters(LANDSLIDE_FILE, nd.LANDSLIDE)
+        sd.seed_disasters(TSUNAMI_FILE, nd.TSUNAMI)
         # TODO: upload hurricane file
         # sd.seed_disasters(HURRICANES_FILE, sd.HURRICANE)
 
