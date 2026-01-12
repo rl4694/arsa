@@ -5,6 +5,7 @@ This file implements CRUD operations for natural disasters.
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
+from datetime import datetime
 
 DISASTERS_RESP = 'disasters'
 COLLECTION = 'natural_disasters'
@@ -21,7 +22,28 @@ HURRICANE = 'hurricane'
 DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE]
 KEY = (NAME, DATE, LOCATION)
 
-disasters = CRUD(
+class NaturalDisasters(CRUD):
+    def validate(self, fields: dict):
+        super().validate(fields)
+        # Check if date is in the format 'yyyy-mm-dd'
+        if DATE in fields:
+            try:
+                datetime.strptime(fields[DATE], "%Y-%m-%d")
+            except:
+                raise ValueError(f'Invalid date string: {fields[DATE]}')
+        # Check if location is in the format 'lat, lon'
+        if LOCATION in fields:
+            location = fields[LOCATION].split(',')
+            if len(location) != 2:
+                raise ValueError(f'Invalid location: {fields[LOCATION]}')
+            try:
+                float(location[0])
+                float(location[1])
+            except:
+                raise ValueError(f'Invalid coordinates: {location}')
+
+
+disasters = NaturalDisasters(
     COLLECTION,
     KEY,
     {

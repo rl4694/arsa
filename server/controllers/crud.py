@@ -32,6 +32,18 @@ class CRUD:
         self.attributes = attributes
         self.cache = Cache(self.collection)
 
+    def validate(self, fields: dict):
+        # Check whether fields is the correct type
+        if not isinstance(fields, dict):
+            raise ValueError(f'Bad type for fields: {type(fields)}')
+
+        # Check whether each individual field is the correct type
+        for attribute in self.attributes:
+            field = fields.get(attribute)
+            is_valid_type = isinstance(field, self.attributes[attribute])
+            if field is not None and not is_valid_type:
+                raise ValueError(f'Bad type for field {field}: {type(field)}')
+
     def find_duplicate(self, fields: dict):
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for fields: {type(fields)}')
@@ -47,21 +59,14 @@ class CRUD:
         Create a new record from the provided fields.
         """
         # Validate parameters
-        if not isinstance(fields, dict):
-            raise ValueError(f'Bad type for fields: {type(fields)}')
+        self.validate(fields)
         if not isinstance(recursive, bool):
             raise ValueError(f'Bad type for recursive: {type(recursive)}')
         
         # Build the record from the fields
         new_record = {}
         for attribute in self.attributes:
-            field = fields.get(attribute)
-            # Validate the field
-            is_valid_type = isinstance(field, self.attributes[attribute])
-            if field is not None and not is_valid_type:
-                raise ValueError(f'Bad type for field {field}: {type(field)}')
-            # Add the field
-            new_record[attribute] = field
+            new_record[attribute] = fields.get(attribute)
 
         # Check if record already exists
         duplicate = self.find_duplicate(fields)
@@ -97,17 +102,16 @@ class CRUD:
         if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
         records = self.cache.read()
-        for record in records.values():
-            if record['_id'] == _id:
-                return record
+        if _id in records:
+            return records[_id]
         raise KeyError(f'Record not found: {query}')
 
     def update(self, _id: str, fields: dict):
         """
         Update the fields for the record matching the query.
         """
-        if not isinstance(fields, dict):
-            raise ValueError(f'Bad type for data: {type(fields)}')
+        # Validate parameters
+        self.validate(fields)
         if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
 
@@ -115,11 +119,8 @@ class CRUD:
         record = {}
         for attribute in self.attributes:
             field = fields.get(attribute)
-            if field is None:
-                continue
-            if not isinstance(field, self.attributes[attribute]):
-                raise ValueError(f'Bad type for field {field}: {type(field)}')
-            record[attribute] = field
+            if field is not None:
+                record[attribute] = field
 
         # Check if updated fields is a duplicate
         if self.find_duplicate(fields):

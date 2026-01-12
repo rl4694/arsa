@@ -68,6 +68,16 @@ class TestCreate:
     def test_bad_field_type(self):
         with pytest.raises(ValueError):
             crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: 123})
+    
+    def test_missing_field(self):
+        _id = crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: SAMPLE_FIELD2})
+        assert is_valid_id(_id)
+        record = crud.read()[_id]
+        assert record[FIELD1] == SAMPLE_FIELD1
+        assert record[FIELD2] == SAMPLE_FIELD2
+        assert record[FIELD3] == None
+        assert FIELD3 in record
+        crud.delete(_id)
 
 
 class TestCount:
