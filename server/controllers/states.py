@@ -45,7 +45,7 @@ class StateList(Resource):
 
         # data['code'] = state_code
         # data['state_id'] = f"{data['nation_code']}-{state_code}"
-        _id = states.create(data, recursive=False)
+        _id = states.create(data, return_duplicate_id=False)
         created = states.select(_id)
         return {STATES_RESP: created}, 201
 
@@ -80,7 +80,7 @@ class State(Resource):
         #     new_payload['state_id'] = f"{new_payload['nation_code']}-{new_code}"
 
         #     states.delete(state_id)
-        #     new_id = states.create(new_payload, recursive=False)
+        #     new_id = states.create(new_payload, return_duplicate_id=False)
         #     record = states.select(new_id)
         #     return {STATES_RESP: record}
 

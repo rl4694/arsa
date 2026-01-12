@@ -43,7 +43,7 @@ class CityList(Resource):
     @api.doc('create_city')
     def post(self):
         data = request.json
-        _id = cities.create(data, recursive=False)
+        _id = cities.create(data, return_duplicate_id=False)
         created = cities.select(_id)
         return {CITIES_RESP: created}, 201
 

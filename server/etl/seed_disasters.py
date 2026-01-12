@@ -21,7 +21,6 @@ def extract(filename: str) -> list:
 
 def transform_earthquake(row: dict) -> list:
     """Transform earthquake data into format CRUD API can understand"""
-    # Use coordinate data to create nation, state, cities
     try:
         if not isinstance(row, dict):
             raise ValueError(f'Bad type for row: {type(row)}')
@@ -43,7 +42,6 @@ def transform_earthquake(row: dict) -> list:
 
 def transform_landslide(row: dict) -> list:
     """Transform landslide data into format CRUD API can understand"""
-    # Use coordinate data to create nation, state, cities
     try:
         if not isinstance(row, dict):
             raise ValueError(f'Bad type for row: {type(row)}')
@@ -66,7 +64,6 @@ def transform_landslide(row: dict) -> list:
 
 def transform_tsunami(row: dict) -> list:
     """Transform tsunami data into format CRUD API can understand"""
-    # Use coordinate data to create nation, state, cities
     try:
         if not isinstance(row, dict):
             raise ValueError(f'Bad type for row: {type(row)}')
@@ -201,6 +198,7 @@ def seed_disasters(filename: str, disaster_type: str):
     if disaster_type not in transforms:
         raise ValueError(f'Unrecognized disaster_type: {disaster_type}')
 
+    # Perform ETL operations
     rows = extract(filename)
     transform_func = transforms[disaster_type]
     for row in rows:

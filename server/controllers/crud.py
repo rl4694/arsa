@@ -50,18 +50,20 @@ class CRUD:
 
         records = self.cache.read()
         for record in records.values():
+            # Check if all key fields from current record and query match
             if all(fields.get(key) == record.get(key) for key in self.keys):
                 return record
         return None
 
-    def create(self, fields: dict, recursive: bool = True) -> str:
+    def create(self, fields: dict, return_duplicate_id: bool = True) -> str:
         """
         Create a new record from the provided fields.
         """
         # Validate parameters
         self.validate(fields)
-        if not isinstance(recursive, bool):
-            raise ValueError(f'Bad type for recursive: {type(recursive)}')
+        if not isinstance(return_duplicate_id, bool):
+            rdi_type = type(return_duplicate_id)
+            raise ValueError(f'Bad type for return_duplicate_id: {rdi_type}')
         
         # Build the record from the fields
         new_record = {}
@@ -71,7 +73,7 @@ class CRUD:
         # Check if record already exists
         duplicate = self.find_duplicate(fields)
         if duplicate:
-            if recursive:
+            if return_duplicate_id:
                 return str(duplicate['_id'])
             else:
                 raise ValueError('Duplicate detected.')
