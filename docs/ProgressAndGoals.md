@@ -1,31 +1,68 @@
 # Progress
-The following features were implemented in Fall 2025.
-- Backend API Server (20 endpoints total)
-    - 4 resources: cities, states, nations, natural disasters
-    - 5 operations per resource: CRUD, select
-    - Cities, states, and nations are connected to each other
-    - Cache using _id as key
-    - Date validation, type checking, and duplicate handling
-- ETL Scripts
-    - Load nation, earthquake, landslide, and tsunami data from CSV files to MongoDB
-    - Map disaster coordinates to cities using Nominatim API
-    - Cache created disasters and geographic entities into JSON files
-- CI Pipeline
-    - Automated unit tests for data controllers and reusable ETL function
-    - Deployment to PythonAnywhere
-    - Environment variables stored in GitHub (CI), .env files (local), and WSGI config (PythonAnywhere)
+The following were requirements for Fall 2025.
+- create an API server for a geographic database.
+
+- implement CRUD operations on a related set of data stored in a database. (countries, states, and cities)
+
+- deploy the project to the cloud using CI/CD.
+
+- include a dozen or more endpoints.
+
+- ensure all endpoints and functions have unit tests.
+
+- thoroughly documented each endpoint for [Swagger](https://swagger.io/).
+
+They were met by implementing the following features.
+
+### API Server
+We created an API server which allows users to perform CRUD operations on
+cities, states, nations, and natural disasters. Each data controller implements
+type-checking, duplicate handling, and caching (using _id as the key). The
+natural disasters also include Date validation. Each data controller has
+a Flask endpoint that is documented with Swagger. In total, we have
+4 resources x 5 operations (CRUD, select) = 20 endpoints.
+
+This fulfills the requirements:
+- create an API server for a geographic database.
+- implement CRUD operations on a related set of data stored in a database. (countries, states, and cities)
+- include a dozen or more endpoints.
+
+### ETL Scripts
+We are loading nation, earthquake, landslide, and tsunami data from CSV files
+to MongoDB using ETL scripts. We are also mapping natural disaster coordinates
+to cities using the Nominatim API. To avoid calling the Nominatim API for
+seeding all of our local setups, we are also caching the generated MongoDB
+records into JSON files and seeding the JSON files if they exist.
+
+### CI Pipeline
+We created a CI/CD pipeline which automates unit testing for our data controllers
+and reusable ETL functions, as well as deploying to PythonAnywhere. We are also
+storing our environment variables in GitHub (CI), .env files (local), and
+WSGI config (PythonAnywhere).
+
+This fulfills the requirements:
+- deploy the project to the cloud using CI/CD.
+- ensure all endpoints and functions have unit tests.
 
 # Goals
-We will try to implement the following features in Spring 2026:
-- Frontend Client
-    - Map with natural disasters overlaid on top
-    - Natural disaster details shown when clicking a disaster on the map
-    - List view for each resource
-    - Create, update, and delete forms for each resource
-    - Login and register pages
-    - Navbar with links and logout button
-- Backend API Server
-    - Connect natural disasters to cities
-    - Add authentication system
-- If we have time
-    - Special effects on the map based on natural disaster intensity/frequency (ex. big scary circles)
+We will try to reach the following goals in Spring 2026.
+
+### Frontend Client
+We will create a frontend client with the following features. It will be implemented through incremental development on a new frontend repository.
+- Map with natural disasters overlaid on top
+- Natural disaster details shown when clicking a disaster on the map
+- List view for each resource
+- Create, update, and delete forms for each resource
+- Login and register pages
+- Navbar with links and logout button
+
+This will give each API endpoint a corresponding frontend interface.
+
+### API Server
+We will modify the Backend API Server to implement the following features:
+- Connect natural disasters to cities
+
+  This will enable us to match natural disasters to cities in the map view.
+- Add authentication system
+  
+  This will restrict the create, update, and delete forms to only be accessible to registered users instead of any public visitor.
