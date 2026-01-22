@@ -48,13 +48,13 @@ This fulfills the requirements:
 We will try to reach the following goals in Spring 2026.
 
 ### Frontend Client
-We will create a frontend client with the following features. It will be implemented through incremental development on a new frontend repository.
-- Map with natural disasters overlaid on top
+We will create a frontend React client with the following features. It will be done through incremental development on a new repository.
+- Map with natural disasters overlaid on top. This can be implemented using [React Leaflet](https://react-leaflet.js.org/).
 - Natural disaster details shown when clicking a disaster on the map
 - List view for each resource
 - Create, update, and delete forms for each resource
 - Login and register pages
-- Navbar with links and logout button
+- Navbar with links and logout button. This can be implemented using React Router.
 
 This will give each API endpoint a corresponding frontend interface.
 
