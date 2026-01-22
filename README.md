@@ -5,8 +5,16 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
-# Objectives (from assignment instructions):
+## Configuration
+- To run this project, you must set the following environment variables (or create a .env file locally)
+- CLOUD_MONGO: Set to "1" to use Atlas, or "0" for local
+- MONGO_URL: mongodb+srv://sjp9:[key]@arsa.afndfz7.mongodb.net/?appName=arsa
 
+# Spring 2026
+You can find the objectives for Spring 2026 [here](./docs/ProgressAndGoals.md).
+
+# Fall 2025
+## Objectives
 - create an API server for a geographic database.
 
 - implement CRUD operations on a related set of data stored in a database. (countries, states, and cities)
@@ -31,8 +39,3 @@ The following is a list of ideas involving geographic data we could implement:
 - US Wildfires ([dataset](https://www.kaggle.com/datasets/firecastrl/us-wildfire-dataset/data))
 - Global Bike Sales ([dataset](https://www.kaggle.com/datasets/hamedahmadinia/global-bike-sales-dataset-2013-2023))
 - Global Population Stats For 2024 ([dataset](https://www.kaggle.com/datasets/raveennimbiwal/global-population-stats-2024))
-
-## Configuration
-- To run this project, you must set the following environment variables (or create a .env file locally)
-- CLOUD_MONGO: Set to "1" to use Atlas, or "0" for local
-- MONGO_URL: mongodb+srv://sjp9:[key]@arsa.afndfz7.mongodb.net/?appName=arsa
