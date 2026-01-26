@@ -55,6 +55,8 @@ We will create a frontend React client with the following features. It will be d
 - Create, update, and delete forms for each resource
 - Login and register pages
 - Navbar with links and logout button. This can be implemented using React Router.
+- Implement React testing
+- Create HATEOAS features in the system
 
 This will give each API endpoint a corresponding frontend interface.
 
