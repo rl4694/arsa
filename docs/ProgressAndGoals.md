@@ -62,9 +62,14 @@ This will give each API endpoint a corresponding frontend interface.
 
 ### API Server
 We will modify the Backend API Server to implement the following features:
-- Connect natural disasters to cities
+- Add latitude and longitude fields to cities
 
-  This will enable us to match natural disasters to cities in the map view.
+  This will enable us to mark cities on the frontend map.
+
+- Add a function to map coordinates to cities
+
+  This will connect natural disasters to cities, since they both will have latitude and longitude data. 
+
 - Add authentication system
   
   This will restrict the create, update, and delete forms to only be accessible to registered users instead of any public visitor.
