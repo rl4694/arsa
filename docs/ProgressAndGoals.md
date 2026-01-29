@@ -57,6 +57,8 @@ We will create a frontend React client with the following features. It will be d
 - Navbar with links and logout button. This can be implemented using React Router.
 - Implement React testing
 - Create HATEOAS features in the system
+- Smart filtering for disaster types
+- Ability to view disasters by nations when clicking on the nation
 
 This will give each API endpoint a corresponding frontend interface.
 
@@ -73,3 +75,11 @@ We will modify the Backend API Server to implement the following features:
 - Add authentication system
   
   This will restrict the create, update, and delete forms to only be accessible to registered users instead of any public visitor.
+
+### AI integration
+
+- This is mostly speculative, but it could be nice to hook up an AI API key if a user would like to find more details on a specific disaster and find details and links for it, google AI studio has decent rate limits for free users with a google accounts (~50 per day for Gemini flash 2.5 and more for flash 2.0), this would require creating a template for the AI to follow for easy parsing, we can store these results for later so eventually we'll have more info on each disaster
+
+### Live Data Integration
+
+- Also speculative but having live data feed into the DB would be nice for disasters such as earthquakes and tornados, this could be also done with AI to some extent with google search features when no easy API exist for them, we could have the AI query and evaluate for disasters and id relevancy and severity, and get details about cities such as coordinates
