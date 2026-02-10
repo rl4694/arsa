@@ -113,3 +113,22 @@ def reverse_geocode(lat: float, lon: float) -> dict:
     except GeocoderServiceError as e:
         raise GeocoderServiceError(f"Geocoding service error: {str(e)}")
 
+
+def forward_geocode(query: str):
+    """
+    Convert a place query string to latitude/longitude using Nominatim.
+
+    Args:
+        query: Free-text query like "Boise, Idaho, United States".
+
+    Returns:
+        (lat, lon) as floats, or (None, None) if not found.
+    """
+    if not isinstance(query, str) or not query.strip():
+        raise ValueError("Query must be a non-empty string")
+
+    location = geocode(query, language="en", addressdetails=True)
+    if location is None:
+        return None, None
+
+    return float(location.latitude), float(location.longitude)

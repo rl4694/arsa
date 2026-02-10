@@ -11,6 +11,8 @@ COLLECTION = 'cities'
 NAME = 'name'
 STATE_NAME = 'state_name'
 NATION_NAME = 'nation_name'
+LATITUDE = 'latitude'
+LONGITUDE = 'longitude'
 KEY = (NAME, STATE_NAME)
 
 cities = CRUD(
@@ -20,6 +22,8 @@ cities = CRUD(
         NAME: str,
         STATE_NAME: str,
         NATION_NAME: str,
+	LATITUDE: float,
+	LONGITUDE: float,
     }
 )
 
@@ -29,7 +33,9 @@ api = Namespace('cities', description='Cities CRUD operations')
 city_model = api.model('City', {
     NAME: fields.String(required=True, description='City Name'),
     STATE_NAME: fields.String(description='State Name'),
-    NATION_NAME: fields.String(description='Nation Name')
+    NATION_NAME: fields.String(description='Nation Name'),
+    LATITUDE: fields.Float(description='City Latitude'),
+    LONGITUDE: fields.Float(description='City Longitude')
 })
 
 
