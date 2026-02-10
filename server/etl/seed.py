@@ -109,7 +109,7 @@ def main():
             disaster_type = record.get(nd.DISASTER_TYPE, 'unknown')
             if counts[disaster_type] > LOAD_COUNT:
                 continue
-            nd.disasters.create(record)
+            sd.load_disaster(record)
             counts[disaster_type] += 1
     # Use API calls otherwise
     else:

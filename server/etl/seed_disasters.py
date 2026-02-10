@@ -182,8 +182,11 @@ def load_location(lat: float, lon: float):
 
 def load_disaster(transformed: list):
     """Load a disaster into database"""
-    _id = nd.disasters.create(transformed)
-    print(f"Created disaster: {_id}")
+    try:
+        _id = nd.disasters.create(transformed)
+        print(f"Created disaster: {_id}")
+    except Exception as e:
+        print("Warning could not create disaster: ", e)
 
 
 def seed_disasters(filename: str, disaster_type: str):
