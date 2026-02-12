@@ -41,13 +41,19 @@ city_model = api.model('City', {
 
 @api.route('/')
 class CityList(Resource):
+    """
+    Handle collection-level operations for cities.
+    Supports listing all cities and creating new ones.
+    """
     @api.doc('list_cities')
     def get(self):
+        """Return all cities."""
         return {CITIES_RESP: cities.read()}
 
     @api.expect(city_model)
     @api.doc('create_city')
     def post(self):
+        """Create a new city."""
         data = request.json
         _id = cities.create(data, return_duplicate_id=False)
         created = cities.select(_id)
@@ -56,8 +62,13 @@ class CityList(Resource):
 
 @api.route('/<string:city_id>')
 class City(Resource):
+    """
+    Handle item-level operations for a single city.
+    Supports retrieval, update, and deletion.
+    """
     @api.doc('get_city')
     def get(self, city_id):
+        """Retrieve a single city by ID."""
         try:
             record = cities.select(city_id)
             return {CITIES_RESP: record}
@@ -67,6 +78,7 @@ class City(Resource):
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
+        """Update a city by ID."""
         try:
             cities.update(city_id, request.json)
             record = cities.select(city_id)
@@ -76,6 +88,7 @@ class City(Resource):
 
     @api.doc('delete_city')
     def delete(self, city_id):
+        """Delete a city by ID."""
         try:
             cities.delete(city_id)
             return '', 204

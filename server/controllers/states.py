@@ -1,3 +1,7 @@
+"""
+This file implements CRUD operations for states.
+"""
+
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
@@ -27,13 +31,19 @@ state_model = api.model('State', {
 
 @api.route('/')
 class StateList(Resource):
+    """
+    Collection-level operations for states.
+    Provides list and create functionality.
+    """
     @api.doc('list_states')
     def get(self):
+        """Return all states."""
         return {STATES_RESP: states.read()}
 
     @api.expect(state_model)
     @api.doc('create_state')
     def post(self):
+        """Create a new state."""
         data = request.json or {}
         # data['nation_code'] = data['nation_code'].upper()
         # try:
@@ -51,8 +61,13 @@ class StateList(Resource):
 
 @api.route('/<string:state_id>')
 class State(Resource):
+    """
+    Item-level operations for a single state.
+    Provides retrieve, update, and delete functionality.
+    """
     @api.doc('get_state')
     def get(self, state_id):
+        """Retrieve a single state by ID."""
         try:
             record = states.select(state_id)
             return {STATES_RESP: record}
@@ -62,6 +77,7 @@ class State(Resource):
     @api.expect(state_model)
     @api.doc('update_state')
     def put(self, state_id):
+        """Update a state by ID."""
         payload = request.json or {}
         # if 'name' in payload or 'nation_code' in payload:
         #     try:
@@ -93,6 +109,7 @@ class State(Resource):
 
     @api.doc('delete_state')
     def delete(self, state_id):
+        """Delete a state by ID."""
         try:
             states.delete(state_id)
             return '', 204

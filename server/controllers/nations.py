@@ -34,13 +34,19 @@ nation_model = api.model('Nation', {
 # NATIONS ENDPOINTS
 @api.route('/')
 class NationList(Resource):
+    """
+    Collection-level operations for nations.
+    Provides list and create functionality.
+    """
     @api.doc('list_nations')
     def get(self):
+        """Return all nations."""
         return {NATIONS_RESP: nations.read()}
 
     @api.expect(nation_model)
     @api.doc('create_nation')
     def post(self):
+        """Create a new nation."""
         data = request.json
         
         try:
@@ -59,8 +65,13 @@ class NationList(Resource):
 
 @api.route('/<string:nation_id>')
 class Nation(Resource):
+    """
+    Item-level operations for a single nation.
+    Provides retrieve, update, and delete functionality.
+    """
     @api.doc('get_nation')
     def get(self, nation_id):
+        """Retrieve a single nation by ID."""
         try:
             record = nations.select(nation_id)
             return {NATIONS_RESP: record}
@@ -70,6 +81,7 @@ class Nation(Resource):
     @api.expect(nation_model)
     @api.doc('update_nation')
     def put(self, nation_id):
+        """Update a nation by ID."""
         try:
             payload = request.json
             if 'name' in payload:
@@ -93,6 +105,7 @@ class Nation(Resource):
 
     @api.doc('delete_nation')
     def delete(self, nation_id):
+        """Delete a nation by ID."""
         try:
             nations.delete(nation_id)
             return '', 204
