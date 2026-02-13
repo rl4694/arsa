@@ -14,6 +14,10 @@ FORCE:
 
 prod: all_tests github
 
+dev:
+	sudo systemctl start mongod
+	. ./venv/bin/activate && . ./local.sh
+
 github: FORCE
 	- git commit -a
 	git push origin master
