@@ -7,7 +7,7 @@ from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
 from datetime import datetime
 
-DISASTERS_RESP = 'disasters'
+DISASTERS_RESP = 'records'
 COLLECTION = 'natural_disasters'
 NAME = 'name'
 DISASTER_TYPE = 'type'

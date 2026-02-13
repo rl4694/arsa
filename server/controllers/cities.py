@@ -6,7 +6,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
 
-CITIES_RESP = 'cities'
+CITIES_RESP = 'records'
 COLLECTION = 'cities'
 NAME = 'name'
 STATE_NAME = 'state_name'

@@ -7,7 +7,7 @@ from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
 import pycountry
 
-NATIONS_RESP = 'nations'
+NATIONS_RESP = 'records'
 COLLECTION = 'nations'
 NAME = 'name'
 CODE = 'code'
