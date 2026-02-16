@@ -14,7 +14,7 @@ FORCE:
 
 prod: all_tests github
 
-dev:
+dev: FORCE
 	sudo systemctl start mongod
 	. ./venv/bin/activate && . ./local.sh
 

@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install MongoDB in a Docker container.
-        uses: supercharge/mongodb-github-action@1.8.0
+        uses: supercharge/mongodb-github-action@1.12.1
 
       - name: Install Python packages.
         run: make dev_env
