@@ -12,7 +12,7 @@ load_dotenv()
 
 LOCAL = "0"
 CLOUD = "1"
-SE_DB = 'seDB'
+SE_DB = 'arsa'
 client = None
 MONGO_ID = '_id'
 
