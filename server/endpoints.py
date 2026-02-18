@@ -12,6 +12,7 @@ from server.controllers.cities import api as cities_ns
 from server.controllers.states import api as states_ns
 from server.controllers.nations import api as nations_ns
 from server.controllers.natural_disasters import api as disasters_ns
+from server.controllers.users import api as users_ns
 from server.etl.geocoding import reverse_geocode
 
 # import werkzeug.exceptions as wz
@@ -24,6 +25,7 @@ api.add_namespace(cities_ns, path='/cities')
 api.add_namespace(states_ns, path='/states')
 api.add_namespace(nations_ns, path='/nations')
 api.add_namespace(disasters_ns, path='/natural_disasters')
+api.add_namespace(users_ns, path='/users')
 
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
