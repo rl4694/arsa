@@ -12,7 +12,8 @@ COLLECTION = 'natural_disasters'
 NAME = 'name'
 DISASTER_TYPE = 'type'
 DATE = 'date'
-LOCATION = 'location'
+LATITUDE = 'latitude'
+LONGITUDE = 'longitude'
 DESCRIPTION = 'description'
 
 EARTHQUAKE = 'earthquake'
@@ -20,7 +21,7 @@ LANDSLIDE = 'landslide'
 TSUNAMI = 'tsunami'
 HURRICANE = 'hurricane'
 DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE]
-KEY = (NAME, DATE, LOCATION)
+KEY = (NAME, DATE, LATITUDE, LONGITUDE)
 
 class NaturalDisasters(CRUD):
     def validate(self, fields: dict):
@@ -31,17 +32,6 @@ class NaturalDisasters(CRUD):
                 datetime.strptime(fields[DATE], "%Y-%m-%d")
             except:
                 raise ValueError(f'Invalid date string: {fields[DATE]}')
-        # Check if location is in the format 'lat, lon'
-        if LOCATION in fields:
-            location = fields[LOCATION].split(',')
-            if len(location) != 2:
-                raise ValueError(f'Invalid location: {fields[LOCATION]}')
-            try:
-                float(location[0])
-                float(location[1])
-            except:
-                raise ValueError(f'Invalid coordinates: {location}')
-
 
 disasters = NaturalDisasters(
     COLLECTION,
@@ -50,7 +40,8 @@ disasters = NaturalDisasters(
         NAME: str,
         DISASTER_TYPE: str,
         DATE: str,
-        LOCATION: str,
+        LATITUDE: float,
+        LONGITUDE: float,
         DESCRIPTION: str,
     }
 )
@@ -58,11 +49,12 @@ disasters = NaturalDisasters(
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
 disaster_model = api.model('NaturalDisaster', {
-  'name': fields.String(required=True),
-  'type': fields.String(required=True),
-  'date': fields.String(required=True),
-  'location': fields.String(required=True),
-  'description': fields.String()
+  NAME: fields.String(required=True),
+  DISASTER_TYPE: fields.String(required=True),
+  DATE: fields.String(required=True, default=datetime.now().strftime("%Y-%m-%d")),
+  LATITUDE: fields.Float(required=True, default=0.5),
+  LONGITUDE: fields.Float(required=True, default=0.5),
+  DESCRIPTION: fields.String()
 })
 
 

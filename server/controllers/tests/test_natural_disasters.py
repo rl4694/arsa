@@ -12,7 +12,8 @@ disasters = nd.NaturalDisasters(
         nd.NAME: str,
         nd.DISASTER_TYPE: str,
         nd.DATE: str,
-        nd.LOCATION: str,
+        nd.LATITUDE: float,
+        nd.LONGITUDE: float,
         nd.DESCRIPTION: str,
     }
 )
@@ -23,7 +24,8 @@ class TestValidate:
             nd.NAME: SAMPLE_NAME,
             nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
             nd.DATE: '2000-01-01',
-            nd.LOCATION: '1, 1',
+            nd.LATITUDE: 1.0,
+            nd.LONGITUDE: 1.0,
             nd.DESCRIPTION: SAMPLE_DESCRIPTION,
         })
 
@@ -33,26 +35,7 @@ class TestValidate:
                 nd.NAME: SAMPLE_NAME,
                 nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
                 nd.DATE: 'invalid-date',
-                nd.LOCATION: '1.0, 1.0',
-                nd.DESCRIPTION: SAMPLE_DESCRIPTION,
-            })
-
-    def test_invalid_location(self):
-        with pytest.raises(ValueError):
-            disasters.validate({
-                nd.NAME: SAMPLE_NAME,
-                nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-                nd.DATE: '2000-01-01',
-                nd.LOCATION: 'invalid',
-                nd.DESCRIPTION: SAMPLE_DESCRIPTION,
-            })
-
-    def test_invalid_coordinates(self):
-        with pytest.raises(ValueError):
-            disasters.validate({
-                nd.NAME: SAMPLE_NAME,
-                nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-                nd.DATE: '2000-01-01',
-                nd.LOCATION: 'invalid, location',
+                nd.LATITUDE: 1.0,
+                nd.LONGITUDE: 1.0,
                 nd.DESCRIPTION: SAMPLE_DESCRIPTION,
             })

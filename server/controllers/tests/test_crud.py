@@ -40,9 +40,17 @@ class TestFindDuplicate:
         duplicate = crud.find_duplicate(SAMPLE_RECORD)
         assert duplicate is None
 
-    def test_non_dict(self):
+    def test_excluded_id(self, temp_record):
+        duplicate = crud.find_duplicate(SAMPLE_RECORD, temp_record)
+        assert duplicate is None
+
+    def test_bad_fields(self):
         with pytest.raises(ValueError):
             crud.find_duplicate(123)
+
+    def test_bad_excluded_id(self):
+        with pytest.raises(ValueError):
+            crud.find_duplicate(SAMPLE_RECORD, 123)
 
 
 class TestCreate:
@@ -121,6 +129,19 @@ class TestUpdate:
         assert new_record[FIELD1] == new_field1
         assert new_record[FIELD2] == SAMPLE_FIELD2
         assert new_record[FIELD3] == SAMPLE_FIELD3
+        crud.delete(_id)
+
+    def test_non_key_field(self):
+        _id = crud.create(SAMPLE_RECORD)
+        new_field3 = 'new_field3'
+        crud.update(_id, {FIELD3: new_field3})
+        records = crud.read()
+        new_record = records[_id]
+
+        assert _id in records
+        assert new_record[FIELD1] == SAMPLE_FIELD1
+        assert new_record[FIELD2] == SAMPLE_FIELD2
+        assert new_record[FIELD3] == new_field3
         crud.delete(_id)
 
     def test_non_dict(self, temp_record):

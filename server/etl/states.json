@@ -1,646 +1,626 @@
 {
-  "6939a025f7dfded2de39c99c": {
-    "_id": "6939a025f7dfded2de39c99c",
-    "name": "Ng\u00e4be-Bugl\u00e9",
-    "nation_name": "Panam\u00e1"
-  },
-  "6939a028f7dfded2de39c9a0": {
-    "_id": "6939a028f7dfded2de39c9a0",
-    "name": "Michoac\u00e1n",
-    "nation_name": "M\u00e9xico"
-  },
-  "6939a037f7dfded2de39c9a9": {
-    "_id": "6939a037f7dfded2de39c9a9",
-    "name": "Morobe",
-    "nation_name": "Papua Niugini"
-  },
-  "6939a03bf7dfded2de39c9ad": {
-    "_id": "6939a03bf7dfded2de39c9ad",
-    "name": "\u56db\u5ddd\u7701",
-    "nation_name": "\u4e2d\u56fd"
-  },
-  "6939a042f7dfded2de39c9b1": {
-    "_id": "6939a042f7dfded2de39c9b1",
-    "name": "Ilocos Norte",
-    "nation_name": "Philippines"
-  },
-  "6939a04af7dfded2de39c9b5": {
-    "_id": "6939a04af7dfded2de39c9b5",
-    "name": "Puno",
-    "nation_name": "Per\u00fa"
-  },
-  "6939a055f7dfded2de39c9b9": {
-    "_id": "6939a055f7dfded2de39c9b9",
-    "name": "Masaya",
-    "nation_name": "Nicaragua"
-  },
-  "6939a060f7dfded2de39c9bd": {
-    "_id": "6939a060f7dfded2de39c9bd",
-    "name": "\u5bae\u57ce\u770c",
-    "nation_name": "\u65e5\u672c"
-  },
-  "6939a073f7dfded2de39c9c1": {
-    "_id": "6939a073f7dfded2de39c9c1",
-    "name": "Banten",
-    "nation_name": "Indonesia"
-  },
-  "6939a08cf7dfded2de39c9c5": {
-    "_id": "6939a08cf7dfded2de39c9c5",
-    "name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2",
-    "nation_name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2 - K\u0131br\u0131s"
-  },
-  "6939a08ff7dfded2de39c9c8": {
-    "_id": "6939a08ff7dfded2de39c9c8",
-    "name": "\u7518\u8083\u7701",
-    "nation_name": "\u4e2d\u56fd"
-  },
-  "6939a0a2f7dfded2de39c9cb": {
-    "_id": "6939a0a2f7dfded2de39c9cb",
-    "name": "Chinandega",
-    "nation_name": "Nicaragua"
-  },
-  "6939a0a6f7dfded2de39c9ce": {
-    "_id": "6939a0a6f7dfded2de39c9ce",
-    "name": "Guerrero",
-    "nation_name": "M\u00e9xico"
-  },
-  "6939a0aef7dfded2de39c9d2": {
-    "_id": "6939a0aef7dfded2de39c9d2",
-    "name": "Sanma",
-    "nation_name": "Vanuatu"
-  },
-  "6939a0b6f7dfded2de39c9d6": {
-    "_id": "6939a0b6f7dfded2de39c9d6",
-    "name": "D\u00e9partement des Nippes",
-    "nation_name": "Ayiti"
-  },
-  "6939a0c5f7dfded2de39c9d9": {
-    "_id": "6939a0c5f7dfded2de39c9d9",
-    "name": "Davao Oriental",
-    "nation_name": "Philippines"
-  },
-  "6939a0cdf7dfded2de39c9dc": {
-    "_id": "6939a0cdf7dfded2de39c9dc",
-    "name": "Metro Manila",
-    "nation_name": "Philippines"
-  },
-  "6939a0cff7dfded2de39c9df": {
-    "_id": "6939a0cff7dfded2de39c9df",
-    "name": "Chiriqu\u00ed",
-    "nation_name": "Panam\u00e1"
-  },
-  "6939a0d8f7dfded2de39c9e2": {
-    "_id": "6939a0d8f7dfded2de39c9e2",
-    "name": "Qinghai",
-    "nation_name": "China"
-  },
-  "6939a0e2f7dfded2de39c9e5": {
-    "_id": "6939a0e2f7dfded2de39c9e5",
-    "name": "Miyagi Prefecture",
-    "nation_name": "Japan"
-  },
-  "6939a0ecf7dfded2de39c9e8": {
-    "_id": "6939a0ecf7dfded2de39c9e8",
-    "name": "\u5ca9\u624b\u770c",
-    "nation_name": "\u65e5\u672c"
-  },
-  "6939a11af7dfded2de39c9ed": {
-    "_id": "6939a11af7dfded2de39c9ed",
-    "name": "\u0130zmir",
-    "nation_name": "T\u00fcrkiye"
-  },
-  "6939a122f7dfded2de39c9f1": {
-    "_id": "6939a122f7dfded2de39c9f1",
-    "name": "Regi\u00f3n de Atacama",
-    "nation_name": "Chile"
-  },
-  "6939a135f7dfded2de39c9f5": {
-    "_id": "6939a135f7dfded2de39c9f5",
-    "name": "Masbate",
-    "nation_name": "Philippines"
-  },
-  "6939a13df7dfded2de39c9f8": {
-    "_id": "6939a13df7dfded2de39c9f8",
-    "name": "Oaxaca",
-    "nation_name": "M\u00e9xico"
-  },
-  "6939a144f7dfded2de39c9fb": {
-    "_id": "6939a144f7dfded2de39c9fb",
-    "name": "Regi\u00f3n de Antofagasta",
-    "nation_name": "Chile"
-  },
-  "6939a156f7dfded2de39c9ff": {
-    "_id": "6939a156f7dfded2de39c9ff",
-    "name": "Idaho",
-    "nation_name": "United States"
-  },
-  "6939a159f7dfded2de39ca02": {
-    "_id": "6939a159f7dfded2de39ca02",
+  "699909f49c4b13f1312adb9a": {
+    "_id": "699909f49c4b13f1312adb9a",
     "name": "\u9655\u897f\u7701",
     "nation_name": "\u4e2d\u56fd"
   },
-  "6939a15bf7dfded2de39ca05": {
-    "_id": "6939a15bf7dfded2de39ca05",
+  "69990a3ac1c326ee19da87e4": {
+    "_id": "69990a3ac1c326ee19da87e4",
+    "name": "Ng\u00e4be-Bugl\u00e9",
+    "nation_name": "Panam\u00e1"
+  },
+  "69990a3bc1c326ee19da87e8": {
+    "_id": "69990a3bc1c326ee19da87e8",
+    "name": "Michoac\u00e1n",
+    "nation_name": "M\u00e9xico"
+  },
+  "69990a3bc1c326ee19da87eb": {
+    "_id": "69990a3bc1c326ee19da87eb",
+    "name": "Colima",
+    "nation_name": "M\u00e9xico"
+  },
+  "69990a40c1c326ee19da87f2": {
+    "_id": "69990a40c1c326ee19da87f2",
+    "name": "Morobe",
+    "nation_name": "Papua Niugini"
+  },
+  "69990a42c1c326ee19da87f5": {
+    "_id": "69990a42c1c326ee19da87f5",
+    "name": "\u56db\u5ddd\u7701",
+    "nation_name": "\u4e2d\u56fd"
+  },
+  "69990a45c1c326ee19da87f9": {
+    "_id": "69990a45c1c326ee19da87f9",
+    "name": "Ilocos Norte",
+    "nation_name": "Philippines"
+  },
+  "69990a47c1c326ee19da87fd": {
+    "_id": "69990a47c1c326ee19da87fd",
+    "name": "Puno",
+    "nation_name": "Per\u00fa"
+  },
+  "69990a4dc1c326ee19da8801": {
+    "_id": "69990a4dc1c326ee19da8801",
+    "name": "Masaya",
+    "nation_name": "Nicaragua"
+  },
+  "69990a53c1c326ee19da8805": {
+    "_id": "69990a53c1c326ee19da8805",
+    "name": "\u5bae\u57ce\u770c",
+    "nation_name": "\u65e5\u672c"
+  },
+  "69990a59c1c326ee19da8809": {
+    "_id": "69990a59c1c326ee19da8809",
+    "name": "Banten",
+    "nation_name": "Indonesia"
+  },
+  "69990a62c1c326ee19da880d": {
+    "_id": "69990a62c1c326ee19da880d",
+    "name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2",
+    "nation_name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2 - K\u0131br\u0131s"
+  },
+  "69990a63c1c326ee19da8810": {
+    "_id": "69990a63c1c326ee19da8810",
+    "name": "\u7518\u8083\u7701",
+    "nation_name": "\u4e2d\u56fd"
+  },
+  "69990a6fc1c326ee19da8813": {
+    "_id": "69990a6fc1c326ee19da8813",
+    "name": "Chinandega",
+    "nation_name": "Nicaragua"
+  },
+  "69990a70c1c326ee19da8816": {
+    "_id": "69990a70c1c326ee19da8816",
+    "name": "Guerrero",
+    "nation_name": "M\u00e9xico"
+  },
+  "69990a73c1c326ee19da881a": {
+    "_id": "69990a73c1c326ee19da881a",
+    "name": "Sanma",
+    "nation_name": "Vanuatu"
+  },
+  "69990a76c1c326ee19da881e": {
+    "_id": "69990a76c1c326ee19da881e",
+    "name": "D\u00e9partement des Nippes",
+    "nation_name": "Ayiti"
+  },
+  "69990a7bc1c326ee19da8821": {
+    "_id": "69990a7bc1c326ee19da8821",
+    "name": "Davao Oriental",
+    "nation_name": "Philippines"
+  },
+  "69990a7fc1c326ee19da8824": {
+    "_id": "69990a7fc1c326ee19da8824",
+    "name": "Metro Manila",
+    "nation_name": "Philippines"
+  },
+  "69990a81c1c326ee19da8827": {
+    "_id": "69990a81c1c326ee19da8827",
+    "name": "Chiriqu\u00ed",
+    "nation_name": "Panam\u00e1"
+  },
+  "69990a84c1c326ee19da882a": {
+    "_id": "69990a84c1c326ee19da882a",
+    "name": "Qinghai",
+    "nation_name": "China"
+  },
+  "69990a87c1c326ee19da882d": {
+    "_id": "69990a87c1c326ee19da882d",
+    "name": "Miyagi Prefecture",
+    "nation_name": "Japan"
+  },
+  "69990a8bc1c326ee19da8830": {
+    "_id": "69990a8bc1c326ee19da8830",
+    "name": "\u5ca9\u624b\u770c",
+    "nation_name": "\u65e5\u672c"
+  },
+  "69990a9ec1c326ee19da8835": {
+    "_id": "69990a9ec1c326ee19da8835",
+    "name": "\u0130zmir",
+    "nation_name": "T\u00fcrkiye"
+  },
+  "69990aa1c1c326ee19da8839": {
+    "_id": "69990aa1c1c326ee19da8839",
+    "name": "Regi\u00f3n de Atacama",
+    "nation_name": "Chile"
+  },
+  "69990aa9c1c326ee19da883d": {
+    "_id": "69990aa9c1c326ee19da883d",
+    "name": "Masbate",
+    "nation_name": "Philippines"
+  },
+  "69990aaec1c326ee19da8840": {
+    "_id": "69990aaec1c326ee19da8840",
+    "name": "Oaxaca",
+    "nation_name": "M\u00e9xico"
+  },
+  "69990ab2c1c326ee19da8843": {
+    "_id": "69990ab2c1c326ee19da8843",
+    "name": "Regi\u00f3n de Antofagasta",
+    "nation_name": "Chile"
+  },
+  "69990ab8c1c326ee19da8847": {
+    "_id": "69990ab8c1c326ee19da8847",
+    "name": "Idaho",
+    "nation_name": "United States"
+  },
+  "69990ab6c1c326ee19da884a": {
+    "_id": "69990ab6c1c326ee19da884a",
     "name": "Oregon",
     "nation_name": "United States"
   },
-  "6939a160f7dfded2de39ca08": {
-    "_id": "6939a160f7dfded2de39ca08",
+  "69990ab7c1c326ee19da884d": {
+    "_id": "69990ab7c1c326ee19da884d",
     "name": "Pasco",
     "nation_name": "Per\u00fa"
   },
-  "6939a163f7dfded2de39ca0c": {
-    "_id": "6939a163f7dfded2de39ca0c",
+  "69990ab8c1c326ee19da8851": {
+    "_id": "69990ab8c1c326ee19da8851",
     "name": "\u0932\u0941\u092e\u094d\u092c\u093f\u0928\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
     "nation_name": "\u0928\u0947\u092a\u093e\u0932"
   },
-  "6939a165f7dfded2de39ca0f": {
-    "_id": "6939a165f7dfded2de39ca0f",
+  "69990ab9c1c326ee19da8854": {
+    "_id": "69990ab9c1c326ee19da8854",
     "name": "Central Visayas",
     "nation_name": "Philippines"
   },
-  "6939a168f7dfded2de39ca12": {
-    "_id": "6939a168f7dfded2de39ca12",
+  "69990abac1c326ee19da8857": {
+    "_id": "69990abac1c326ee19da8857",
     "name": "Leyte",
     "nation_name": "Philippines"
   },
-  "6939a16bf7dfded2de39ca16": {
-    "_id": "6939a16bf7dfded2de39ca16",
+  "69990abdc1c326ee19da885b": {
+    "_id": "69990abdc1c326ee19da885b",
     "name": "British Columbia",
     "nation_name": "Canada"
   },
-  "6939a16ff7dfded2de39ca19": {
-    "_id": "6939a16ff7dfded2de39ca19",
+  "69990abec1c326ee19da885e": {
+    "_id": "69990abec1c326ee19da885e",
     "name": "Sinaloa",
     "nation_name": "M\u00e9xico"
   },
-  "6939a173f7dfded2de39ca1c": {
-    "_id": "6939a173f7dfded2de39ca1c",
+  "69990ac0c1c326ee19da8861": {
+    "_id": "69990ac0c1c326ee19da8861",
     "name": "Yunnan",
     "nation_name": "China"
   },
-  "6939a180f7dfded2de39ca25": {
-    "_id": "6939a180f7dfded2de39ca25",
+  "69990ac5c1c326ee19da886a": {
+    "_id": "69990ac5c1c326ee19da886a",
     "name": "T\u1ec9nh Cao B\u1eb1ng",
     "nation_name": "Vi\u1ec7t Nam"
   },
-  "6939a182f7dfded2de39ca28": {
-    "_id": "6939a182f7dfded2de39ca28",
+  "69990ac6c1c326ee19da886d": {
+    "_id": "69990ac6c1c326ee19da886d",
     "name": "Camarines Sur",
     "nation_name": "Philippines"
   },
-  "6939a188f7dfded2de39ca2d": {
-    "_id": "6939a188f7dfded2de39ca2d",
+  "69990ac8c1c326ee19da8872": {
+    "_id": "69990ac8c1c326ee19da8872",
     "name": "Tennessee",
     "nation_name": "United States"
   },
-  "6939a18ef7dfded2de39ca31": {
-    "_id": "6939a18ef7dfded2de39ca31",
+  "69990acac1c326ee19da8876": {
+    "_id": "69990acac1c326ee19da8876",
     "name": "Washington",
     "nation_name": "United States"
   },
-  "6939a19ff7dfded2de39ca3c": {
-    "_id": "6939a19ff7dfded2de39ca3c",
+  "69990ad1c1c326ee19da8881": {
+    "_id": "69990ad1c1c326ee19da8881",
     "name": "Jijel",
     "nation_name": "Algeria"
   },
-  "6939a1a7f7dfded2de39ca42": {
-    "_id": "6939a1a7f7dfded2de39ca42",
+  "69990ad3c1c326ee19da8887": {
+    "_id": "69990ad3c1c326ee19da8887",
     "name": "Sarawak",
     "nation_name": "Malaysia"
   },
-  "6939a1aaf7dfded2de39ca45": {
-    "_id": "6939a1aaf7dfded2de39ca45",
+  "69990ad5c1c326ee19da888a": {
+    "_id": "69990ad5c1c326ee19da888a",
     "name": "Nusa Tenggara Barat",
     "nation_name": "Indonesia"
   },
-  "6939a1acf7dfded2de39ca49": {
-    "_id": "6939a1acf7dfded2de39ca49",
+  "69990ad6c1c326ee19da888e": {
+    "_id": "69990ad6c1c326ee19da888e",
     "name": "Western Area Urban",
     "nation_name": "Sierra Leone"
   },
-  "6939a1b0f7dfded2de39ca4c": {
-    "_id": "6939a1b0f7dfded2de39ca4c",
+  "69990ad5c1c326ee19da8891": {
+    "_id": "69990ad5c1c326ee19da8891",
     "name": "Labuan",
     "nation_name": "Malaysia"
   },
-  "6939a1b3f7dfded2de39ca4f": {
-    "_id": "6939a1b3f7dfded2de39ca4f",
+  "69990ad6c1c326ee19da8894": {
+    "_id": "69990ad6c1c326ee19da8894",
     "name": "Mexico City",
     "nation_name": "Mexico"
   },
-  "6939a1b5f7dfded2de39ca53": {
-    "_id": "6939a1b5f7dfded2de39ca53",
+  "69990ad6c1c326ee19da8898": {
+    "_id": "69990ad6c1c326ee19da8898",
     "name": "Campania",
     "nation_name": "Italy"
   },
-  "6939a1b9f7dfded2de39ca57": {
-    "_id": "6939a1b9f7dfded2de39ca57",
+  "69990ad8c1c326ee19da889c": {
+    "_id": "69990ad8c1c326ee19da889c",
     "name": "\u09b0\u0982\u09aa\u09c1\u09b0 \u09ac\u09bf\u09ad\u09be\u0997",
     "nation_name": "\u09ac\u09be\u0982\u09b2\u09be\u09a6\u09c7\u09b6"
   },
-  "6939a1bcf7dfded2de39ca5a": {
-    "_id": "6939a1bcf7dfded2de39ca5a",
+  "69990ad9c1c326ee19da889f": {
+    "_id": "69990ad9c1c326ee19da889f",
     "name": "California",
     "nation_name": "United States"
   },
-  "6939a1c3f7dfded2de39ca5e": {
-    "_id": "6939a1c3f7dfded2de39ca5e",
+  "69990adbc1c326ee19da88a3": {
+    "_id": "69990adbc1c326ee19da88a3",
     "name": "Cebu",
     "nation_name": "Philippines"
   },
-  "6939a1caf7dfded2de39ca62": {
-    "_id": "6939a1caf7dfded2de39ca62",
+  "69990addc1c326ee19da88a7": {
+    "_id": "69990addc1c326ee19da88a7",
     "name": "Virginia",
     "nation_name": "United States"
   },
-  "6939a1ccf7dfded2de39ca66": {
-    "_id": "6939a1ccf7dfded2de39ca66",
+  "69990addc1c326ee19da88ab": {
+    "_id": "69990addc1c326ee19da88ab",
     "name": "Tasmania",
     "nation_name": "Australia"
   },
-  "6939a1cef7dfded2de39ca69": {
-    "_id": "6939a1cef7dfded2de39ca69",
+  "69990adec1c326ee19da88ae": {
+    "_id": "69990adec1c326ee19da88ae",
     "name": "Gandaki Province",
     "nation_name": "Nepal"
   },
-  "6939a1d1f7dfded2de39ca6c": {
-    "_id": "6939a1d1f7dfded2de39ca6c",
+  "69990ae1c1c326ee19da88b1": {
+    "_id": "69990ae1c1c326ee19da88b1",
     "name": "\u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
     "nation_name": "\u0928\u0947\u092a\u093e\u0932"
   },
-  "6939a1d3f7dfded2de39ca6f": {
-    "_id": "6939a1d3f7dfded2de39ca6f",
+  "69990ae2c1c326ee19da88b4": {
+    "_id": "69990ae2c1c326ee19da88b4",
     "name": "Yamaguchi Prefecture",
     "nation_name": "Japan"
   },
-  "6939a1d9f7dfded2de39ca73": {
-    "_id": "6939a1d9f7dfded2de39ca73",
+  "69990ae3c1c326ee19da88b8": {
+    "_id": "69990ae3c1c326ee19da88b8",
     "name": "Hiroshima Prefecture",
     "nation_name": "Japan"
   },
-  "6939a1ddf7dfded2de39ca76": {
-    "_id": "6939a1ddf7dfded2de39ca76",
+  "69990ae4c1c326ee19da88bb": {
+    "_id": "69990ae4c1c326ee19da88bb",
     "name": "Sichuan",
     "nation_name": "China"
   },
-  "6939a1ddf7dfded2de39ca7a": {
-    "_id": "6939a1ddf7dfded2de39ca7a",
+  "69990ae5c1c326ee19da88bf": {
+    "_id": "69990ae5c1c326ee19da88bf",
     "name": "West Bengal",
     "nation_name": "India"
   },
-  "6939a1e5f7dfded2de39ca80": {
-    "_id": "6939a1e5f7dfded2de39ca80",
+  "69990ae9c1c326ee19da88c5": {
+    "_id": "69990ae9c1c326ee19da88c5",
     "name": "Alaska",
     "nation_name": "United States"
   },
-  "6939a1f3f7dfded2de39ca86": {
-    "_id": "6939a1f3f7dfded2de39ca86",
+  "69990aefc1c326ee19da88cb": {
+    "_id": "69990aefc1c326ee19da88cb",
     "name": "Jawa Tengah",
     "nation_name": "Indonesia"
   },
-  "6939a1f5f7dfded2de39ca89": {
-    "_id": "6939a1f5f7dfded2de39ca89",
-    "name": "\u4e91\u5357\u7701",
-    "nation_name": "\u4e2d\u56fd"
-  },
-  "6939a1f7f7dfded2de39ca8c": {
-    "_id": "6939a1f7f7dfded2de39ca8c",
+  "69990af1c1c326ee19da88cf": {
+    "_id": "69990af1c1c326ee19da88cf",
     "name": "Georgia",
     "nation_name": "United States"
   },
-  "6939a1faf7dfded2de39ca92": {
-    "_id": "6939a1faf7dfded2de39ca92",
+  "69990af2c1c326ee19da88d5": {
+    "_id": "69990af2c1c326ee19da88d5",
     "name": "Rio de Janeiro",
     "nation_name": "Brazil"
   },
-  "6939a203f7dfded2de39ca98": {
-    "_id": "6939a203f7dfded2de39ca98",
+  "69990af6c1c326ee19da88db": {
+    "_id": "69990af6c1c326ee19da88db",
     "name": "Manipur",
     "nation_name": "India"
   },
-  "6939a205f7dfded2de39ca9c": {
-    "_id": "6939a205f7dfded2de39ca9c",
+  "69990af8c1c326ee19da88df": {
+    "_id": "69990af8c1c326ee19da88df",
     "name": "\u06af\u0644\u06af\u062a \u0628\u0644\u062a\u0633\u062a\u0627\u0646",
     "nation_name": "\u067e\u0627\u06a9\u0633\u062a\u0627\u0646"
   },
-  "6939a20bf7dfded2de39caa0": {
-    "_id": "6939a20bf7dfded2de39caa0",
+  "69990afac1c326ee19da88e3": {
+    "_id": "69990afac1c326ee19da88e3",
     "name": "\u0938\u0941\u0926\u0942\u0930\u092a\u0936\u094d\u091a\u093f\u092e \u092a\u094d\u0930\u0926\u0947\u0936",
     "nation_name": "\u0928\u0947\u092a\u093e\u0932"
   },
-  "6939a212f7dfded2de39caa6": {
-    "_id": "6939a212f7dfded2de39caa6",
+  "69990afec1c326ee19da88e9": {
+    "_id": "69990afec1c326ee19da88e9",
     "name": "Minas Gerais",
     "nation_name": "Brasil"
   },
-  "6939a215f7dfded2de39caa9": {
-    "_id": "6939a215f7dfded2de39caa9",
+  "69990affc1c326ee19da88ec": {
+    "_id": "69990affc1c326ee19da88ec",
     "name": "\u067e\u0646\u062c\u0627\u0628",
     "nation_name": "\u067e\u0627\u06a9\u0633\u062a\u0627\u0646"
   },
-  "6939a217f7dfded2de39caac": {
-    "_id": "6939a217f7dfded2de39caac",
+  "69990b01c1c326ee19da88ef": {
+    "_id": "69990b01c1c326ee19da88ef",
     "name": "Qu\u00e9bec",
     "nation_name": "Canada"
   },
-  "6939a21af7dfded2de39caaf": {
-    "_id": "6939a21af7dfded2de39caaf",
+  "69990b02c1c326ee19da88f2": {
+    "_id": "69990b02c1c326ee19da88f2",
     "name": "Uttarakhand",
     "nation_name": "India"
   },
-  "6939a23bf7dfded2de39cabc": {
-    "_id": "6939a23bf7dfded2de39cabc",
+  "69990b0cc1c326ee19da8901": {
+    "_id": "69990b0cc1c326ee19da8901",
     "name": "Pangasinan",
     "nation_name": "Philippines"
   },
-  "6939a23cf7dfded2de39cabf": {
-    "_id": "6939a23cf7dfded2de39cabf",
+  "69990b0dc1c326ee19da8904": {
+    "_id": "69990b0dc1c326ee19da8904",
     "name": "Pernambuco",
     "nation_name": "Brasil"
   },
-  "6939a242f7dfded2de39cac3": {
-    "_id": "6939a242f7dfded2de39cac3",
+  "69990b0ec1c326ee19da8908": {
+    "_id": "69990b0ec1c326ee19da8908",
     "name": "Pernambuco",
     "nation_name": "Brazil"
   },
-  "6939a246f7dfded2de39cac8": {
-    "_id": "6939a246f7dfded2de39cac8",
+  "69990b10c1c326ee19da890d": {
+    "_id": "69990b10c1c326ee19da890d",
     "name": "Colima",
     "nation_name": "Mexico"
   },
-  "6939a248f7dfded2de39cacb": {
-    "_id": "6939a248f7dfded2de39cacb",
+  "69990b11c1c326ee19da8910": {
+    "_id": "69990b11c1c326ee19da8910",
     "name": "Guerrero",
     "nation_name": "Mexico"
   },
-  "6939a254f7dfded2de39cad4": {
-    "_id": "6939a254f7dfded2de39cad4",
+  "69990b17c1c326ee19da8919": {
+    "_id": "69990b17c1c326ee19da8919",
     "name": "Nayarit",
     "nation_name": "M\u00e9xico"
   },
-  "6939a258f7dfded2de39cad7": {
-    "_id": "6939a258f7dfded2de39cad7",
+  "69990b18c1c326ee19da891c": {
+    "_id": "69990b18c1c326ee19da891c",
     "name": "Colorado",
     "nation_name": "United States"
   },
-  "6939a263f7dfded2de39cadc": {
-    "_id": "6939a263f7dfded2de39cadc",
+  "69990b1cc1c326ee19da8921": {
+    "_id": "69990b1cc1c326ee19da8921",
     "name": "Nagaland",
     "nation_name": "India"
   },
-  "6939a269f7dfded2de39cae2": {
-    "_id": "6939a269f7dfded2de39cae2",
-    "name": "\u03a0\u03b5\u03c1\u03b9\u03c6\u03ad\u03c1\u03b5\u03b9\u03b1 \u0391\u03bd\u03b1\u03c4\u03bf\u03bb\u03b9\u03ba\u03ae\u03c2 \u039c\u03b1\u03ba\u03b5\u03b4\u03bf\u03bd\u03af\u03b1\u03c2 \u03ba\u03b1\u03b9 \u0398\u03c1\u03ac\u03ba\u03b7\u03c2",
-    "nation_name": "\u0395\u03bb\u03bb\u03ac\u03c2"
-  },
-  "6939a26bf7dfded2de39cae6": {
-    "_id": "6939a26bf7dfded2de39cae6",
+  "69990b1fc1c326ee19da8927": {
+    "_id": "69990b1fc1c326ee19da8927",
     "name": "England",
     "nation_name": "United Kingdom"
   },
-  "6939a26ff7dfded2de39caea": {
-    "_id": "6939a26ff7dfded2de39caea",
+  "69990b1fc1c326ee19da892b": {
+    "_id": "69990b1fc1c326ee19da892b",
     "name": "\u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0644\u0627\u0630\u0642\u064a\u0629",
     "nation_name": "\u0633\u0648\u0631\u064a\u0627"
   },
-  "6939a273f7dfded2de39caee": {
-    "_id": "6939a273f7dfded2de39caee",
+  "69990b20c1c326ee19da892f": {
+    "_id": "69990b20c1c326ee19da892f",
     "name": "\uac15\uc6d0\ub3c4",
     "nation_name": "\uc870\uc120\ubbfc\uc8fc\uc8fc\uc758\uc778\ubbfc\uacf5\ud654\uad6d"
   },
-  "6939a275f7dfded2de39caf1": {
-    "_id": "6939a275f7dfded2de39caf1",
-    "name": "Canakkale",
-    "nation_name": "Turkey"
-  },
-  "6939a278f7dfded2de39caf4": {
-    "_id": "6939a278f7dfded2de39caf4",
-    "name": "\u5c71\u4e1c\u7701",
-    "nation_name": "\u4e2d\u56fd"
-  },
-  "6939a27bf7dfded2de39caf8": {
-    "_id": "6939a27bf7dfded2de39caf8",
+  "69990b22c1c326ee19da8933": {
+    "_id": "69990b22c1c326ee19da8933",
     "name": "\ucda9\uccad\ub0a8\ub3c4",
     "nation_name": "\ub300\ud55c\ubbfc\uad6d"
   },
-  "6939a289f7dfded2de39caff": {
-    "_id": "6939a289f7dfded2de39caff",
+  "69990b27c1c326ee19da893a": {
+    "_id": "69990b27c1c326ee19da893a",
     "name": "Cymru / Wales",
     "nation_name": "United Kingdom"
   },
-  "6939a28cf7dfded2de39cb02": {
-    "_id": "6939a28cf7dfded2de39cb02",
+  "69990b28c1c326ee19da893d": {
+    "_id": "69990b28c1c326ee19da893d",
     "name": "\u4e09\u91cd\u770c",
     "nation_name": "\u65e5\u672c"
   },
-  "6939a28ef7dfded2de39cb06": {
-    "_id": "6939a28ef7dfded2de39cb06",
+  "69990b28c1c326ee19da8941": {
+    "_id": "69990b28c1c326ee19da8941",
     "name": "Guernsey",
     "nation_name": "Guernsey"
   },
-  "6939a29ef7dfded2de39cb10": {
-    "_id": "6939a29ef7dfded2de39cb10",
+  "69990b30c1c326ee19da894b": {
+    "_id": "69990b30c1c326ee19da894b",
     "name": "Kocaeli",
     "nation_name": "T\u00fcrkiye"
   },
-  "6939a2a0f7dfded2de39cb13": {
-    "_id": "6939a2a0f7dfded2de39cb13",
+  "69990b30c1c326ee19da894e": {
+    "_id": "69990b30c1c326ee19da894e",
     "name": "South Hwanghae",
     "nation_name": "North Korea"
   },
-  "6939a2adf7dfded2de39cb19": {
-    "_id": "6939a2adf7dfded2de39cb19",
-    "name": "Santa Cruz de Tenerife",
+  "69990b34c1c326ee19da8954": {
+    "_id": "69990b34c1c326ee19da8954",
+    "name": "Canarias",
     "nation_name": "Espa\u00f1a"
   },
-  "6939a2aff7dfded2de39cb1c": {
-    "_id": "6939a2aff7dfded2de39cb1c",
+  "69990b36c1c326ee19da8957": {
+    "_id": "69990b36c1c326ee19da8957",
     "name": "\uac15\uc6d0\ud2b9\ubcc4\uc790\uce58\ub3c4",
     "nation_name": "\ub300\ud55c\ubbfc\uad6d"
   },
-  "6939a2b2f7dfded2de39cb1f": {
-    "_id": "6939a2b2f7dfded2de39cb1f",
-    "name": "Aegean",
+  "69990b36c1c326ee19da895b": {
+    "_id": "69990b36c1c326ee19da895b",
+    "name": "South Aegean",
     "nation_name": "Greece"
   },
-  "6939a2b5f7dfded2de39cb22": {
-    "_id": "6939a2b5f7dfded2de39cb22",
+  "69990b37c1c326ee19da895e": {
+    "_id": "69990b37c1c326ee19da895e",
     "name": "Veneto",
     "nation_name": "Italy"
   },
-  "6939a2b8f7dfded2de39cb26": {
-    "_id": "6939a2b8f7dfded2de39cb26",
-    "name": "\u9759\u5ca1\u770c",
-    "nation_name": "\u65e5\u672c"
-  },
-  "6939a2b9f7dfded2de39cb29": {
-    "_id": "6939a2b9f7dfded2de39cb29",
+  "69990b3bc1c326ee19da8963": {
+    "_id": "69990b3bc1c326ee19da8963",
     "name": "South Chungcheong",
     "nation_name": "South Korea"
   },
-  "6939a2c0f7dfded2de39cb2f": {
-    "_id": "6939a2c0f7dfded2de39cb2f",
+  "69990b3ec1c326ee19da8969": {
+    "_id": "69990b3ec1c326ee19da8969",
     "name": "Kumamoto Prefecture",
     "nation_name": "Japan"
   },
-  "6939a2cdf7dfded2de39cb38": {
-    "_id": "6939a2cdf7dfded2de39cb38",
+  "69990b41c1c326ee19da8972": {
+    "_id": "69990b41c1c326ee19da8972",
     "name": "Ioanian Islands",
     "nation_name": "Greece"
   },
-  "6939a2cff7dfded2de39cb3c": {
-    "_id": "6939a2cff7dfded2de39cb3c",
+  "69990b43c1c326ee19da8976": {
+    "_id": "69990b43c1c326ee19da8976",
     "name": "Anzo\u00e1tegui",
     "nation_name": "Venezuela"
   },
-  "6939a2d2f7dfded2de39cb3f": {
-    "_id": "6939a2d2f7dfded2de39cb3f",
+  "69990b44c1c326ee19da8979": {
+    "_id": "69990b44c1c326ee19da8979",
     "name": "Central Greece",
     "nation_name": "Greece"
   },
-  "6939a2d4f7dfded2de39cb43": {
-    "_id": "6939a2d4f7dfded2de39cb43",
+  "69990b45c1c326ee19da897d": {
+    "_id": "69990b45c1c326ee19da897d",
     "name": "Judea and Samaria",
     "nation_name": "Palestinian Territories"
   },
-  "6939a2d6f7dfded2de39cb47": {
-    "_id": "6939a2d6f7dfded2de39cb47",
+  "69990b47c1c326ee19da8981": {
+    "_id": "69990b47c1c326ee19da8981",
     "name": "Biobio Region",
     "nation_name": "Chile"
   },
-  "6939a2d9f7dfded2de39cb4a": {
-    "_id": "6939a2d9f7dfded2de39cb4a",
-    "name": "\u0645\u062d\u0627\u0641\u0638\u0629 \u0637\u0631\u0637\u0648\u0633",
-    "nation_name": "\u0633\u0648\u0631\u064a\u0627"
-  },
-  "6939a2dbf7dfded2de39cb4d": {
-    "_id": "6939a2dbf7dfded2de39cb4d",
+  "69990b48c1c326ee19da8984": {
+    "_id": "69990b48c1c326ee19da8984",
     "name": "Java",
     "nation_name": "Indonesia"
   },
-  "6939a2f6f7dfded2de39cb59": {
-    "_id": "6939a2f6f7dfded2de39cb59",
-    "name": "Noord-Brabant",
+  "69990b52c1c326ee19da8990": {
+    "_id": "69990b52c1c326ee19da8990",
+    "name": "Limburg",
     "nation_name": "Nederland"
   },
-  "6939a2fdf7dfded2de39cb5f": {
-    "_id": "6939a2fdf7dfded2de39cb5f",
-    "name": "South Governorate",
-    "nation_name": "Lebanon"
-  },
-  "6939a302f7dfded2de39cb64": {
-    "_id": "6939a302f7dfded2de39cb64",
+  "69990b53c1c326ee19da8995": {
+    "_id": "69990b53c1c326ee19da8995",
     "name": "Niigata Prefecture",
     "nation_name": "Japan"
   },
-  "6939a30df7dfded2de39cb69": {
-    "_id": "6939a30df7dfded2de39cb69",
+  "69990b57c1c326ee19da899a": {
+    "_id": "69990b57c1c326ee19da899a",
     "name": "Oita Prefecture",
     "nation_name": "Japan"
   },
-  "6939a314f7dfded2de39cb6d": {
-    "_id": "6939a314f7dfded2de39cb6d",
+  "69990b59c1c326ee19da899d": {
+    "_id": "69990b59c1c326ee19da899d",
+    "name": "\u9759\u5ca1\u770c",
+    "nation_name": "\u65e5\u672c"
+  },
+  "69990b5ac1c326ee19da89a0": {
+    "_id": "69990b5ac1c326ee19da89a0",
     "name": "Jawa Barat",
     "nation_name": "Indonesia"
   },
-  "6939a31bf7dfded2de39cb70": {
-    "_id": "6939a31bf7dfded2de39cb70",
+  "69990b5bc1c326ee19da89a3": {
+    "_id": "69990b5bc1c326ee19da89a3",
     "name": "Oriental Mindoro",
     "nation_name": "Philippines"
   },
-  "6939a320f7dfded2de39cb73": {
-    "_id": "6939a320f7dfded2de39cb73",
+  "69990b5cc1c326ee19da89a6": {
+    "_id": "69990b5cc1c326ee19da89a6",
     "name": "La Union",
     "nation_name": "Philippines"
   },
-  "6939a322f7dfded2de39cb76": {
-    "_id": "6939a322f7dfded2de39cb76",
+  "69990b5dc1c326ee19da89a9": {
+    "_id": "69990b5dc1c326ee19da89a9",
     "name": "Arequipa",
     "nation_name": "Peru"
   },
-  "6939a324f7dfded2de39cb79": {
-    "_id": "6939a324f7dfded2de39cb79",
+  "69990b5dc1c326ee19da89ac": {
+    "_id": "69990b5dc1c326ee19da89ac",
     "name": "Chiba Prefecture",
     "nation_name": "Japan"
   },
-  "6939a327f7dfded2de39cb7c": {
-    "_id": "6939a327f7dfded2de39cb7c",
+  "69990b5fc1c326ee19da89af": {
+    "_id": "69990b5fc1c326ee19da89af",
     "name": "Istanbul",
     "nation_name": "Turkey"
   },
-  "6939a32af7dfded2de39cb7f": {
-    "_id": "6939a32af7dfded2de39cb7f",
+  "69990b61c1c326ee19da89b2": {
+    "_id": "69990b61c1c326ee19da89b2",
     "name": "Okinawa Prefecture",
     "nation_name": "Japan"
   },
-  "6939a32cf7dfded2de39cb82": {
-    "_id": "6939a32cf7dfded2de39cb82",
+  "69990b62c1c326ee19da89b5": {
+    "_id": "69990b62c1c326ee19da89b5",
     "name": "\u6c5f\u82cf\u7701",
     "nation_name": "\u4e2d\u56fd"
   },
-  "6939a330f7dfded2de39cb85": {
-    "_id": "6939a330f7dfded2de39cb85",
+  "69990b64c1c326ee19da89b8": {
+    "_id": "69990b64c1c326ee19da89b8",
     "name": "\u5343\u8449\u770c",
     "nation_name": "\u65e5\u672c"
   },
-  "6939a335f7dfded2de39cb89": {
-    "_id": "6939a335f7dfded2de39cb89",
+  "69990b66c1c326ee19da89bc": {
+    "_id": "69990b66c1c326ee19da89bc",
     "name": "Moquegua",
     "nation_name": "Peru"
   },
-  "6939a338f7dfded2de39cb8c": {
-    "_id": "6939a338f7dfded2de39cb8c",
+  "69990b67c1c326ee19da89bf": {
+    "_id": "69990b67c1c326ee19da89bf",
     "name": "Kagawa Prefecture",
     "nation_name": "Japan"
   },
-  "6939a33cf7dfded2de39cb8f": {
-    "_id": "6939a33cf7dfded2de39cb8f",
+  "69990b69c1c326ee19da89c2": {
+    "_id": "69990b69c1c326ee19da89c2",
     "name": "Maluku",
     "nation_name": "Indonesia"
   },
-  "6939a345f7dfded2de39cb94": {
-    "_id": "6939a345f7dfded2de39cb94",
+  "69990b6dc1c326ee19da89c9": {
+    "_id": "69990b6dc1c326ee19da89c9",
     "name": "Valparaiso Region",
     "nation_name": "Chile"
   },
-  "6939a34af7dfded2de39cb97": {
-    "_id": "6939a34af7dfded2de39cb97",
+  "69990b70c1c326ee19da89cd": {
+    "_id": "69990b70c1c326ee19da89cd",
     "name": "Batangas",
     "nation_name": "Philippines"
   },
-  "6939a350f7dfded2de39cb9b": {
-    "_id": "6939a350f7dfded2de39cb9b",
+  "69990b72c1c326ee19da89d1": {
+    "_id": "69990b72c1c326ee19da89d1",
     "name": "Maluku Utara",
     "nation_name": "Indonesia"
   },
-  "6939a35ef7dfded2de39cba2": {
-    "_id": "6939a35ef7dfded2de39cba2",
+  "69990b73c1c326ee19da89d4": {
+    "_id": "69990b73c1c326ee19da89d4",
+    "name": "\u00c7anakkale",
+    "nation_name": "T\u00fcrkiye"
+  },
+  "69990b78c1c326ee19da89da": {
+    "_id": "69990b78c1c326ee19da89da",
     "name": "\uc804\ub77c\ub0a8\ub3c4",
     "nation_name": "\ub300\ud55c\ubbfc\uad6d"
   },
-  "6939a366f7dfded2de39cba6": {
-    "_id": "6939a366f7dfded2de39cba6",
+  "69990b78c1c326ee19da89df": {
+    "_id": "69990b78c1c326ee19da89df",
     "name": "Guangdong",
     "nation_name": "China"
   },
-  "6939a36ef7dfded2de39cba9": {
-    "_id": "6939a36ef7dfded2de39cba9",
+  "69990b7cc1c326ee19da89e2": {
+    "_id": "69990b7cc1c326ee19da89e2",
     "name": "Cagayan",
     "nation_name": "Philippines"
   },
-  "6939a373f7dfded2de39cbad": {
-    "_id": "6939a373f7dfded2de39cbad",
+  "69990b7ec1c326ee19da89e7": {
+    "_id": "69990b7ec1c326ee19da89e7",
     "name": "Cort\u00e9s",
     "nation_name": "Honduras"
   },
-  "6939a379f7dfded2de39cbb1": {
-    "_id": "6939a379f7dfded2de39cbb1",
+  "69990b80c1c326ee19da89eb": {
+    "_id": "69990b80c1c326ee19da89eb",
     "name": "Osaka Prefecture",
     "nation_name": "Japan"
   },
-  "6939a392f7dfded2de39cbba": {
-    "_id": "6939a392f7dfded2de39cbba",
+  "69990b87c1c326ee19da89f4": {
+    "_id": "69990b87c1c326ee19da89f4",
     "name": "Kanagawa Prefecture",
     "nation_name": "Japan"
   }

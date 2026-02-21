@@ -44,14 +44,17 @@ class CRUD:
             if field is not None and not is_valid_type:
                 raise ValueError(f'Bad type for field {field}: {type(field)}')
 
-    def find_duplicate(self, fields: dict):
+    def find_duplicate(self, fields: dict, excluded_id: str = ''):
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for fields: {type(fields)}')
+        if not isinstance(excluded_id, str):
+            raise ValueError(f'Bad type for fields: {type(excluded_id)}')
 
         records = self.cache.read()
         for record in records.values():
             # Check if all key fields from current record and query match
-            if all(fields.get(key) == record.get(key) for key in self.keys):
+            if (not (len(excluded_id) > 0 and record.get('_id') == excluded_id)
+                and all(fields.get(key) == record.get(key) for key in self.keys)):
                 return record
         return None
 
@@ -125,7 +128,7 @@ class CRUD:
                 record[attribute] = field
 
         # Check if updated fields is a duplicate
-        if self.find_duplicate(fields):
+        if self.find_duplicate(fields, _id):
             raise ValueError('Duplicate detected.')
 
         # Update the record

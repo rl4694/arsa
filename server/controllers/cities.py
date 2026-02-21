@@ -22,8 +22,8 @@ cities = CRUD(
         NAME: str,
         STATE_NAME: str,
         NATION_NAME: str,
-	LATITUDE: float,
-	LONGITUDE: float,
+        LATITUDE: float,
+        LONGITUDE: float,
     }
 )
 
@@ -34,8 +34,8 @@ city_model = api.model('City', {
     NAME: fields.String(required=True, description='City Name'),
     STATE_NAME: fields.String(description='State Name'),
     NATION_NAME: fields.String(description='Nation Name'),
-    LATITUDE: fields.Float(description='City Latitude'),
-    LONGITUDE: fields.Float(description='City Longitude')
+    LATITUDE: fields.Float(description='City Latitude', default=0.5),
+    LONGITUDE: fields.Float(description='City Longitude', default=0.5)
 })
 
 

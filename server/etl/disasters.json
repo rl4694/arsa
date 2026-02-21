@@ -1,1778 +1,2000 @@
 {
-  "6939a023f7dfded2de39c99a": {
-    "_id": "6939a023f7dfded2de39c99a",
+  "699909f29c4b13f1312adb98": {
+    "_id": "699909f29c4b13f1312adb98",
     "name": "Earthquake at Honiara",
     "type": "earthquake",
     "date": "2022-11-22",
-    "location": "-9.7963, 159.596",
+    "latitude": -9.7963,
+    "longitude": 159.596,
     "description": "Magnitude: N/A,Depth: 14 km"
   },
-  "6939a026f7dfded2de39c99e": {
-    "_id": "6939a026f7dfded2de39c99e",
-    "name": "Earthquake at Llano Tugr\u00ed",
-    "type": "earthquake",
-    "date": "2022-10-20",
-    "location": "7.6712, -82.3396",
-    "description": "Magnitude: N/A,Depth: 20 km"
-  },
-  "6939a028f7dfded2de39c9a2": {
-    "_id": "6939a028f7dfded2de39c9a2",
-    "name": "Earthquake at L\u00e1zaro C\u00e1rdenas",
-    "type": "earthquake",
-    "date": "2022-09-22",
-    "location": "18.33, -102.913",
-    "description": "Magnitude: N/A,Depth: 20 km"
-  },
-  "6939a02af7dfded2de39c9a4": {
-    "_id": "6939a02af7dfded2de39c9a4",
-    "name": "Earthquake at Apatzing\u00e1n",
-    "type": "earthquake",
-    "date": "2022-09-19",
-    "location": "18.3667, -103.252",
-    "description": "Magnitude: N/A,Depth: 26.943 km"
-  },
-  "6939a02df7dfded2de39c9a6": {
-    "_id": "6939a02df7dfded2de39c9a6",
-    "name": "Earthquake at \u5609\u7fa9\u5e02",
-    "type": "earthquake",
-    "date": "2022-09-18",
-    "location": "23.1444, 121.307",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a030f7dfded2de39c9a7": {
-    "_id": "6939a030f7dfded2de39c9a7",
-    "name": "Earthquake at \u5609\u7fa9\u5e02",
-    "type": "earthquake",
-    "date": "2022-09-17",
-    "location": "23.029, 121.348",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a037f7dfded2de39c9ab": {
-    "_id": "6939a037f7dfded2de39c9ab",
-    "name": "Earthquake at Lae",
-    "type": "earthquake",
-    "date": "2022-09-10",
-    "location": "-6.2237, 146.471",
-    "description": "Magnitude: N/A,Depth: 116 km"
-  },
-  "6939a03bf7dfded2de39c9af": {
-    "_id": "6939a03bf7dfded2de39c9af",
-    "name": "Earthquake at \u5b9d\u5174\u53bf",
-    "type": "earthquake",
-    "date": "2022-09-05",
-    "location": "29.7263, 102.279",
-    "description": "Magnitude: N/A,Depth: 12 km"
-  },
-  "6939a043f7dfded2de39c9b3": {
-    "_id": "6939a043f7dfded2de39c9b3",
-    "name": "Earthquake at Laoag",
-    "type": "earthquake",
-    "date": "2022-07-27",
-    "location": "17.5978, 120.809",
-    "description": "Magnitude: N/A,Depth: 33.729 km"
-  },
-  "6939a04af7dfded2de39c9b7": {
-    "_id": "6939a04af7dfded2de39c9b7",
-    "name": "Earthquake at Juliaca",
-    "type": "earthquake",
-    "date": "2022-05-26",
-    "location": "-14.8628, -70.3081",
-    "description": "Magnitude: N/A,Depth: 236 km"
-  },
-  "6939a055f7dfded2de39c9bb": {
-    "_id": "6939a055f7dfded2de39c9bb",
-    "name": "Earthquake at Masaya",
-    "type": "earthquake",
-    "date": "2022-04-21",
-    "location": "11.5538, -86.9919",
-    "description": "Magnitude: N/A,Depth: 27 km"
-  },
-  "6939a060f7dfded2de39c9bf": {
-    "_id": "6939a060f7dfded2de39c9bf",
-    "name": "Earthquake at \u6771\u677e\u5cf6\u5e02",
-    "type": "earthquake",
-    "date": "2022-03-16",
-    "location": "37.7015, 141.587",
-    "description": "Magnitude: N/A,Depth: 41 km"
-  },
-  "6939a073f7dfded2de39c9c3": {
-    "_id": "6939a073f7dfded2de39c9c3",
-    "name": "Earthquake at Serang",
-    "type": "earthquake",
-    "date": "2022-01-14",
-    "location": "-6.9291, 105.251",
-    "description": "Magnitude: N/A,Depth: 33 km"
-  },
-  "6939a08cf7dfded2de39c9c7": {
-    "_id": "6939a08cf7dfded2de39c9c7",
-    "name": "Earthquake at \u03a0\u03ac\u03c6\u03bf\u03c2",
-    "type": "earthquake",
-    "date": "2022-01-11",
-    "location": "35.1456, 31.9095",
-    "description": "Magnitude: N/A,Depth: 21 km"
-  },
-  "6939a08ff7dfded2de39c9ca": {
-    "_id": "6939a08ff7dfded2de39c9ca",
-    "name": "Earthquake at \u6c11\u4e50\u53bf",
-    "type": "earthquake",
-    "date": "2022-01-07",
-    "location": "37.8167, 101.299",
-    "description": "Magnitude: N/A,Depth: 13 km"
-  },
-  "6939a0a2f7dfded2de39c9cd": {
-    "_id": "6939a0a2f7dfded2de39c9cd",
-    "name": "Earthquake at Chinandega",
-    "type": "earthquake",
-    "date": "2021-09-22",
-    "location": "12.1598, -87.8542",
-    "description": "Magnitude: N/A,Depth: 21 km"
-  },
-  "6939a0a6f7dfded2de39c9d0": {
-    "_id": "6939a0a6f7dfded2de39c9d0",
-    "name": "Earthquake at Acapulco",
-    "type": "earthquake",
-    "date": "2021-09-08",
-    "location": "16.9502, -99.7877",
-    "description": "Magnitude: N/A,Depth: 20 km"
-  },
-  "6939a0aef7dfded2de39c9d4": {
-    "_id": "6939a0aef7dfded2de39c9d4",
-    "name": "Earthquake at Luganville",
-    "type": "earthquake",
-    "date": "2021-08-18",
-    "location": "-14.892, 167.085",
-    "description": "Magnitude: N/A,Depth: 93 km"
-  },
-  "6939a0b6f7dfded2de39c9d8": {
-    "_id": "6939a0b6f7dfded2de39c9d8",
-    "name": "Earthquake at Mirago\u00e2ne",
-    "type": "earthquake",
-    "date": "2021-08-14",
-    "location": "18.3521, -73.4804",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a0c5f7dfded2de39c9db": {
-    "_id": "6939a0c5f7dfded2de39c9db",
-    "name": "Earthquake at Mati",
-    "type": "earthquake",
-    "date": "2021-08-11",
-    "location": "6.4547, 126.742",
-    "description": "Magnitude: N/A,Depth: 55.14 km"
-  },
-  "6939a0cdf7dfded2de39c9de": {
-    "_id": "6939a0cdf7dfded2de39c9de",
-    "name": "Earthquake at Para\u00f1aque",
-    "type": "earthquake",
-    "date": "2021-07-23",
-    "location": "13.6989, 120.713",
-    "description": "Magnitude: N/A,Depth: 110 km"
-  },
-  "6939a0cff7dfded2de39c9e1": {
-    "_id": "6939a0cff7dfded2de39c9e1",
-    "name": "Earthquake at David",
-    "type": "earthquake",
-    "date": "2021-07-21",
-    "location": "7.5904, -82.8813",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a0d8f7dfded2de39c9e4": {
-    "_id": "6939a0d8f7dfded2de39c9e4",
-    "name": "Earthquake at Madoi County",
-    "type": "earthquake",
-    "date": "2021-05-21",
-    "location": "34.5861, 98.2551",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a0e2f7dfded2de39c9e7": {
-    "_id": "6939a0e2f7dfded2de39c9e7",
-    "name": "Earthquake at Ishinomaki",
-    "type": "earthquake",
-    "date": "2021-05-01",
-    "location": "38.2296, 141.665",
-    "description": "Magnitude: N/A,Depth: 43 km"
-  },
-  "6939a0ecf7dfded2de39c9ea": {
-    "_id": "6939a0ecf7dfded2de39c9ea",
-    "name": "Earthquake at \u91dc\u77f3\u5e02",
-    "type": "earthquake",
-    "date": "2021-03-20",
-    "location": "38.4752, 141.607",
-    "description": "Magnitude: N/A,Depth: 43 km"
-  },
-  "6939a102f7dfded2de39c9eb": {
-    "_id": "6939a102f7dfded2de39c9eb",
-    "name": "Earthquake at \u6771\u677e\u5cf6\u5e02",
-    "type": "earthquake",
-    "date": "2021-02-13",
-    "location": "37.6856, 141.992",
-    "description": "Magnitude: N/A,Depth: 43.98 km"
-  },
-  "6939a11af7dfded2de39c9ef": {
-    "_id": "6939a11af7dfded2de39c9ef",
-    "name": "Earthquake at \u0130zmir",
-    "type": "earthquake",
-    "date": "2020-10-30",
-    "location": "37.8973, 26.7953",
-    "description": "Magnitude: N/A,Depth: 21 km"
-  },
-  "6939a122f7dfded2de39c9f3": {
-    "_id": "6939a122f7dfded2de39c9f3",
-    "name": "Earthquake at Vallenar",
-    "type": "earthquake",
-    "date": "2020-09-01",
-    "location": "-27.9285, -71.3937",
-    "description": "Magnitude: N/A,Depth: 16 km"
-  },
-  "6939a125f7dfded2de39c9f4": {
-    "_id": "6939a125f7dfded2de39c9f4",
-    "name": "Earthquake at Vallenar",
-    "type": "earthquake",
-    "date": "2020-09-01",
-    "location": "-28.013, -71.1958",
-    "description": "Magnitude: N/A,Depth: 21 km"
-  },
-  "6939a135f7dfded2de39c9f7": {
-    "_id": "6939a135f7dfded2de39c9f7",
-    "name": "Earthquake at Masbate City",
-    "type": "earthquake",
-    "date": "2020-08-18",
-    "location": "12.0065, 124.13",
-    "description": "Magnitude: N/A,Depth: 10 km"
-  },
-  "6939a13df7dfded2de39c9fa": {
-    "_id": "6939a13df7dfded2de39c9fa",
-    "name": "Earthquake at Salina Cruz",
-    "type": "earthquake",
-    "date": "2020-06-23",
-    "location": "15.9163, -95.9533",
-    "description": "Magnitude: N/A,Depth: 20 km"
-  },
-  "6939a144f7dfded2de39c9fd": {
-    "_id": "6939a144f7dfded2de39c9fd",
-    "name": "Earthquake at Calama",
-    "type": "earthquake",
-    "date": "2020-06-03",
-    "location": "-23.2966, -68.4204",
-    "description": "Magnitude: N/A,Depth: 112 km"
-  },
-  "6939a156f7dfded2de39ca01": {
-    "_id": "6939a156f7dfded2de39ca01",
-    "name": "Earthquake at Boise",
-    "type": "earthquake",
-    "date": "2020-03-31",
-    "location": "44.4646, -115.118",
-    "description": "Magnitude: N/A,Depth: 12.06 km"
-  },
-  "6939a159f7dfded2de39ca04": {
-    "_id": "6939a159f7dfded2de39ca04",
+  "699909f49c4b13f1312adb9c": {
+    "_id": "699909f49c4b13f1312adb9c",
     "name": "Landslide at \u6d0b\u53bf",
     "type": "landslide",
     "date": "2008-08-01",
-    "location": "32.5625, 107.45",
+    "latitude": 32.5625,
+    "longitude": 107.45,
     "description": "Size: large, Trigger: N/A"
   },
-  "6939a15bf7dfded2de39ca07": {
-    "_id": "6939a15bf7dfded2de39ca07",
+  "69990a3ac1c326ee19da87e6": {
+    "_id": "69990a3ac1c326ee19da87e6",
+    "name": "Earthquake at Llano Tugr\u00ed",
+    "type": "earthquake",
+    "date": "2022-10-20",
+    "latitude": 7.6712,
+    "longitude": -82.3396,
+    "description": "Magnitude: N/A,Depth: 20 km"
+  },
+  "69990a3bc1c326ee19da87ea": {
+    "_id": "69990a3bc1c326ee19da87ea",
+    "name": "Earthquake at L\u00e1zaro C\u00e1rdenas",
+    "type": "earthquake",
+    "date": "2022-09-22",
+    "latitude": 18.33,
+    "longitude": -102.913,
+    "description": "Magnitude: N/A,Depth: 20 km"
+  },
+  "69990a3bc1c326ee19da87ed": {
+    "_id": "69990a3bc1c326ee19da87ed",
+    "name": "Earthquake at Villa de \u00c1lvarez",
+    "type": "earthquake",
+    "date": "2022-09-19",
+    "latitude": 18.3667,
+    "longitude": -103.252,
+    "description": "Magnitude: N/A,Depth: 26.943 km"
+  },
+  "69990a3dc1c326ee19da87ef": {
+    "_id": "69990a3dc1c326ee19da87ef",
+    "name": "Earthquake at \u5609\u7fa9\u5e02",
+    "type": "earthquake",
+    "date": "2022-09-18",
+    "latitude": 23.1444,
+    "longitude": 121.307,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990a3ec1c326ee19da87f0": {
+    "_id": "69990a3ec1c326ee19da87f0",
+    "name": "Earthquake at \u5609\u7fa9\u5e02",
+    "type": "earthquake",
+    "date": "2022-09-17",
+    "latitude": 23.029,
+    "longitude": 121.348,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990a40c1c326ee19da87f4": {
+    "_id": "69990a40c1c326ee19da87f4",
+    "name": "Earthquake at Lae",
+    "type": "earthquake",
+    "date": "2022-09-10",
+    "latitude": -6.2237,
+    "longitude": 146.471,
+    "description": "Magnitude: N/A,Depth: 116 km"
+  },
+  "69990a42c1c326ee19da87f7": {
+    "_id": "69990a42c1c326ee19da87f7",
+    "name": "Earthquake at \u5b9d\u5174\u53bf",
+    "type": "earthquake",
+    "date": "2022-09-05",
+    "latitude": 29.7263,
+    "longitude": 102.279,
+    "description": "Magnitude: N/A,Depth: 12 km"
+  },
+  "69990a45c1c326ee19da87fb": {
+    "_id": "69990a45c1c326ee19da87fb",
+    "name": "Earthquake at Laoag",
+    "type": "earthquake",
+    "date": "2022-07-27",
+    "latitude": 17.5978,
+    "longitude": 120.809,
+    "description": "Magnitude: N/A,Depth: 33.729 km"
+  },
+  "69990a47c1c326ee19da87ff": {
+    "_id": "69990a47c1c326ee19da87ff",
+    "name": "Earthquake at Juliaca",
+    "type": "earthquake",
+    "date": "2022-05-26",
+    "latitude": -14.8628,
+    "longitude": -70.3081,
+    "description": "Magnitude: N/A,Depth: 236 km"
+  },
+  "69990a4dc1c326ee19da8803": {
+    "_id": "69990a4dc1c326ee19da8803",
+    "name": "Earthquake at Masaya",
+    "type": "earthquake",
+    "date": "2022-04-21",
+    "latitude": 11.5538,
+    "longitude": -86.9919,
+    "description": "Magnitude: N/A,Depth: 27 km"
+  },
+  "69990a53c1c326ee19da8807": {
+    "_id": "69990a53c1c326ee19da8807",
+    "name": "Earthquake at \u6771\u677e\u5cf6\u5e02",
+    "type": "earthquake",
+    "date": "2022-03-16",
+    "latitude": 37.7015,
+    "longitude": 141.587,
+    "description": "Magnitude: N/A,Depth: 41 km"
+  },
+  "69990a59c1c326ee19da880b": {
+    "_id": "69990a59c1c326ee19da880b",
+    "name": "Earthquake at Serang",
+    "type": "earthquake",
+    "date": "2022-01-14",
+    "latitude": -6.9291,
+    "longitude": 105.251,
+    "description": "Magnitude: N/A,Depth: 33 km"
+  },
+  "69990a62c1c326ee19da880f": {
+    "_id": "69990a62c1c326ee19da880f",
+    "name": "Earthquake at \u03a0\u03ac\u03c6\u03bf\u03c2",
+    "type": "earthquake",
+    "date": "2022-01-11",
+    "latitude": 35.1456,
+    "longitude": 31.9095,
+    "description": "Magnitude: N/A,Depth: 21 km"
+  },
+  "69990a63c1c326ee19da8812": {
+    "_id": "69990a63c1c326ee19da8812",
+    "name": "Earthquake at \u6c11\u4e50\u53bf",
+    "type": "earthquake",
+    "date": "2022-01-07",
+    "latitude": 37.8167,
+    "longitude": 101.299,
+    "description": "Magnitude: N/A,Depth: 13 km"
+  },
+  "69990a6fc1c326ee19da8815": {
+    "_id": "69990a6fc1c326ee19da8815",
+    "name": "Earthquake at Chinandega",
+    "type": "earthquake",
+    "date": "2021-09-22",
+    "latitude": 12.1598,
+    "longitude": -87.8542,
+    "description": "Magnitude: N/A,Depth: 21 km"
+  },
+  "69990a70c1c326ee19da8818": {
+    "_id": "69990a70c1c326ee19da8818",
+    "name": "Earthquake at Acapulco",
+    "type": "earthquake",
+    "date": "2021-09-08",
+    "latitude": 16.9502,
+    "longitude": -99.7877,
+    "description": "Magnitude: N/A,Depth: 20 km"
+  },
+  "69990a73c1c326ee19da881c": {
+    "_id": "69990a73c1c326ee19da881c",
+    "name": "Earthquake at Luganville",
+    "type": "earthquake",
+    "date": "2021-08-18",
+    "latitude": -14.892,
+    "longitude": 167.085,
+    "description": "Magnitude: N/A,Depth: 93 km"
+  },
+  "69990a76c1c326ee19da8820": {
+    "_id": "69990a76c1c326ee19da8820",
+    "name": "Earthquake at Mirago\u00e2ne",
+    "type": "earthquake",
+    "date": "2021-08-14",
+    "latitude": 18.3521,
+    "longitude": -73.4804,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990a7bc1c326ee19da8823": {
+    "_id": "69990a7bc1c326ee19da8823",
+    "name": "Earthquake at Mati",
+    "type": "earthquake",
+    "date": "2021-08-11",
+    "latitude": 6.4547,
+    "longitude": 126.742,
+    "description": "Magnitude: N/A,Depth: 55.14 km"
+  },
+  "69990a7fc1c326ee19da8826": {
+    "_id": "69990a7fc1c326ee19da8826",
+    "name": "Earthquake at Taguig",
+    "type": "earthquake",
+    "date": "2021-07-23",
+    "latitude": 13.6989,
+    "longitude": 120.713,
+    "description": "Magnitude: N/A,Depth: 110 km"
+  },
+  "69990a81c1c326ee19da8829": {
+    "_id": "69990a81c1c326ee19da8829",
+    "name": "Earthquake at David",
+    "type": "earthquake",
+    "date": "2021-07-21",
+    "latitude": 7.5904,
+    "longitude": -82.8813,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990a84c1c326ee19da882c": {
+    "_id": "69990a84c1c326ee19da882c",
+    "name": "Earthquake at Madoi County",
+    "type": "earthquake",
+    "date": "2021-05-21",
+    "latitude": 34.5861,
+    "longitude": 98.2551,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990a87c1c326ee19da882f": {
+    "_id": "69990a87c1c326ee19da882f",
+    "name": "Earthquake at Ishinomaki",
+    "type": "earthquake",
+    "date": "2021-05-01",
+    "latitude": 38.2296,
+    "longitude": 141.665,
+    "description": "Magnitude: N/A,Depth: 43 km"
+  },
+  "69990a8bc1c326ee19da8832": {
+    "_id": "69990a8bc1c326ee19da8832",
+    "name": "Earthquake at \u91dc\u77f3\u5e02",
+    "type": "earthquake",
+    "date": "2021-03-20",
+    "latitude": 38.4752,
+    "longitude": 141.607,
+    "description": "Magnitude: N/A,Depth: 43 km"
+  },
+  "69990a93c1c326ee19da8833": {
+    "_id": "69990a93c1c326ee19da8833",
+    "name": "Earthquake at \u6771\u677e\u5cf6\u5e02",
+    "type": "earthquake",
+    "date": "2021-02-13",
+    "latitude": 37.6856,
+    "longitude": 141.992,
+    "description": "Magnitude: N/A,Depth: 43.98 km"
+  },
+  "69990a9ec1c326ee19da8837": {
+    "_id": "69990a9ec1c326ee19da8837",
+    "name": "Earthquake at \u0130zmir",
+    "type": "earthquake",
+    "date": "2020-10-30",
+    "latitude": 37.8973,
+    "longitude": 26.7953,
+    "description": "Magnitude: N/A,Depth: 21 km"
+  },
+  "69990aa1c1c326ee19da883b": {
+    "_id": "69990aa1c1c326ee19da883b",
+    "name": "Earthquake at Vallenar",
+    "type": "earthquake",
+    "date": "2020-09-01",
+    "latitude": -27.9285,
+    "longitude": -71.3937,
+    "description": "Magnitude: N/A,Depth: 16 km"
+  },
+  "69990aa3c1c326ee19da883c": {
+    "_id": "69990aa3c1c326ee19da883c",
+    "name": "Earthquake at Vallenar",
+    "type": "earthquake",
+    "date": "2020-09-01",
+    "latitude": -28.013,
+    "longitude": -71.1958,
+    "description": "Magnitude: N/A,Depth: 21 km"
+  },
+  "69990aa9c1c326ee19da883f": {
+    "_id": "69990aa9c1c326ee19da883f",
+    "name": "Earthquake at Masbate City",
+    "type": "earthquake",
+    "date": "2020-08-18",
+    "latitude": 12.0065,
+    "longitude": 124.13,
+    "description": "Magnitude: N/A,Depth: 10 km"
+  },
+  "69990aaec1c326ee19da8842": {
+    "_id": "69990aaec1c326ee19da8842",
+    "name": "Earthquake at Salina Cruz",
+    "type": "earthquake",
+    "date": "2020-06-23",
+    "latitude": 15.9163,
+    "longitude": -95.9533,
+    "description": "Magnitude: N/A,Depth: 20 km"
+  },
+  "69990ab2c1c326ee19da8845": {
+    "_id": "69990ab2c1c326ee19da8845",
+    "name": "Earthquake at Calama",
+    "type": "earthquake",
+    "date": "2020-06-03",
+    "latitude": -23.2966,
+    "longitude": -68.4204,
+    "description": "Magnitude: N/A,Depth: 112 km"
+  },
+  "69990ab8c1c326ee19da8849": {
+    "_id": "69990ab8c1c326ee19da8849",
+    "name": "Earthquake at Boise",
+    "type": "earthquake",
+    "date": "2020-03-31",
+    "latitude": 44.4646,
+    "longitude": -115.118,
+    "description": "Magnitude: N/A,Depth: 12.06 km"
+  },
+  "69990ab6c1c326ee19da884c": {
+    "_id": "69990ab6c1c326ee19da884c",
     "name": "Landslide at Albany",
     "type": "landslide",
     "date": "2009-01-02",
-    "location": "45.42, -122.663",
+    "latitude": 45.42,
+    "longitude": -122.663,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a160f7dfded2de39ca0a": {
-    "_id": "6939a160f7dfded2de39ca0a",
+  "69990ab7c1c326ee19da884f": {
+    "_id": "69990ab7c1c326ee19da884f",
     "name": "Landslide at Cerro de Pasco",
     "type": "landslide",
     "date": "2007-01-19",
-    "location": "-11.1295, -75.3587",
+    "latitude": -11.1295,
+    "longitude": -75.3587,
     "description": "Size: large, Trigger: N/A"
   },
-  "6939a163f7dfded2de39ca0e": {
-    "_id": "6939a163f7dfded2de39ca0e",
+  "69990ab8c1c326ee19da8853": {
+    "_id": "69990ab8c1c326ee19da8853",
     "name": "Landslide at \u0918\u094b\u0930\u093e\u0939\u0940",
     "type": "landslide",
     "date": "2009-07-31",
-    "location": "28.8378, 81.708",
+    "latitude": 28.8378,
+    "longitude": 81.708,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a165f7dfded2de39ca11": {
-    "_id": "6939a165f7dfded2de39ca11",
+  "69990ab9c1c326ee19da8856": {
+    "_id": "69990ab9c1c326ee19da8856",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2010-10-16",
-    "location": "10.3336, 123.8978",
+    "latitude": 10.3336,
+    "longitude": 123.8978,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a168f7dfded2de39ca14": {
-    "_id": "6939a168f7dfded2de39ca14",
+  "69990abac1c326ee19da8859": {
+    "_id": "69990abac1c326ee19da8859",
     "name": "Landslide at Ormoc",
     "type": "landslide",
     "date": "2012-02-16",
-    "location": "10.7004, 124.9668",
+    "latitude": 10.7004,
+    "longitude": 124.9668,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a16cf7dfded2de39ca18": {
-    "_id": "6939a16cf7dfded2de39ca18",
+  "69990abdc1c326ee19da885d": {
+    "_id": "69990abdc1c326ee19da885d",
     "name": "Landslide at Trail",
     "type": "landslide",
     "date": "2012-03-30",
-    "location": "48.2797, -117.2665",
+    "latitude": 48.2797,
+    "longitude": -117.2665,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a16ff7dfded2de39ca1b": {
-    "_id": "6939a16ff7dfded2de39ca1b",
+  "69990abec1c326ee19da8860": {
+    "_id": "69990abec1c326ee19da8860",
     "name": "Landslide at Guasave",
     "type": "landslide",
     "date": "2007-09-02",
-    "location": "24.9531, -107.622",
+    "latitude": 24.9531,
+    "longitude": -107.622,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a173f7dfded2de39ca1e": {
-    "_id": "6939a173f7dfded2de39ca1e",
+  "69990ac0c1c326ee19da8863": {
+    "_id": "69990ac0c1c326ee19da8863",
     "name": "Landslide at Linxiang District",
     "type": "landslide",
     "date": "2008-11-01",
-    "location": "23.89, 100.0845",
+    "latitude": 23.89,
+    "longitude": 100.0845,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a175f7dfded2de39ca20": {
-    "_id": "6939a175f7dfded2de39ca20",
+  "69990ac1c1c326ee19da8865": {
+    "_id": "69990ac1c1c326ee19da8865",
     "name": "Landslide at Kunming",
     "type": "landslide",
     "date": "2008-11-01",
-    "location": "25.0967, 102.695",
+    "latitude": 25.0967,
+    "longitude": 102.695,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a178f7dfded2de39ca22": {
-    "_id": "6939a178f7dfded2de39ca22",
+  "69990ac2c1c326ee19da8867": {
+    "_id": "69990ac2c1c326ee19da8867",
     "name": "Landslide at Gresham",
     "type": "landslide",
     "date": "2014-12-21",
-    "location": "45.8647, -122.8178",
+    "latitude": 45.8647,
+    "longitude": -122.8178,
     "description": "Size: unknown, Trigger: N/A"
   },
-  "6939a17cf7dfded2de39ca23": {
-    "_id": "6939a17cf7dfded2de39ca23",
+  "69990ac3c1c326ee19da8868": {
+    "_id": "69990ac3c1c326ee19da8868",
     "name": "Landslide at Albany",
     "type": "landslide",
     "date": "2009-01-01",
-    "location": "45.377, -122.0704",
+    "latitude": 45.377,
+    "longitude": -122.0704,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a180f7dfded2de39ca27": {
-    "_id": "6939a180f7dfded2de39ca27",
-    "name": "Landslide at Th\u1ee5c Ph\u00e1n",
+  "69990ac5c1c326ee19da886c": {
+    "_id": "69990ac5c1c326ee19da886c",
+    "name": "Landslide at T\u00e2n Giang",
     "type": "landslide",
     "date": "2017-07-03",
-    "location": "23.14383048, 105.5299971",
+    "latitude": 23.14383048,
+    "longitude": 105.5299971,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a182f7dfded2de39ca2a": {
-    "_id": "6939a182f7dfded2de39ca2a",
+  "69990ac6c1c326ee19da886f": {
+    "_id": "69990ac6c1c326ee19da886f",
     "name": "Landslide at Iriga",
     "type": "landslide",
     "date": "2009-01-02",
-    "location": "12.5655, 124.0419",
+    "latitude": 12.5655,
+    "longitude": 124.0419,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a184f7dfded2de39ca2c": {
-    "_id": "6939a184f7dfded2de39ca2c",
+  "69990ac6c1c326ee19da8871": {
+    "_id": "69990ac6c1c326ee19da8871",
     "name": "Landslide at Portland",
     "type": "landslide",
     "date": "2009-01-03",
-    "location": "45.521, -122.67",
+    "latitude": 45.521,
+    "longitude": -122.67,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a188f7dfded2de39ca2f": {
-    "_id": "6939a188f7dfded2de39ca2f",
+  "69990ac8c1c326ee19da8874": {
+    "_id": "69990ac8c1c326ee19da8874",
     "name": "Landslide at Knoxville",
     "type": "landslide",
     "date": "2009-01-07",
-    "location": "35.507, -83.071",
+    "latitude": 35.507,
+    "longitude": -83.071,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a18cf7dfded2de39ca30": {
-    "_id": "6939a18cf7dfded2de39ca30",
+  "69990ac9c1c326ee19da8875": {
+    "_id": "69990ac9c1c326ee19da8875",
     "name": "Landslide at Gresham",
     "type": "landslide",
     "date": "2009-01-07",
-    "location": "46.11, -122.893",
+    "latitude": 46.11,
+    "longitude": -122.893,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a18ef7dfded2de39ca33": {
-    "_id": "6939a18ef7dfded2de39ca33",
+  "69990acac1c326ee19da8878": {
+    "_id": "69990acac1c326ee19da8878",
     "name": "Landslide at Tacoma",
     "type": "landslide",
     "date": "2009-01-07",
-    "location": "47.432, -122.334",
+    "latitude": 47.432,
+    "longitude": -122.334,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a191f7dfded2de39ca35": {
-    "_id": "6939a191f7dfded2de39ca35",
+  "69990accc1c326ee19da887a": {
+    "_id": "69990accc1c326ee19da887a",
     "name": "Landslide at Port Moody",
     "type": "landslide",
     "date": "2009-01-07",
-    "location": "48.538, -121.75",
+    "latitude": 48.538,
+    "longitude": -121.75,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a195f7dfded2de39ca36": {
-    "_id": "6939a195f7dfded2de39ca36",
+  "69990accc1c326ee19da887b": {
+    "_id": "69990accc1c326ee19da887b",
     "name": "Landslide at Port Moody",
     "type": "landslide",
     "date": "2009-01-07",
-    "location": "48.72, -122.2",
+    "latitude": 48.72,
+    "longitude": -122.2,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a199f7dfded2de39ca37": {
-    "_id": "6939a199f7dfded2de39ca37",
+  "69990acec1c326ee19da887c": {
+    "_id": "69990acec1c326ee19da887c",
     "name": "Landslide at Gresham",
     "type": "landslide",
     "date": "2009-01-08",
-    "location": "46.1299, -122.909",
+    "latitude": 46.1299,
+    "longitude": -122.909,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a19bf7dfded2de39ca39": {
-    "_id": "6939a19bf7dfded2de39ca39",
+  "69990ad0c1c326ee19da887e": {
+    "_id": "69990ad0c1c326ee19da887e",
     "name": "Landslide at Seattle",
     "type": "landslide",
     "date": "2009-01-08",
-    "location": "47.538, -122.273",
+    "latitude": 47.538,
+    "longitude": -122.273,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a19df7dfded2de39ca3a": {
-    "_id": "6939a19df7dfded2de39ca3a",
+  "69990ad0c1c326ee19da887f": {
+    "_id": "69990ad0c1c326ee19da887f",
     "name": "Landslide at Port Moody",
     "type": "landslide",
     "date": "2009-01-08",
-    "location": "48.929, -122.037",
+    "latitude": 48.929,
+    "longitude": -122.037,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a19ff7dfded2de39ca3e": {
-    "_id": "6939a19ff7dfded2de39ca3e",
+  "69990ad1c1c326ee19da8883": {
+    "_id": "69990ad1c1c326ee19da8883",
     "name": "Landslide at Jijel",
     "type": "landslide",
     "date": "2009-01-13",
-    "location": "36.7946, 5.765",
+    "latitude": 36.7946,
+    "longitude": 5.765,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1a5f7dfded2de39ca40": {
-    "_id": "6939a1a5f7dfded2de39ca40",
+  "69990ad2c1c326ee19da8885": {
+    "_id": "69990ad2c1c326ee19da8885",
     "name": "Landslide at Victoria",
     "type": "landslide",
     "date": "2009-01-13",
-    "location": "47.7573, -122.2072",
+    "latitude": 47.7573,
+    "longitude": -122.2072,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1a7f7dfded2de39ca44": {
-    "_id": "6939a1a7f7dfded2de39ca44",
+  "69990ad3c1c326ee19da8889": {
+    "_id": "69990ad3c1c326ee19da8889",
     "name": "Landslide at Kuching",
     "type": "landslide",
     "date": "2009-01-16",
-    "location": "1.531, 110.3442",
+    "latitude": 1.531,
+    "longitude": 110.3442,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1aaf7dfded2de39ca47": {
-    "_id": "6939a1aaf7dfded2de39ca47",
+  "69990ad5c1c326ee19da888c": {
+    "_id": "69990ad5c1c326ee19da888c",
     "name": "Landslide at Mataram",
     "type": "landslide",
     "date": "2009-01-19",
-    "location": "-8.5073, 116.662",
+    "latitude": -8.5073,
+    "longitude": 116.662,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1acf7dfded2de39ca4b": {
-    "_id": "6939a1acf7dfded2de39ca4b",
+  "69990ad6c1c326ee19da8890": {
+    "_id": "69990ad6c1c326ee19da8890",
     "name": "Landslide at Freetown",
     "type": "landslide",
     "date": "2009-08-13",
-    "location": "8.4841, -13.2287",
+    "latitude": 8.4841,
+    "longitude": -13.2287,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1b0f7dfded2de39ca4e": {
-    "_id": "6939a1b0f7dfded2de39ca4e",
+  "69990ad5c1c326ee19da8893": {
+    "_id": "69990ad5c1c326ee19da8893",
     "name": "Landslide at Bandar Victoria",
     "type": "landslide",
     "date": "2009-01-22",
-    "location": "5.031, 115.0668",
+    "latitude": 5.031,
+    "longitude": 115.0668,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1b3f7dfded2de39ca51": {
-    "_id": "6939a1b3f7dfded2de39ca51",
+  "69990ad6c1c326ee19da8896": {
+    "_id": "69990ad6c1c326ee19da8896",
     "name": "Landslide at Mexico City",
     "type": "landslide",
     "date": "2009-01-22",
-    "location": "19.4271, -99.1276",
+    "latitude": 19.4271,
+    "longitude": -99.1276,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1b5f7dfded2de39ca55": {
-    "_id": "6939a1b5f7dfded2de39ca55",
+  "69990ad6c1c326ee19da889a": {
+    "_id": "69990ad6c1c326ee19da889a",
     "name": "Landslide at Naples",
     "type": "landslide",
     "date": "2009-01-26",
-    "location": "40.8403, 14.252",
+    "latitude": 40.8403,
+    "longitude": 14.252,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1b9f7dfded2de39ca59": {
-    "_id": "6939a1b9f7dfded2de39ca59",
+  "69990ad8c1c326ee19da889e": {
+    "_id": "69990ad8c1c326ee19da889e",
     "name": "Landslide at \u09aa\u099e\u09cd\u099a\u0997\u09a1\u09bc",
     "type": "landslide",
     "date": "2009-07-22",
-    "location": "26.8826, 88.2788",
+    "latitude": 26.8826,
+    "longitude": 88.2788,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1bcf7dfded2de39ca5c": {
-    "_id": "6939a1bcf7dfded2de39ca5c",
+  "69990ad9c1c326ee19da88a1": {
+    "_id": "69990ad9c1c326ee19da88a1",
     "name": "Landslide at Santa Clarita",
     "type": "landslide",
     "date": "2009-02-06",
-    "location": "34.162, -118.05",
+    "latitude": 34.162,
+    "longitude": -118.05,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1bef7dfded2de39ca5d": {
-    "_id": "6939a1bef7dfded2de39ca5d",
+  "69990adac1c326ee19da88a2": {
+    "_id": "69990adac1c326ee19da88a2",
     "name": "Landslide at \u09aa\u099e\u09cd\u099a\u0997\u09a1\u09bc",
     "type": "landslide",
     "date": "2009-07-22",
-    "location": "26.8572, 88.3143",
+    "latitude": 26.8572,
+    "longitude": 88.3143,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1c3f7dfded2de39ca60": {
-    "_id": "6939a1c3f7dfded2de39ca60",
+  "69990adbc1c326ee19da88a5": {
+    "_id": "69990adbc1c326ee19da88a5",
     "name": "Landslide at Carcar",
     "type": "landslide",
     "date": "2009-02-07",
-    "location": "9.29, 123.226",
+    "latitude": 9.29,
+    "longitude": 123.226,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1c6f7dfded2de39ca61": {
-    "_id": "6939a1c6f7dfded2de39ca61",
-    "name": "Landslide at Para\u00f1aque",
+  "69990adcc1c326ee19da88a6": {
+    "_id": "69990adcc1c326ee19da88a6",
+    "name": "Landslide at Taguig",
     "type": "landslide",
     "date": "2009-09-09",
-    "location": "14.545, 121.56",
+    "latitude": 14.545,
+    "longitude": 121.56,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1caf7dfded2de39ca64": {
-    "_id": "6939a1caf7dfded2de39ca64",
+  "69990addc1c326ee19da88a9": {
+    "_id": "69990addc1c326ee19da88a9",
     "name": "Landslide at Lynchburg",
     "type": "landslide",
     "date": "2009-04-20",
-    "location": "37.9137, -79.4305",
+    "latitude": 37.9137,
+    "longitude": -79.4305,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1ccf7dfded2de39ca68": {
-    "_id": "6939a1ccf7dfded2de39ca68",
+  "69990addc1c326ee19da88ad": {
+    "_id": "69990addc1c326ee19da88ad",
     "name": "Landslide at Burnie",
     "type": "landslide",
     "date": "2009-08-23",
-    "location": "-41.0528, 145.9063",
+    "latitude": -41.0528,
+    "longitude": 145.9063,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1cef7dfded2de39ca6b": {
-    "_id": "6939a1cef7dfded2de39ca6b",
+  "69990adec1c326ee19da88b0": {
+    "_id": "69990adec1c326ee19da88b0",
     "name": "Landslide at Pokhara",
     "type": "landslide",
     "date": "2009-07-02",
-    "location": "28.2039, 83.9806",
+    "latitude": 28.2039,
+    "longitude": 83.9806,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1d1f7dfded2de39ca6e": {
-    "_id": "6939a1d1f7dfded2de39ca6e",
+  "69990ae1c1c326ee19da88b3": {
+    "_id": "69990ae1c1c326ee19da88b3",
     "name": "Landslide at \u092d\u0930\u0924\u092a\u0941\u0930",
     "type": "landslide",
     "date": "2009-07-02",
-    "location": "27.9447, 84.2279",
+    "latitude": 27.9447,
+    "longitude": 84.2279,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1d3f7dfded2de39ca71": {
-    "_id": "6939a1d3f7dfded2de39ca71",
+  "69990ae2c1c326ee19da88b6": {
+    "_id": "69990ae2c1c326ee19da88b6",
     "name": "Landslide at Hofu",
     "type": "landslide",
     "date": "2009-07-21",
-    "location": "34.0496, 131.5729",
+    "latitude": 34.0496,
+    "longitude": 131.5729,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1d6f7dfded2de39ca72": {
-    "_id": "6939a1d6f7dfded2de39ca72",
+  "69990ae2c1c326ee19da88b7": {
+    "_id": "69990ae2c1c326ee19da88b7",
     "name": "Landslide at Knoxville",
     "type": "landslide",
     "date": "2017-05-19",
-    "location": "36.770029, -83.712126",
+    "latitude": 36.770029,
+    "longitude": -83.712126,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1d9f7dfded2de39ca75": {
-    "_id": "6939a1d9f7dfded2de39ca75",
+  "69990ae3c1c326ee19da88ba": {
+    "_id": "69990ae3c1c326ee19da88ba",
     "name": "Landslide at Hiroshima",
     "type": "landslide",
     "date": "2009-07-24",
-    "location": "34.3852, 132.4592",
+    "latitude": 34.3852,
+    "longitude": 132.4592,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1ddf7dfded2de39ca78": {
-    "_id": "6939a1ddf7dfded2de39ca78",
+  "69990ae4c1c326ee19da88bd": {
+    "_id": "69990ae4c1c326ee19da88bd",
     "name": "Landslide at Wenchuan",
     "type": "landslide",
     "date": "2009-07-25",
-    "location": "31.483, 103.5868",
+    "latitude": 31.483,
+    "longitude": 103.5868,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1ddf7dfded2de39ca7c": {
-    "_id": "6939a1ddf7dfded2de39ca7c",
+  "69990ae5c1c326ee19da88c1": {
+    "_id": "69990ae5c1c326ee19da88c1",
     "name": "Landslide at Siliguri",
     "type": "landslide",
     "date": "2009-07-01",
-    "location": "27.478, 88.527",
+    "latitude": 27.478,
+    "longitude": 88.527,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1e1f7dfded2de39ca7e": {
-    "_id": "6939a1e1f7dfded2de39ca7e",
+  "69990ae7c1c326ee19da88c3": {
+    "_id": "69990ae7c1c326ee19da88c3",
     "name": "Landslide at \u092d\u0915\u094d\u0924\u092a\u0941\u0930",
     "type": "landslide",
-    "date": "07/27/2009 12:00:00 AM",
-    "location": "28.0, 85.71",
+    "date": "2009-07-27",
+    "latitude": 28.0,
+    "longitude": 85.71,
     "description": "Size: large, Trigger: N/A"
   },
-  "6939a1e3f7dfded2de39ca7f": {
-    "_id": "6939a1e3f7dfded2de39ca7f",
+  "69990ae8c1c326ee19da88c4": {
+    "_id": "69990ae8c1c326ee19da88c4",
     "name": "Landslide at \u092d\u0930\u0924\u092a\u0941\u0930",
     "type": "landslide",
     "date": "2009-07-31",
-    "location": "28.1046, 83.8791",
+    "latitude": 28.1046,
+    "longitude": 83.8791,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1e5f7dfded2de39ca82": {
-    "_id": "6939a1e5f7dfded2de39ca82",
+  "69990ae9c1c326ee19da88c7": {
+    "_id": "69990ae9c1c326ee19da88c7",
     "name": "Landslide at Wrangell",
     "type": "landslide",
     "date": "2009-09-20",
-    "location": "56.5561, -132.7269",
+    "latitude": 56.5561,
+    "longitude": -132.7269,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1eaf7dfded2de39ca83": {
-    "_id": "6939a1eaf7dfded2de39ca83",
+  "69990aebc1c326ee19da88c8": {
+    "_id": "69990aebc1c326ee19da88c8",
     "name": "Landslide at Wrangell",
     "type": "landslide",
     "date": "2009-09-22",
-    "location": "56.5692, -132.7348",
+    "latitude": 56.5692,
+    "longitude": -132.7348,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1edf7dfded2de39ca84": {
-    "_id": "6939a1edf7dfded2de39ca84",
+  "69990aecc1c326ee19da88c9": {
+    "_id": "69990aecc1c326ee19da88c9",
     "name": "Landslide at Wrangell",
     "type": "landslide",
     "date": "2009-09-22",
-    "location": "56.5787, -132.5617",
+    "latitude": 56.5787,
+    "longitude": -132.5617,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1f0f7dfded2de39ca85": {
-    "_id": "6939a1f0f7dfded2de39ca85",
+  "69990aeec1c326ee19da88ca": {
+    "_id": "69990aeec1c326ee19da88ca",
     "name": "Landslide at Tacoma",
     "type": "landslide",
     "date": "2009-11-18",
-    "location": "47.2846, -122.5562",
+    "latitude": 47.2846,
+    "longitude": -122.5562,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1f3f7dfded2de39ca88": {
-    "_id": "6939a1f3f7dfded2de39ca88",
+  "69990aefc1c326ee19da88cd": {
+    "_id": "69990aefc1c326ee19da88cd",
     "name": "Landslide at Tegal",
     "type": "landslide",
     "date": "2009-11-21",
-    "location": "-7.571, 109.9187",
+    "latitude": -7.571,
+    "longitude": 109.9187,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a1f5f7dfded2de39ca8b": {
-    "_id": "6939a1f5f7dfded2de39ca8b",
-    "name": "Landslide at \u9a6c\u5173\u53bf",
+  "69990af0c1c326ee19da88ce": {
+    "_id": "69990af0c1c326ee19da88ce",
+    "name": "Landslide at Minh Xu\u00e2n",
     "type": "landslide",
     "date": "2017-07-03",
-    "location": "22.69040325, 104.4530851",
+    "latitude": 22.69040325,
+    "longitude": 104.4530851,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1f7f7dfded2de39ca8e": {
-    "_id": "6939a1f7f7dfded2de39ca8e",
+  "69990af1c1c326ee19da88d1": {
+    "_id": "69990af1c1c326ee19da88d1",
     "name": "Landslide at Dalton",
     "type": "landslide",
     "date": "2009-12-09",
-    "location": "35.0672, -85.3697",
+    "latitude": 35.0672,
+    "longitude": -85.3697,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1f8f7dfded2de39ca90": {
-    "_id": "6939a1f8f7dfded2de39ca90",
+  "69990af1c1c326ee19da88d3": {
+    "_id": "69990af1c1c326ee19da88d3",
     "name": "Landslide at Chattanooga",
     "type": "landslide",
     "date": "2009-12-09",
-    "location": "35.1052, -85.3361",
+    "latitude": 35.1052,
+    "longitude": -85.3361,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a1faf7dfded2de39ca94": {
-    "_id": "6939a1faf7dfded2de39ca94",
+  "69990af2c1c326ee19da88d7": {
+    "_id": "69990af2c1c326ee19da88d7",
     "name": "Landslide at Angra dos Reis",
     "type": "landslide",
     "date": "2010-01-01",
-    "location": "-23.01374445, -44.32249842",
+    "latitude": -23.01374445,
+    "longitude": -44.32249842,
     "description": "Size: large, Trigger: N/A"
   },
-  "6939a1fdf7dfded2de39ca95": {
-    "_id": "6939a1fdf7dfded2de39ca95",
+  "69990af4c1c326ee19da88d8": {
+    "_id": "69990af4c1c326ee19da88d8",
     "name": "Landslide at Albany",
     "type": "landslide",
     "date": "2015-02-06",
-    "location": "45.2335, -123.1587",
+    "latitude": 45.2335,
+    "longitude": -123.1587,
     "description": "Size: unknown, Trigger: N/A"
   },
-  "6939a1fff7dfded2de39ca97": {
-    "_id": "6939a1fff7dfded2de39ca97",
+  "69990af5c1c326ee19da88da": {
+    "_id": "69990af5c1c326ee19da88da",
     "name": "Landslide at Niter\u00f3i",
     "type": "landslide",
     "date": "2010-04-05",
-    "location": "-22.89234445, -43.07409842",
+    "latitude": -22.89234445,
+    "longitude": -43.07409842,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a203f7dfded2de39ca9a": {
-    "_id": "6939a203f7dfded2de39ca9a",
+  "69990af6c1c326ee19da88dd": {
+    "_id": "69990af6c1c326ee19da88dd",
     "name": "Landslide at Imphal",
     "type": "landslide",
     "date": "2010-07-29",
-    "location": "25.3098633, 94.48214677",
+    "latitude": 25.3098633,
+    "longitude": 94.48214677,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a205f7dfded2de39ca9e": {
-    "_id": "6939a205f7dfded2de39ca9e",
+  "69990af8c1c326ee19da88e1": {
+    "_id": "69990af8c1c326ee19da88e1",
     "name": "Landslide at \u06af\u0644\u06af\u062a",
     "type": "landslide",
     "date": "2010-08-06",
-    "location": "36.6567, 74.8609",
+    "latitude": 36.6567,
+    "longitude": 74.8609,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a208f7dfded2de39ca9f": {
-    "_id": "6939a208f7dfded2de39ca9f",
+  "69990af8c1c326ee19da88e2": {
+    "_id": "69990af8c1c326ee19da88e2",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2010-10-16",
-    "location": "10.395, 123.9153",
+    "latitude": 10.395,
+    "longitude": 123.9153,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a20bf7dfded2de39caa2": {
-    "_id": "6939a20bf7dfded2de39caa2",
+  "69990afac1c326ee19da88e5": {
+    "_id": "69990afac1c326ee19da88e5",
     "name": "Landslide at \u092d\u093f\u092e\u0926\u0924\u094d\u0924",
     "type": "landslide",
     "date": "2011-07-21",
-    "location": "29.7334, 79.6367",
+    "latitude": 29.7334,
+    "longitude": 79.6367,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a20df7dfded2de39caa4": {
-    "_id": "6939a20df7dfded2de39caa4",
+  "69990afcc1c326ee19da88e7": {
+    "_id": "69990afcc1c326ee19da88e7",
     "name": "Landslide at Bogo",
     "type": "landslide",
     "date": "2010-10-17",
-    "location": "10.57, 123.72",
+    "latitude": 10.57,
+    "longitude": 123.72,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a20ff7dfded2de39caa5": {
-    "_id": "6939a20ff7dfded2de39caa5",
+  "69990afdc1c326ee19da88e8": {
+    "_id": "69990afdc1c326ee19da88e8",
     "name": "Landslide at Bogo",
     "type": "landslide",
     "date": "2010-10-17",
-    "location": "10.77, 123.98",
+    "latitude": 10.77,
+    "longitude": 123.98,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a212f7dfded2de39caa8": {
-    "_id": "6939a212f7dfded2de39caa8",
+  "69990afec1c326ee19da88eb": {
+    "_id": "69990afec1c326ee19da88eb",
     "name": "Landslide at Juiz de Fora",
     "type": "landslide",
     "date": "2011-01-12",
-    "location": "-22.2331, -42.6018",
+    "latitude": -22.2331,
+    "longitude": -42.6018,
     "description": "Size: very_large, Trigger: N/A"
   },
-  "6939a215f7dfded2de39caab": {
-    "_id": "6939a215f7dfded2de39caab",
+  "69990affc1c326ee19da88ee": {
+    "_id": "69990affc1c326ee19da88ee",
     "name": "Landslide at \u06af\u0648\u062c\u0631 \u062e\u0627\u0646",
     "type": "landslide",
     "date": "2007-03-19",
-    "location": "33.8778, 74.3333",
+    "latitude": 33.8778,
+    "longitude": 74.3333,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a217f7dfded2de39caae": {
-    "_id": "6939a217f7dfded2de39caae",
+  "69990b01c1c326ee19da88f1": {
+    "_id": "69990b01c1c326ee19da88f1",
     "name": "Landslide at Saint-J\u00e9r\u00f4me",
     "type": "landslide",
     "date": "2011-05-04",
-    "location": "44.9378, -73.0562",
+    "latitude": 44.9378,
+    "longitude": -73.0562,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a21af7dfded2de39cab1": {
-    "_id": "6939a21af7dfded2de39cab1",
+  "69990b02c1c326ee19da88f4": {
+    "_id": "69990b02c1c326ee19da88f4",
     "name": "Landslide at Dehradun",
     "type": "landslide",
     "date": "2011-06-29",
-    "location": "30.7666, 78.7963",
+    "latitude": 30.7666,
+    "longitude": 78.7963,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a21cf7dfded2de39cab3": {
-    "_id": "6939a21cf7dfded2de39cab3",
-    "name": "Landslide at \u092c\u0941\u091f\u0935\u0932",
+  "69990b00c1c326ee19da88f5": {
+    "_id": "69990b00c1c326ee19da88f5",
+    "name": "Landslide at \u092d\u0930\u0924\u092a\u0941\u0930",
     "type": "landslide",
     "date": "2011-07-03",
-    "location": "27.7394, 83.5754",
+    "latitude": 27.7394,
+    "longitude": 83.5754,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a21df7dfded2de39cab4": {
-    "_id": "6939a21df7dfded2de39cab4",
+  "69990b00c1c326ee19da88f6": {
+    "_id": "69990b00c1c326ee19da88f6",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2013-07-21",
-    "location": "10.335, 123.8725",
+    "latitude": 10.335,
+    "longitude": 123.8725,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a221f7dfded2de39cab5": {
-    "_id": "6939a221f7dfded2de39cab5",
+  "69990b01c1c326ee19da88f8": {
+    "_id": "69990b01c1c326ee19da88f8",
     "name": "Landslide at \u092c\u0941\u091f\u0935\u0932",
     "type": "landslide",
     "date": "2011-07-03",
-    "location": "28.3683, 83.2934",
+    "latitude": 28.3683,
+    "longitude": 83.2934,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a224f7dfded2de39cab6": {
-    "_id": "6939a224f7dfded2de39cab6",
+  "69990b03c1c326ee19da88f9": {
+    "_id": "69990b03c1c326ee19da88f9",
     "name": "Landslide at \u092c\u0941\u091f\u0935\u0932",
     "type": "landslide",
     "date": "2011-07-03",
-    "location": "28.0889, 83.2934",
+    "latitude": 28.0889,
+    "longitude": 83.2934,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a22bf7dfded2de39cab7": {
-    "_id": "6939a22bf7dfded2de39cab7",
+  "69990b04c1c326ee19da88fb": {
+    "_id": "69990b04c1c326ee19da88fb",
+    "name": "Landslide at Puerto Escondido",
+    "type": "landslide",
+    "date": "2017-06-02",
+    "latitude": 16.09880042,
+    "longitude": -96.22255907,
+    "description": "Size: medium, Trigger: N/A"
+  },
+  "69990b05c1c326ee19da88fc": {
+    "_id": "69990b05c1c326ee19da88fc",
     "name": "Landslide at Dehradun",
     "type": "landslide",
     "date": "2011-07-09",
-    "location": "30.7652, 78.5925",
+    "latitude": 30.7652,
+    "longitude": 78.5925,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a22ef7dfded2de39cab8": {
-    "_id": "6939a22ef7dfded2de39cab8",
+  "69990b07c1c326ee19da88fd": {
+    "_id": "69990b07c1c326ee19da88fd",
     "name": "Landslide at Dehradun",
     "type": "landslide",
     "date": "2011-07-09",
-    "location": "30.7331, 79.0685",
+    "latitude": 30.7331,
+    "longitude": 79.0685,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a232f7dfded2de39cab9": {
-    "_id": "6939a232f7dfded2de39cab9",
+  "69990b08c1c326ee19da88fe": {
+    "_id": "69990b08c1c326ee19da88fe",
     "name": "Landslide at Dehradun",
     "type": "landslide",
     "date": "2011-07-09",
-    "location": "31.0188, 78.4129",
+    "latitude": 31.0188,
+    "longitude": 78.4129,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a236f7dfded2de39cabb": {
-    "_id": "6939a236f7dfded2de39cabb",
+  "69990b0ac1c326ee19da8900": {
+    "_id": "69990b0ac1c326ee19da8900",
     "name": "Landslide at Madera",
     "type": "landslide",
     "date": "2017-01-06",
-    "location": "37.67607624, -119.7795082",
+    "latitude": 37.67607624,
+    "longitude": -119.7795082,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a23bf7dfded2de39cabe": {
-    "_id": "6939a23bf7dfded2de39cabe",
+  "69990b0cc1c326ee19da8903": {
+    "_id": "69990b0cc1c326ee19da8903",
     "name": "Landslide at Dagupan",
     "type": "landslide",
     "date": "2017-05-30",
-    "location": "16.77787239, 120.9613282",
+    "latitude": 16.77787239,
+    "longitude": 120.9613282,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a23cf7dfded2de39cac1": {
-    "_id": "6939a23cf7dfded2de39cac1",
+  "69990b0dc1c326ee19da8906": {
+    "_id": "69990b0dc1c326ee19da8906",
     "name": "Landslide at Santa Cruz do Capibaribe",
     "type": "landslide",
     "date": "2011-07-16",
-    "location": "-8.8137, -36.9541",
+    "latitude": -8.8137,
+    "longitude": -36.9541,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a23ff7dfded2de39cac2": {
-    "_id": "6939a23ff7dfded2de39cac2",
+  "69990b0ec1c326ee19da8907": {
+    "_id": "69990b0ec1c326ee19da8907",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2012-02-14",
-    "location": "10.39, 123.92",
+    "latitude": 10.39,
+    "longitude": 123.92,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a242f7dfded2de39cac5": {
-    "_id": "6939a242f7dfded2de39cac5",
+  "69990b0ec1c326ee19da890a": {
+    "_id": "69990b0ec1c326ee19da890a",
     "name": "Landslide at Recife",
     "type": "landslide",
     "date": "2011-07-16",
-    "location": "-8.0543, -34.8813",
+    "latitude": -8.0543,
+    "longitude": -34.8813,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a244f7dfded2de39cac7": {
-    "_id": "6939a244f7dfded2de39cac7",
+  "69990b10c1c326ee19da890c": {
+    "_id": "69990b10c1c326ee19da890c",
     "name": "Landslide at Almora",
     "type": "landslide",
     "date": "2011-07-21",
-    "location": "30.4043, 79.3318",
+    "latitude": 30.4043,
+    "longitude": 79.3318,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a246f7dfded2de39caca": {
-    "_id": "6939a246f7dfded2de39caca",
+  "69990b10c1c326ee19da890f": {
+    "_id": "69990b10c1c326ee19da890f",
     "name": "Landslide at Colima City",
     "type": "landslide",
     "date": "2011-07-22",
-    "location": "19.2444, -103.7244",
+    "latitude": 19.2444,
+    "longitude": -103.7244,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a248f7dfded2de39cacd": {
-    "_id": "6939a248f7dfded2de39cacd",
+  "69990b11c1c326ee19da8912": {
+    "_id": "69990b11c1c326ee19da8912",
     "name": "Landslide at Chilpancingo",
     "type": "landslide",
     "date": "2011-07-22",
-    "location": "17.4974, -99.538",
+    "latitude": 17.4974,
+    "longitude": -99.538,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a24bf7dfded2de39cace": {
-    "_id": "6939a24bf7dfded2de39cace",
+  "69990b13c1c326ee19da8913": {
+    "_id": "69990b13c1c326ee19da8913",
     "name": "Landslide at \u092d\u0930\u0924\u092a\u0941\u0930",
     "type": "landslide",
     "date": "2017-07-03",
-    "location": "27.83196401, 84.54704621",
+    "latitude": 27.83196401,
+    "longitude": 84.54704621,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a24ef7dfded2de39cad0": {
-    "_id": "6939a24ef7dfded2de39cad0",
+  "69990b14c1c326ee19da8915": {
+    "_id": "69990b14c1c326ee19da8915",
     "name": "Landslide at Zamora",
     "type": "landslide",
     "date": "2011-07-22",
-    "location": "19.5805, -101.7023",
+    "latitude": 19.5805,
+    "longitude": -101.7023,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a251f7dfded2de39cad1": {
-    "_id": "6939a251f7dfded2de39cad1",
+  "69990b15c1c326ee19da8916": {
+    "_id": "69990b15c1c326ee19da8916",
     "name": "Landslide at Ormoc",
     "type": "landslide",
     "date": "2012-02-16",
-    "location": "10.6073, 124.9705",
+    "latitude": 10.6073,
+    "longitude": 124.9705,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a252f7dfded2de39cad3": {
-    "_id": "6939a252f7dfded2de39cad3",
+  "69990b16c1c326ee19da8918": {
+    "_id": "69990b16c1c326ee19da8918",
     "name": "Landslide at White Rock",
     "type": "landslide",
     "date": "2009-11-17",
-    "location": "49.0229, -122.8001",
+    "latitude": 49.0229,
+    "longitude": -122.8001,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a254f7dfded2de39cad6": {
-    "_id": "6939a254f7dfded2de39cad6",
+  "69990b17c1c326ee19da891b": {
+    "_id": "69990b17c1c326ee19da891b",
     "name": "Landslide at Tepic",
     "type": "landslide",
     "date": "2011-07-22",
-    "location": "21.7595, -104.8334",
+    "latitude": 21.7595,
+    "longitude": -104.8334,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a258f7dfded2de39cad9": {
-    "_id": "6939a258f7dfded2de39cad9",
+  "69990b18c1c326ee19da891e": {
+    "_id": "69990b18c1c326ee19da891e",
     "name": "Landslide at Glenwood Springs",
     "type": "landslide",
     "date": "2011-07-30",
-    "location": "39.4274, -107.1291",
+    "latitude": 39.4274,
+    "longitude": -107.1291,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a25af7dfded2de39cada": {
-    "_id": "6939a25af7dfded2de39cada",
+  "69990b19c1c326ee19da891f": {
+    "_id": "69990b19c1c326ee19da891f",
     "name": "Landslide at Glenwood Springs",
     "type": "landslide",
     "date": "2011-07-30",
-    "location": "39.4977, -107.2225",
+    "latitude": 39.4977,
+    "longitude": -107.2225,
     "description": "Size: small, Trigger: N/A"
   },
-  "6939a25ef7dfded2de39cadb": {
-    "_id": "6939a25ef7dfded2de39cadb",
+  "69990b1bc1c326ee19da8920": {
+    "_id": "69990b1bc1c326ee19da8920",
     "name": "Landslide at \u092c\u0941\u091f\u0935\u0932",
     "type": "landslide",
     "date": "2011-09-17",
-    "location": "28.3875, 82.6474",
+    "latitude": 28.3875,
+    "longitude": 82.6474,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a263f7dfded2de39cade": {
-    "_id": "6939a263f7dfded2de39cade",
+  "69990b1cc1c326ee19da8923": {
+    "_id": "69990b1cc1c326ee19da8923",
     "name": "Landslide at Kohima",
     "type": "landslide",
     "date": "2016-09-05",
-    "location": "26.324724, 94.514651",
+    "latitude": 26.324724,
+    "longitude": 94.514651,
     "description": "Size: large, Trigger: N/A"
   },
-  "6939a264f7dfded2de39cadf": {
-    "_id": "6939a264f7dfded2de39cadf",
+  "69990b1dc1c326ee19da8924": {
+    "_id": "69990b1dc1c326ee19da8924",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2012-02-14",
-    "location": "10.37, 123.89",
+    "latitude": 10.37,
+    "longitude": 123.89,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a265f7dfded2de39cae0": {
-    "_id": "6939a265f7dfded2de39cae0",
+  "69990b1ec1c326ee19da8925": {
+    "_id": "69990b1ec1c326ee19da8925",
     "name": "Landslide at Cebu City",
     "type": "landslide",
     "date": "2012-02-14",
-    "location": "10.42, 123.91",
+    "latitude": 10.42,
+    "longitude": 123.91,
     "description": "Size: medium, Trigger: N/A"
   },
-  "6939a269f7dfded2de39cae4": {
-    "_id": "6939a269f7dfded2de39cae4",
-    "name": "Tsunami at \u0391\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03bf\u03cd\u03c0\u03bf\u03bb\u03b7",
-    "type": "tsunami",
-    "date": "-330-01-01",
-    "location": "40.0, 25.0",
-    "description": null
-  },
-  "6939a26bf7dfded2de39cae8": {
-    "_id": "6939a26bf7dfded2de39cae8",
+  "69990b1fc1c326ee19da8929": {
+    "_id": "69990b1fc1c326ee19da8929",
     "name": "Tsunami at Bristol",
     "type": "tsunami",
     "date": "1764-02-11",
-    "location": "51.45, -2.583",
+    "latitude": 51.45,
+    "longitude": -2.583,
     "description": null
   },
-  "6939a26ff7dfded2de39caec": {
-    "_id": "6939a26ff7dfded2de39caec",
+  "69990b1fc1c326ee19da892d": {
+    "_id": "69990b1fc1c326ee19da892d",
     "name": "Tsunami at \u0627\u0644\u0644\u0627\u0630\u0642\u064a\u0629",
     "type": "tsunami",
-    "date": "859-01-01",
-    "location": "36.08, 36.25",
+    "date": "0859-01-01",
+    "latitude": 36.08,
+    "longitude": 36.25,
     "description": null
   },
-  "6939a273f7dfded2de39caf0": {
-    "_id": "6939a273f7dfded2de39caf0",
+  "69990b20c1c326ee19da8931": {
+    "_id": "69990b20c1c326ee19da8931",
     "name": "Tsunami at \ubb38\ucc9c\uc2dc",
     "type": "tsunami",
     "date": "1580-01-01",
-    "location": "40.0, 128.0",
+    "latitude": 40.0,
+    "longitude": 128.0,
     "description": null
   },
-  "6939a275f7dfded2de39caf3": {
-    "_id": "6939a275f7dfded2de39caf3",
-    "name": "Tsunami at \u00c7anakkale Merkez",
-    "type": "tsunami",
-    "date": "-1300-01-01",
-    "location": "39.96, 26.24",
-    "description": null
-  },
-  "6939a278f7dfded2de39caf6": {
-    "_id": "6939a278f7dfded2de39caf6",
-    "name": "Tsunami at \u6cb3\u53e3\u533a",
-    "type": "tsunami",
-    "date": "-47-09-01",
-    "location": "37.5, 119.5",
-    "description": null
-  },
-  "6939a27bf7dfded2de39cafa": {
-    "_id": "6939a27bf7dfded2de39cafa",
+  "69990b22c1c326ee19da8935": {
+    "_id": "69990b22c1c326ee19da8935",
     "name": "Tsunami at \ubcf4\ub839\uc2dc",
     "type": "tsunami",
     "date": "1556-10-21",
-    "location": "37.0, 126.0",
+    "latitude": 37.0,
+    "longitude": 126.0,
     "description": null
   },
-  "6939a27ef7dfded2de39cafc": {
-    "_id": "6939a27ef7dfded2de39cafc",
+  "69990b23c1c326ee19da8937": {
+    "_id": "69990b23c1c326ee19da8937",
     "name": "Tsunami at Horta",
     "type": "tsunami",
     "date": "1641-12-21",
-    "location": "38.4, -28.1",
+    "latitude": 38.4,
+    "longitude": -28.1,
     "description": null
   },
-  "6939a282f7dfded2de39cafd": {
-    "_id": "6939a282f7dfded2de39cafd",
+  "69990b24c1c326ee19da8938": {
+    "_id": "69990b24c1c326ee19da8938",
     "name": "Tsunami at Tokyo",
     "type": "tsunami",
     "date": "1747-03-01",
-    "location": "33.1, 139.8",
+    "latitude": 33.1,
+    "longitude": 139.8,
     "description": null
   },
-  "6939a284f7dfded2de39cafe": {
-    "_id": "6939a284f7dfded2de39cafe",
+  "69990b25c1c326ee19da8939": {
+    "_id": "69990b25c1c326ee19da8939",
     "name": "Tsunami at Tokyo",
     "type": "tsunami",
     "date": "1606-01-23",
-    "location": "31.9, 140.0",
+    "latitude": 31.9,
+    "longitude": 140.0,
     "description": null
   },
-  "6939a289f7dfded2de39cb01": {
-    "_id": "6939a289f7dfded2de39cb01",
+  "69990b27c1c326ee19da893c": {
+    "_id": "69990b27c1c326ee19da893c",
     "name": "Tsunami at Cardiff",
     "type": "tsunami",
     "date": "1763-09-18",
-    "location": "50.6, -2.4659999999999997",
+    "latitude": 50.6,
+    "longitude": -2.4659999999999997,
     "description": null
   },
-  "6939a28cf7dfded2de39cb04": {
-    "_id": "6939a28cf7dfded2de39cb04",
+  "69990b28c1c326ee19da893f": {
+    "_id": "69990b28c1c326ee19da893f",
     "name": "Tsunami at \u5c3e\u9df2\u5e02",
     "type": "tsunami",
     "date": "1704-01-01",
-    "location": "33.6, 136.0",
+    "latitude": 33.6,
+    "longitude": 136.0,
     "description": null
   },
-  "6939a28ef7dfded2de39cb08": {
-    "_id": "6939a28ef7dfded2de39cb08",
+  "69990b28c1c326ee19da8943": {
+    "_id": "69990b28c1c326ee19da8943",
     "name": "Tsunami at Castel",
     "type": "tsunami",
     "date": "1761-08-14",
-    "location": "49.465, -2.585",
+    "latitude": 49.465,
+    "longitude": -2.585,
     "description": null
   },
-  "6939a290f7dfded2de39cb0a": {
-    "_id": "6939a290f7dfded2de39cb0a",
+  "69990b29c1c326ee19da8945": {
+    "_id": "69990b29c1c326ee19da8945",
     "name": "Tsunami at Bergen",
     "type": "tsunami",
     "date": "1762-05-26",
-    "location": "60.383, 5.332999999999999",
+    "latitude": 60.383,
+    "longitude": 5.332999999999999,
     "description": null
   },
-  "6939a295f7dfded2de39cb0b": {
-    "_id": "6939a295f7dfded2de39cb0b",
+  "69990b2ac1c326ee19da8946": {
+    "_id": "69990b2ac1c326ee19da8946",
     "name": "Tsunami at Angra do Hero\u00edsmo",
     "type": "tsunami",
     "date": "1653-01-01",
-    "location": "38.4, -27.1",
+    "latitude": 38.4,
+    "longitude": -27.1,
     "description": null
   },
-  "6939a297f7dfded2de39cb0c": {
-    "_id": "6939a297f7dfded2de39cb0c",
+  "69990b2dc1c326ee19da8947": {
+    "_id": "69990b2dc1c326ee19da8947",
     "name": "Tsunami at Horta",
     "type": "tsunami",
     "date": "1668-11-23",
-    "location": "38.5, -28.1",
+    "latitude": 38.5,
+    "longitude": -28.1,
     "description": null
   },
-  "6939a298f7dfded2de39cb0d": {
-    "_id": "6939a298f7dfded2de39cb0d",
+  "69990b2dc1c326ee19da8948": {
+    "_id": "69990b2dc1c326ee19da8948",
     "name": "Tsunami at Tokyo",
     "type": "tsunami",
     "date": "1732-01-01",
-    "location": "33.1, 139.767",
+    "latitude": 33.1,
+    "longitude": 139.767,
     "description": null
   },
-  "6939a29bf7dfded2de39cb0f": {
-    "_id": "6939a29bf7dfded2de39cb0f",
+  "69990b2ec1c326ee19da894a": {
+    "_id": "69990b2ec1c326ee19da894a",
     "name": "Tsunami at Plymouth",
     "type": "tsunami",
     "date": "1099-11-11",
-    "location": "50.11600000000001, -5.483",
+    "latitude": 50.11600000000001,
+    "longitude": -5.483,
     "description": null
   },
-  "6939a29ef7dfded2de39cb12": {
-    "_id": "6939a29ef7dfded2de39cb12",
+  "69990b30c1c326ee19da894d": {
+    "_id": "69990b30c1c326ee19da894d",
     "name": "Tsunami at Kocaeli",
     "type": "tsunami",
-    "date": "1646-04-05",
-    "location": "41.04, 28.98",
+    "date": "0975-10-26",
+    "latitude": 41.04,
+    "longitude": 28.98,
     "description": null
   },
-  "6939a2a0f7dfded2de39cb15": {
-    "_id": "6939a2a0f7dfded2de39cb15",
+  "69990b30c1c326ee19da8950": {
+    "_id": "69990b30c1c326ee19da8950",
     "name": "Tsunami at Haeju-si",
     "type": "tsunami",
     "date": "1407-08-23",
-    "location": "38.0, 125.7",
+    "latitude": 38.0,
+    "longitude": 125.7,
     "description": null
   },
-  "6939a2a8f7dfded2de39cb17": {
-    "_id": "6939a2a8f7dfded2de39cb17",
+  "69990b33c1c326ee19da8952": {
+    "_id": "69990b33c1c326ee19da8952",
     "name": "Tsunami at Leeds",
     "type": "tsunami",
     "date": "1755-11-05",
-    "location": "54.68, -1.21",
+    "latitude": 54.68,
+    "longitude": -1.21,
     "description": null
   },
-  "6939a2adf7dfded2de39cb1b": {
-    "_id": "6939a2adf7dfded2de39cb1b",
+  "69990b34c1c326ee19da8956": {
+    "_id": "69990b34c1c326ee19da8956",
     "name": "Tsunami at Santa Cruz de Tenerife",
     "type": "tsunami",
     "date": "1706-05-05",
-    "location": "28.271, -16.641",
+    "latitude": 28.271,
+    "longitude": -16.641,
     "description": null
   },
-  "6939a2aff7dfded2de39cb1e": {
-    "_id": "6939a2aff7dfded2de39cb1e",
+  "69990b36c1c326ee19da8959": {
+    "_id": "69990b36c1c326ee19da8959",
     "name": "Tsunami at \uc18d\ucd08\uc2dc",
     "type": "tsunami",
-    "date": "1681-06-12",
-    "location": "37.5, 129.5",
+    "date": "1681-06-26",
+    "latitude": 37.5,
+    "longitude": 129.5,
     "description": null
   },
-  "6939a2b3f7dfded2de39cb21": {
-    "_id": "6939a2b3f7dfded2de39cb21",
+  "69990b36c1c326ee19da895d": {
+    "_id": "69990b36c1c326ee19da895d",
     "name": "Tsunami at Thira Municipal Unit",
     "type": "tsunami",
-    "date": "46-01-01",
-    "location": "36.404, 25.396",
+    "date": "1650-09-29",
+    "latitude": 36.404,
+    "longitude": 25.396,
     "description": null
   },
-  "6939a2b5f7dfded2de39cb24": {
-    "_id": "6939a2b5f7dfded2de39cb24",
+  "69990b37c1c326ee19da8960": {
+    "_id": "69990b37c1c326ee19da8960",
     "name": "Tsunami at Verona",
     "type": "tsunami",
-    "date": "792-04-30",
-    "location": "45.5, 11.0",
+    "date": "0792-04-30",
+    "latitude": 45.5,
+    "longitude": 11.0,
     "description": null
   },
-  "6939a2b5f7dfded2de39cb25": {
-    "_id": "6939a2b5f7dfded2de39cb25",
+  "69990b38c1c326ee19da8961": {
+    "_id": "69990b38c1c326ee19da8961",
     "name": "Tsunami at Praia da Vit\u00f3ria",
     "type": "tsunami",
     "date": "1676-01-01",
-    "location": "38.733000000000004, -27.066",
+    "latitude": 38.733000000000004,
+    "longitude": -27.066,
     "description": null
   },
-  "6939a2b8f7dfded2de39cb28": {
-    "_id": "6939a2b8f7dfded2de39cb28",
-    "name": "Tsunami at \u9759\u5ca1\u5e02",
+  "69990b3ac1c326ee19da8962": {
+    "_id": "69990b3ac1c326ee19da8962",
+    "name": "Tsunami at \u4e16\u7530\u8c37\u533a",
     "type": "tsunami",
     "date": "1704-01-01",
-    "location": "34.8, 138.6",
+    "latitude": 34.8,
+    "longitude": 138.6,
     "description": null
   },
-  "6939a2b9f7dfded2de39cb2b": {
-    "_id": "6939a2b9f7dfded2de39cb2b",
+  "69990b3bc1c326ee19da8965": {
+    "_id": "69990b3bc1c326ee19da8965",
     "name": "Tsunami at Boryeong-si",
     "type": "tsunami",
     "date": "1519-09-24",
-    "location": "36.3, 126.0",
+    "latitude": 36.3,
+    "longitude": 126.0,
     "description": null
   },
-  "6939a2bcf7dfded2de39cb2c": {
-    "_id": "6939a2bcf7dfded2de39cb2c",
+  "69990b3bc1c326ee19da8966": {
+    "_id": "69990b3bc1c326ee19da8966",
     "name": "Tsunami at Incheon",
     "type": "tsunami",
     "date": "1434-08-06",
-    "location": "37.5, 126.0",
+    "latitude": 37.5,
+    "longitude": 126.0,
     "description": null
   },
-  "6939a2bdf7dfded2de39cb2e": {
-    "_id": "6939a2bdf7dfded2de39cb2e",
-    "name": "Tsunami at Cambridge",
+  "69990b3dc1c326ee19da8968": {
+    "_id": "69990b3dc1c326ee19da8968",
+    "name": "Tsunami at Greater London",
     "type": "tsunami",
     "date": "1609-01-19",
-    "location": "51.5, 0.466",
+    "latitude": 51.5,
+    "longitude": 0.466,
     "description": null
   },
-  "6939a2c0f7dfded2de39cb31": {
-    "_id": "6939a2c0f7dfded2de39cb31",
+  "69990b3ec1c326ee19da896b": {
+    "_id": "69990b3ec1c326ee19da896b",
     "name": "Tsunami at Yatsushiro",
     "type": "tsunami",
-    "date": "1619-05-01",
-    "location": "32.5, 130.6",
+    "date": "1562-07-25",
+    "latitude": 32.5,
+    "longitude": 130.6,
     "description": null
   },
-  "6939a2c3f7dfded2de39cb33": {
-    "_id": "6939a2c3f7dfded2de39cb33",
+  "69990b3cc1c326ee19da896c": {
+    "_id": "69990b3cc1c326ee19da896c",
     "name": "Tsunami at Greater London",
     "type": "tsunami",
     "date": "1762-09-27",
-    "location": "51.5, 0.1",
+    "latitude": 51.5,
+    "longitude": 0.1,
     "description": null
   },
-  "6939a2c6f7dfded2de39cb34": {
-    "_id": "6939a2c6f7dfded2de39cb34",
+  "69990b3dc1c326ee19da896d": {
+    "_id": "69990b3dc1c326ee19da896d",
+    "name": "Tsunami at Thira Municipal Unit",
+    "type": "tsunami",
+    "date": "0046-01-01",
+    "latitude": 36.404,
+    "longitude": 25.396,
+    "description": null
+  },
+  "69990b3ec1c326ee19da896e": {
+    "_id": "69990b3ec1c326ee19da896e",
     "name": "Tsunami at Greater London",
     "type": "tsunami",
     "date": "1767-11-28",
-    "location": "51.5, -0.08",
+    "latitude": 51.5,
+    "longitude": -0.08,
     "description": null
   },
-  "6939a2c8f7dfded2de39cb36": {
-    "_id": "6939a2c8f7dfded2de39cb36",
+  "69990b3fc1c326ee19da8970": {
+    "_id": "69990b3fc1c326ee19da8970",
     "name": "Tsunami at North Devon",
     "type": "tsunami",
     "date": "1756-02-27",
-    "location": "51.208, -4.122",
+    "latitude": 51.208,
+    "longitude": -4.122,
     "description": null
   },
-  "6939a2cbf7dfded2de39cb37": {
-    "_id": "6939a2cbf7dfded2de39cb37",
+  "69990b40c1c326ee19da8971": {
+    "_id": "69990b40c1c326ee19da8971",
     "name": "Tsunami at Busan",
     "type": "tsunami",
     "date": "1636-07-31",
-    "location": "35.1, 129.05",
+    "latitude": 35.1,
+    "longitude": 129.05,
     "description": null
   },
-  "6939a2cdf7dfded2de39cb3a": {
-    "_id": "6939a2cdf7dfded2de39cb3a",
+  "69990b41c1c326ee19da8974": {
+    "_id": "69990b41c1c326ee19da8974",
     "name": "Tsunami at Corfu",
     "type": "tsunami",
     "date": "1732-11-01",
-    "location": "39.5, 20.0",
+    "latitude": 39.5,
+    "longitude": 20.0,
     "description": null
   },
-  "6939a2cff7dfded2de39cb3e": {
-    "_id": "6939a2cff7dfded2de39cb3e",
+  "69990b43c1c326ee19da8978": {
+    "_id": "69990b43c1c326ee19da8978",
     "name": "Tsunami at Puerto La Cruz",
     "type": "tsunami",
     "date": "1726-01-01",
-    "location": "10.633, -64.3",
+    "latitude": 10.633,
+    "longitude": -64.3,
     "description": null
   },
-  "6939a2d2f7dfded2de39cb41": {
-    "_id": "6939a2d2f7dfded2de39cb41",
+  "69990b44c1c326ee19da897b": {
+    "_id": "69990b44c1c326ee19da897b",
     "name": "Tsunami at Municipal Unit of Galaxidi",
     "type": "tsunami",
-    "date": "551-04-01",
-    "location": "38.4, 22.3",
+    "date": "0551-04-01",
+    "latitude": 38.4,
+    "longitude": 22.3,
     "description": null
   },
-  "6939a2d4f7dfded2de39cb45": {
-    "_id": "6939a2d4f7dfded2de39cb45",
+  "69990b45c1c326ee19da897f": {
+    "_id": "69990b45c1c326ee19da897f",
     "name": "Tsunami at Megilot Yam HaMelakh Regional Council",
     "type": "tsunami",
-    "date": "315-01-01",
-    "location": "31.7, 35.5",
+    "date": "0315-01-01",
+    "latitude": 31.7,
+    "longitude": 35.5,
     "description": null
   },
-  "6939a2d5f7dfded2de39cb46": {
-    "_id": "6939a2d5f7dfded2de39cb46",
+  "69990b46c1c326ee19da8980": {
+    "_id": "69990b46c1c326ee19da8980",
     "name": "Tsunami at Iriga",
     "type": "tsunami",
     "date": "1747-01-01",
-    "location": "13.6, 123.2",
+    "latitude": 13.6,
+    "longitude": 123.2,
     "description": null
   },
-  "6939a2d6f7dfded2de39cb49": {
-    "_id": "6939a2d6f7dfded2de39cb49",
+  "69990b47c1c326ee19da8983": {
+    "_id": "69990b47c1c326ee19da8983",
     "name": "Tsunami at Concepcion",
     "type": "tsunami",
     "date": "1742-03-23",
-    "location": "-36.8, -73.0",
+    "latitude": -36.8,
+    "longitude": -73.0,
     "description": null
   },
-  "6939a2d9f7dfded2de39cb4c": {
-    "_id": "6939a2d9f7dfded2de39cb4c",
-    "name": "Tsunami at \u0637\u0631\u0637\u0648\u0633",
-    "type": "tsunami",
-    "date": "-1365-01-01",
-    "location": "35.683, 35.8",
-    "description": null
-  },
-  "6939a2dbf7dfded2de39cb4f": {
-    "_id": "6939a2dbf7dfded2de39cb4f",
+  "69990b48c1c326ee19da8986": {
+    "_id": "69990b48c1c326ee19da8986",
     "name": "Tsunami at Central Jakarta",
     "type": "tsunami",
     "date": "1722-10-01",
-    "location": "-6.1739999999999995, 106.829",
+    "latitude": -6.1739999999999995,
+    "longitude": 106.829,
     "description": null
   },
-  "6939a2e1f7dfded2de39cb51": {
-    "_id": "6939a2e1f7dfded2de39cb51",
+  "69990b4ac1c326ee19da8988": {
+    "_id": "69990b4ac1c326ee19da8988",
     "name": "Tsunami at Vale",
     "type": "tsunami",
-    "date": "842-10-24",
-    "location": "49.5, -2.5",
+    "date": "0842-10-24",
+    "latitude": 49.5,
+    "longitude": -2.5,
     "description": null
   },
-  "6939a2e5f7dfded2de39cb52": {
-    "_id": "6939a2e5f7dfded2de39cb52",
+  "69990b4cc1c326ee19da8989": {
+    "_id": "69990b4cc1c326ee19da8989",
     "name": "Tsunami at \u0130zmir",
     "type": "tsunami",
     "date": "1667-11-30",
-    "location": "38.4, 27.1",
+    "latitude": 38.4,
+    "longitude": 27.1,
     "description": null
   },
-  "6939a2e8f7dfded2de39cb53": {
-    "_id": "6939a2e8f7dfded2de39cb53",
+  "69990b4dc1c326ee19da898a": {
+    "_id": "69990b4dc1c326ee19da898a",
     "name": "Tsunami at \u0130zmir",
     "type": "tsunami",
     "date": "1039-02-02",
-    "location": "38.4, 27.3",
+    "latitude": 38.4,
+    "longitude": 27.3,
     "description": null
   },
-  "6939a2ecf7dfded2de39cb54": {
-    "_id": "6939a2ecf7dfded2de39cb54",
+  "69990b4ec1c326ee19da898b": {
+    "_id": "69990b4ec1c326ee19da898b",
     "name": "Tsunami at Marinha Grande",
     "type": "tsunami",
     "date": "1752-04-28",
-    "location": "40.4, -8.7",
+    "latitude": 40.4,
+    "longitude": -8.7,
     "description": null
   },
-  "6939a2eef7dfded2de39cb55": {
-    "_id": "6939a2eef7dfded2de39cb55",
+  "69990b4fc1c326ee19da898c": {
+    "_id": "69990b4fc1c326ee19da898c",
     "name": "Tsunami at Lisbon",
     "type": "tsunami",
     "date": "1756-03-29",
-    "location": "38.7, -9.1",
+    "latitude": 38.7,
+    "longitude": -9.1,
     "description": null
   },
-  "6939a2f2f7dfded2de39cb57": {
-    "_id": "6939a2f2f7dfded2de39cb57",
+  "69990b50c1c326ee19da898e": {
+    "_id": "69990b50c1c326ee19da898e",
     "name": "Tsunami at Truro",
     "type": "tsunami",
     "date": "1757-07-15",
-    "location": "49.92, -6.32",
+    "latitude": 49.92,
+    "longitude": -6.32,
     "description": null
   },
-  "6939a2f6f7dfded2de39cb5b": {
-    "_id": "6939a2f6f7dfded2de39cb5b",
-    "name": "Tsunami at Breda",
+  "69990b52c1c326ee19da8992": {
+    "_id": "69990b52c1c326ee19da8992",
+    "name": "Tsunami at Maastricht",
     "type": "tsunami",
     "date": "1640-04-04",
-    "location": "50.8, 5.7",
+    "latitude": 50.8,
+    "longitude": 5.7,
     "description": null
   },
-  "6939a2fbf7dfded2de39cb5d": {
-    "_id": "6939a2fbf7dfded2de39cb5d",
+  "69990b52c1c326ee19da8994": {
+    "_id": "69990b52c1c326ee19da8994",
     "name": "Tsunami at \u041e\u0445\u0440\u0438\u0434",
     "type": "tsunami",
     "date": "1273-09-01",
-    "location": "41.3, 19.7",
+    "latitude": 41.3,
+    "longitude": 19.7,
     "description": null
   },
-  "6939a2fdf7dfded2de39cb61": {
-    "_id": "6939a2fdf7dfded2de39cb61",
-    "name": "Tsunami at Sidon",
-    "type": "tsunami",
-    "date": "-525-01-01",
-    "location": "33.56, 35.37",
-    "description": null
-  },
-  "6939a2fff7dfded2de39cb63": {
-    "_id": "6939a2fff7dfded2de39cb63",
-    "name": "Tsunami at Tyre",
-    "type": "tsunami",
-    "date": "-590-01-01",
-    "location": "33.27, 35.22",
-    "description": null
-  },
-  "6939a302f7dfded2de39cb66": {
-    "_id": "6939a302f7dfded2de39cb66",
+  "69990b53c1c326ee19da8997": {
+    "_id": "69990b53c1c326ee19da8997",
     "name": "Tsunami at Itoigawa",
     "type": "tsunami",
-    "date": "863-07-10",
-    "location": "37.1, 138.0",
+    "date": "0863-07-10",
+    "latitude": 37.1,
+    "longitude": 138.0,
     "description": null
   },
-  "6939a305f7dfded2de39cb67": {
-    "_id": "6939a305f7dfded2de39cb67",
+  "69990b54c1c326ee19da8998": {
+    "_id": "69990b54c1c326ee19da8998",
     "name": "Tsunami at Puerto La Cruz",
     "type": "tsunami",
     "date": "1750-01-01",
-    "location": "10.7, -64.1",
+    "latitude": 10.7,
+    "longitude": -64.1,
     "description": null
   },
-  "6939a307f7dfded2de39cb68": {
-    "_id": "6939a307f7dfded2de39cb68",
-    "name": "Tsunami at \u9759\u5ca1\u5e02",
+  "69990b55c1c326ee19da8999": {
+    "_id": "69990b55c1c326ee19da8999",
+    "name": "Tsunami at \u6e2f\u533a",
     "type": "tsunami",
     "date": "1545-02-07",
-    "location": "34.8, 139.0",
+    "latitude": 34.8,
+    "longitude": 139.0,
     "description": null
   },
-  "6939a30df7dfded2de39cb6b": {
-    "_id": "6939a30df7dfded2de39cb6b",
+  "69990b57c1c326ee19da899c": {
+    "_id": "69990b57c1c326ee19da899c",
     "name": "Tsunami at Oita",
     "type": "tsunami",
-    "date": "1698-12-22",
-    "location": "33.3, 131.7",
+    "date": "1715-12-29",
+    "latitude": 33.3,
+    "longitude": 131.7,
     "description": null
   },
-  "6939a311f7dfded2de39cb6c": {
-    "_id": "6939a311f7dfded2de39cb6c",
+  "69990b59c1c326ee19da899f": {
+    "_id": "69990b59c1c326ee19da899f",
     "name": "Tsunami at \u9759\u5ca1\u5e02",
     "type": "tsunami",
     "date": "1498-07-09",
-    "location": "34.4, 137.7",
+    "latitude": 34.4,
+    "longitude": 137.7,
     "description": null
   },
-  "6939a314f7dfded2de39cb6f": {
-    "_id": "6939a314f7dfded2de39cb6f",
-    "name": "Tsunami at Cimahi",
+  "69990b5ac1c326ee19da89a2": {
+    "_id": "69990b5ac1c326ee19da89a2",
+    "name": "Tsunami at Bogor",
     "type": "tsunami",
     "date": "1757-08-24",
-    "location": "-6.0, 107.0",
+    "latitude": -6.0,
+    "longitude": 107.0,
     "description": null
   },
-  "6939a31bf7dfded2de39cb72": {
-    "_id": "6939a31bf7dfded2de39cb72",
+  "69990b5bc1c326ee19da89a5": {
+    "_id": "69990b5bc1c326ee19da89a5",
     "name": "Tsunami at Calapan",
     "type": "tsunami",
     "date": "1653-07-01",
-    "location": "13.1, 121.6",
+    "latitude": 13.1,
+    "longitude": 121.6,
     "description": null
   },
-  "6939a320f7dfded2de39cb75": {
-    "_id": "6939a320f7dfded2de39cb75",
+  "69990b5cc1c326ee19da89a8": {
+    "_id": "69990b5cc1c326ee19da89a8",
     "name": "Tsunami at San Fernando",
     "type": "tsunami",
     "date": "1744-01-01",
-    "location": "17.0, 121.0",
+    "latitude": 17.0,
+    "longitude": 121.0,
     "description": null
   },
-  "6939a322f7dfded2de39cb78": {
-    "_id": "6939a322f7dfded2de39cb78",
+  "69990b5dc1c326ee19da89ab": {
+    "_id": "69990b5dc1c326ee19da89ab",
     "name": "Tsunami at Samuel Pastor",
     "type": "tsunami",
     "date": "1725-03-27",
-    "location": "-16.6, -72.7",
+    "latitude": -16.6,
+    "longitude": -72.7,
     "description": null
   },
-  "6939a324f7dfded2de39cb7b": {
-    "_id": "6939a324f7dfded2de39cb7b",
+  "69990b5dc1c326ee19da89ae": {
+    "_id": "69990b5dc1c326ee19da89ae",
     "name": "Tsunami at Isumi",
     "type": "tsunami",
     "date": "1642-09-04",
-    "location": "35.2, 140.6",
+    "latitude": 35.2,
+    "longitude": 140.6,
     "description": null
   },
-  "6939a327f7dfded2de39cb7e": {
-    "_id": "6939a327f7dfded2de39cb7e",
+  "69990b5fc1c326ee19da89b1": {
+    "_id": "69990b5fc1c326ee19da89b1",
     "name": "Tsunami at Istanbul",
     "type": "tsunami",
     "date": "1332-02-12",
-    "location": "40.9, 28.9",
+    "latitude": 40.9,
+    "longitude": 28.9,
     "description": null
   },
-  "6939a32af7dfded2de39cb81": {
-    "_id": "6939a32af7dfded2de39cb81",
+  "69990b61c1c326ee19da89b4": {
+    "_id": "69990b61c1c326ee19da89b4",
     "name": "Tsunami at Miyakojima",
     "type": "tsunami",
     "date": "1667-01-01",
-    "location": "25.0, 125.5",
+    "latitude": 25.0,
+    "longitude": 125.5,
     "description": null
   },
-  "6939a32cf7dfded2de39cb84": {
-    "_id": "6939a32cf7dfded2de39cb84",
+  "69990b62c1c326ee19da89b7": {
+    "_id": "69990b62c1c326ee19da89b7",
     "name": "Tsunami at \u5982\u768b\u5e02",
     "type": "tsunami",
     "date": "1509-06-17",
-    "location": "31.5, 121.5",
+    "latitude": 31.5,
+    "longitude": 121.5,
     "description": null
   },
-  "6939a330f7dfded2de39cb87": {
-    "_id": "6939a330f7dfded2de39cb87",
+  "69990b64c1c326ee19da89ba": {
+    "_id": "69990b64c1c326ee19da89ba",
     "name": "Tsunami at \u677e\u6238\u5e02",
     "type": "tsunami",
     "date": "1732-12-04",
-    "location": "35.2, 140.8",
+    "latitude": 35.2,
+    "longitude": 140.8,
     "description": null
   },
-  "6939a332f7dfded2de39cb88": {
-    "_id": "6939a332f7dfded2de39cb88",
+  "69990b65c1c326ee19da89bb": {
+    "_id": "69990b65c1c326ee19da89bb",
     "name": "Tsunami at Acapulco",
     "type": "tsunami",
     "date": "1732-02-25",
-    "location": "16.8, -99.9",
+    "latitude": 16.8,
+    "longitude": -99.9,
     "description": null
   },
-  "6939a335f7dfded2de39cb8b": {
-    "_id": "6939a335f7dfded2de39cb8b",
+  "69990b66c1c326ee19da89be": {
+    "_id": "69990b66c1c326ee19da89be",
     "name": "Tsunami at Moquegua",
     "type": "tsunami",
     "date": "1715-08-23",
-    "location": "-17.3, -70.8",
+    "latitude": -17.3,
+    "longitude": -70.8,
     "description": null
   },
-  "6939a338f7dfded2de39cb8e": {
-    "_id": "6939a338f7dfded2de39cb8e",
+  "69990b67c1c326ee19da89c1": {
+    "_id": "69990b67c1c326ee19da89c1",
     "name": "Tsunami at Takamatsu",
     "type": "tsunami",
     "date": "1711-12-20",
-    "location": "34.3, 134.0",
+    "latitude": 34.3,
+    "longitude": 134.0,
     "description": null
   },
-  "6939a33cf7dfded2de39cb91": {
-    "_id": "6939a33cf7dfded2de39cb91",
+  "69990b69c1c326ee19da89c4": {
+    "_id": "69990b69c1c326ee19da89c4",
     "name": "Tsunami at Ambon",
     "type": "tsunami",
     "date": "1708-11-28",
-    "location": "-3.69, 128.15",
+    "latitude": -3.69,
+    "longitude": 128.15,
     "description": null
   },
-  "6939a340f7dfded2de39cb92": {
-    "_id": "6939a340f7dfded2de39cb92",
-    "name": "Tsunami at \u5c3e\u9df2\u5e02",
+  "69990b6bc1c326ee19da89c6": {
+    "_id": "69990b6bc1c326ee19da89c6",
+    "name": "Tsunami at \u639b\u5ddd\u5e02",
     "type": "tsunami",
     "date": "1708-02-13",
-    "location": "34.0, 137.0",
+    "latitude": 34.0,
+    "longitude": 137.0,
     "description": null
   },
-  "6939a342f7dfded2de39cb93": {
-    "_id": "6939a342f7dfded2de39cb93",
+  "69990b6bc1c326ee19da89c7": {
+    "_id": "69990b6bc1c326ee19da89c7",
     "name": "Tsunami at Boryeong-si",
     "type": "tsunami",
     "date": "1700-09-12",
-    "location": "36.5, 126.5",
+    "latitude": 36.5,
+    "longitude": 126.5,
     "description": null
   },
-  "6939a345f7dfded2de39cb96": {
-    "_id": "6939a345f7dfded2de39cb96",
+  "69990b6cc1c326ee19da89c8": {
+    "_id": "69990b6cc1c326ee19da89c8",
+    "name": "Tsunami at Oita",
+    "type": "tsunami",
+    "date": "1698-12-22",
+    "latitude": 33.3,
+    "longitude": 131.7,
+    "description": null
+  },
+  "69990b6dc1c326ee19da89cb": {
+    "_id": "69990b6dc1c326ee19da89cb",
     "name": "Tsunami at San Felipe",
     "type": "tsunami",
     "date": "1687-07-12",
-    "location": "-32.8, -70.7",
+    "latitude": -32.8,
+    "longitude": -70.7,
     "description": null
   },
-  "6939a34af7dfded2de39cb99": {
-    "_id": "6939a34af7dfded2de39cb99",
+  "69990b6ec1c326ee19da89cc": {
+    "_id": "69990b6ec1c326ee19da89cc",
+    "name": "Tsunami at \uc18d\ucd08\uc2dc",
+    "type": "tsunami",
+    "date": "1681-06-12",
+    "latitude": 37.5,
+    "longitude": 129.5,
+    "description": null
+  },
+  "69990b70c1c326ee19da89cf": {
+    "_id": "69990b70c1c326ee19da89cf",
     "name": "Tsunami at Batangas City",
     "type": "tsunami",
     "date": "1675-03-01",
-    "location": "13.0, 121.0",
+    "latitude": 13.0,
+    "longitude": 121.0,
     "description": null
   },
-  "6939a34cf7dfded2de39cb9a": {
-    "_id": "6939a34cf7dfded2de39cb9a",
+  "69990b70c1c326ee19da89d0": {
+    "_id": "69990b70c1c326ee19da89d0",
     "name": "Tsunami at Ambon",
     "type": "tsunami",
     "date": "1674-05-06",
-    "location": "-3.7, 128.2",
+    "latitude": -3.7,
+    "longitude": 128.2,
     "description": null
   },
-  "6939a350f7dfded2de39cb9d": {
-    "_id": "6939a350f7dfded2de39cb9d",
+  "69990b72c1c326ee19da89d3": {
+    "_id": "69990b72c1c326ee19da89d3",
     "name": "Tsunami at Tidore Kepulauan",
     "type": "tsunami",
     "date": "1673-08-12",
-    "location": "1.375, 127.52",
+    "latitude": 1.375,
+    "longitude": 127.52,
     "description": null
   },
-  "6939a351f7dfded2de39cb9e": {
-    "_id": "6939a351f7dfded2de39cb9e",
-    "name": "Tsunami at \u0391\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03bf\u03cd\u03c0\u03bf\u03bb\u03b7",
+  "69990b73c1c326ee19da89d6": {
+    "_id": "69990b73c1c326ee19da89d6",
+    "name": "Tsunami at \u00c7anakkale",
     "type": "tsunami",
     "date": "1672-04-01",
-    "location": "40.0, 26.0",
+    "latitude": 40.0,
+    "longitude": 26.0,
     "description": null
   },
-  "6939a353f7dfded2de39cb9f": {
-    "_id": "6939a353f7dfded2de39cb9f",
+  "69990b75c1c326ee19da89d7": {
+    "_id": "69990b75c1c326ee19da89d7",
     "name": "Tsunami at \u677e\u6238\u5e02",
     "type": "tsunami",
     "date": "1670-12-17",
-    "location": "35.5, 141.0",
+    "latitude": 35.5,
+    "longitude": 141.0,
     "description": null
   },
-  "6939a356f7dfded2de39cba0": {
-    "_id": "6939a356f7dfded2de39cba0",
+  "69990b75c1c326ee19da89d8": {
+    "_id": "69990b75c1c326ee19da89d8",
     "name": "Tsunami at Tainan",
     "type": "tsunami",
     "date": "1661-01-08",
-    "location": "23.0, 120.1",
+    "latitude": 23.0,
+    "longitude": 120.1,
     "description": null
   },
-  "6939a35af7dfded2de39cba1": {
-    "_id": "6939a35af7dfded2de39cba1",
+  "69990b77c1c326ee19da89d9": {
+    "_id": "69990b77c1c326ee19da89d9",
     "name": "Tsunami at Ambon",
     "type": "tsunami",
     "date": "1657-12-01",
-    "location": "-3.0, 128.0",
+    "latitude": -3.0,
+    "longitude": 128.0,
     "description": null
   },
-  "6939a35ef7dfded2de39cba4": {
-    "_id": "6939a35ef7dfded2de39cba4",
+  "69990b78c1c326ee19da89dc": {
+    "_id": "69990b78c1c326ee19da89dc",
     "name": "Tsunami at \ubaa9\ud3ec\uc2dc",
     "type": "tsunami",
     "date": "1649-12-09",
-    "location": "35.5, 126.0",
+    "latitude": 35.5,
+    "longitude": 126.0,
     "description": null
   },
-  "6939a364f7dfded2de39cba5": {
-    "_id": "6939a364f7dfded2de39cba5",
+  "69990b78c1c326ee19da89dd": {
+    "_id": "69990b78c1c326ee19da89dd",
+    "name": "Tsunami at Kocaeli",
+    "type": "tsunami",
+    "date": "1646-04-05",
+    "latitude": 41.04,
+    "longitude": 28.98,
+    "description": null
+  },
+  "69990b79c1c326ee19da89de": {
+    "_id": "69990b79c1c326ee19da89de",
     "name": "Tsunami at Ulsan",
     "type": "tsunami",
     "date": "1643-07-25",
-    "location": "35.5, 129.5",
+    "latitude": 35.5,
+    "longitude": 129.5,
     "description": null
   },
-  "6939a366f7dfded2de39cba8": {
-    "_id": "6939a366f7dfded2de39cba8",
+  "69990b78c1c326ee19da89e1": {
+    "_id": "69990b78c1c326ee19da89e1",
     "name": "Tsunami at Shantou",
     "type": "tsunami",
     "date": "1640-09-16",
-    "location": "23.0, 117.0",
+    "latitude": 23.0,
+    "longitude": 117.0,
     "description": null
   },
-  "6939a36ef7dfded2de39cbab": {
-    "_id": "6939a36ef7dfded2de39cbab",
+  "69990b7cc1c326ee19da89e4": {
+    "_id": "69990b7cc1c326ee19da89e4",
     "name": "Tsunami at Tuguegarao",
     "type": "tsunami",
     "date": "1627-09-14",
-    "location": "18.4, 121.6",
+    "latitude": 18.4,
+    "longitude": 121.6,
     "description": null
   },
-  "6939a373f7dfded2de39cbaf": {
-    "_id": "6939a373f7dfded2de39cbaf",
+  "69990b7dc1c326ee19da89e5": {
+    "_id": "69990b7dc1c326ee19da89e5",
+    "name": "Tsunami at Yatsushiro",
+    "type": "tsunami",
+    "date": "1619-05-01",
+    "latitude": 32.5,
+    "longitude": 130.6,
+    "description": null
+  },
+  "69990b7ec1c326ee19da89e9": {
+    "_id": "69990b7ec1c326ee19da89e9",
     "name": "Tsunami at San Pedro Sula",
     "type": "tsunami",
     "date": "1539-11-24",
-    "location": "16.2, -88.5",
+    "latitude": 16.2,
+    "longitude": -88.5,
     "description": null
   },
-  "6939a376f7dfded2de39cbb0": {
-    "_id": "6939a376f7dfded2de39cbb0",
+  "69990b7fc1c326ee19da89ea": {
+    "_id": "69990b7fc1c326ee19da89ea",
     "name": "Tsunami at \u5c3e\u9df2\u5e02",
     "type": "tsunami",
     "date": "1520-04-04",
-    "location": "33.6, 136.3",
+    "latitude": 33.6,
+    "longitude": 136.3,
     "description": null
   },
-  "6939a379f7dfded2de39cbb3": {
-    "_id": "6939a379f7dfded2de39cbb3",
+  "69990b80c1c326ee19da89ed": {
+    "_id": "69990b80c1c326ee19da89ed",
     "name": "Tsunami at Osaka",
     "type": "tsunami",
     "date": "1510-09-21",
-    "location": "34.6, 135.4",
+    "latitude": 34.6,
+    "longitude": 135.4,
     "description": null
   },
-  "6939a37cf7dfded2de39cbb5": {
-    "_id": "6939a37cf7dfded2de39cbb5",
+  "69990b81c1c326ee19da89ef": {
+    "_id": "69990b81c1c326ee19da89ef",
     "name": "Tsunami at Kashiwazaki",
     "type": "tsunami",
     "date": "1448-09-19",
-    "location": "37.5, 138.2",
+    "latitude": 37.5,
+    "longitude": 138.2,
     "description": null
   },
-  "6939a37ef7dfded2de39cbb6": {
-    "_id": "6939a37ef7dfded2de39cbb6",
+  "69990b82c1c326ee19da89f0": {
+    "_id": "69990b82c1c326ee19da89f0",
     "name": "Tsunami at Tokyo",
     "type": "tsunami",
     "date": "1433-11-07",
-    "location": "34.9, 139.5",
+    "latitude": 34.9,
+    "longitude": 139.5,
     "description": null
   },
-  "6939a382f7dfded2de39cbb7": {
-    "_id": "6939a382f7dfded2de39cbb7",
+  "69990b83c1c326ee19da89f1": {
+    "_id": "69990b83c1c326ee19da89f1",
     "name": "Tsunami at \u5c3e\u9df2\u5e02",
     "type": "tsunami",
     "date": "1408-01-21",
-    "location": "33.8, 136.9",
+    "latitude": 33.8,
+    "longitude": 136.9,
     "description": null
   },
-  "6939a38df7dfded2de39cbb8": {
-    "_id": "6939a38df7dfded2de39cbb8",
+  "69990b85c1c326ee19da89f2": {
+    "_id": "69990b85c1c326ee19da89f2",
     "name": "Tsunami at \u5c3e\u9df2\u5e02",
     "type": "tsunami",
     "date": "1403-12-01",
-    "location": "33.7, 136.5",
+    "latitude": 33.7,
+    "longitude": 136.5,
     "description": null
   },
-  "6939a391f7dfded2de39cbb9": {
-    "_id": "6939a391f7dfded2de39cbb9",
+  "69990b86c1c326ee19da89f3": {
+    "_id": "69990b86c1c326ee19da89f3",
     "name": "Tsunami at \u5c3e\u9df2\u5e02",
     "type": "tsunami",
     "date": "1331-08-15",
-    "location": "33.7, 135.2",
+    "latitude": 33.7,
+    "longitude": 135.2,
     "description": null
   },
-  "6939a392f7dfded2de39cbbc": {
-    "_id": "6939a392f7dfded2de39cbbc",
+  "69990b87c1c326ee19da89f6": {
+    "_id": "69990b87c1c326ee19da89f6",
     "name": "Tsunami at Yokosuka",
     "type": "tsunami",
     "date": "1257-10-09",
-    "location": "35.2, 139.5",
+    "latitude": 35.2,
+    "longitude": 139.5,
     "description": null
   },
-  "6939a397f7dfded2de39cbbe": {
-    "_id": "6939a397f7dfded2de39cbbe",
+  "69990b89c1c326ee19da89f8": {
+    "_id": "69990b89c1c326ee19da89f8",
     "name": "Tsunami at Chigasaki",
     "type": "tsunami",
     "date": "1241-05-22",
-    "location": "35.2, 139.4",
+    "latitude": 35.2,
+    "longitude": 139.4,
     "description": null
   }
 }

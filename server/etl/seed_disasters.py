@@ -19,6 +19,12 @@ def extract(filename: str) -> list:
         exit(1)
 
 
+def transform_date(year: str, month: str, day: str) -> str:
+    return (f"{int(float(year or 1)):04d}"
+            f"-{int(float(month or 1)):02d}"
+            f"-{int(float(day or 1)):02d}") 
+
+
 def transform_earthquake(row: dict) -> list:
     """Transform earthquake data into format CRUD API can understand"""
     try:
@@ -26,13 +32,20 @@ def transform_earthquake(row: dict) -> list:
             raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['latitude'])
         lon = float(row['longitude'])
-        date = datetime.strptime(row.get('date_time'), "%d-%m-%Y %H:%M")
+
+        day, month, year = row.get('date_time').split(' ')[0].split('-')
+        date = transform_date(year, month, day)
+        # Skip negative years
+        if date[0] == '-':
+            return None
+
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Earthquake at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.EARTHQUAKE,
-            nd.DATE: date.strftime("%Y-%m-%d"),
-            nd.LOCATION: f"{lat}, {lon}",
+            nd.DATE: date,
+            nd.LATITUDE: lat,
+            nd.LONGITUDE: lon,
             nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
                             f"Depth: {row.get('depth', 'N/A')} km"
         }
@@ -49,13 +62,20 @@ def transform_landslide(row: dict) -> list:
         lon = float(row['longitude'])
         size = row.get('landslide_size', 'N/A')
         trigger = row.get('trigger', 'N/A')
-        date = datetime.strptime(row.get('event_date'), "%m/%d/%Y %I:%M:%S %p")
+
+        month, day, year = row.get('event_date').split(' ')[0].split('/')
+        date = transform_date(year, month, day)
+        # Skip negative years
+        if date[0] == '-':
+            return None
+
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Landslide at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.LANDSLIDE,
-            nd.DATE: date.strftime("%Y-%m-%d"),
-            nd.LOCATION: f"{lat}, {lon}",
+            nd.DATE: date,
+            nd.LATITUDE: lat,
+            nd.LONGITUDE: lon,
             nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
         }
     except Exception as e:
@@ -69,16 +89,19 @@ def transform_tsunami(row: dict) -> list:
             raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['LATITUDE'])
         lon = float(row['LONGITUDE'])
-        # Default to '01' if field is an empty string
-        date = (f"{int(float(row.get('YEAR') or 1)):02d}"
-                f"-{int(float(row.get('MONTH') or 1)):02d}"
-                f"-{int(float(row.get('DAY') or 1)):02d}")
+
+        date = transform_date(row.get('YEAR'), row.get('MONTH'), row.get('DAY'))
+        # Skip negative years
+        if date[0] == '-':
+            return None
+
         loc_data = load_location(lat, lon)
         return {
             nd.NAME: f"Tsunami at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.TSUNAMI,
             nd.DATE: date,
-            nd.LOCATION: f"{lat}, {lon}"
+            nd.LATITUDE: lat,
+            nd.LONGITUDE: lon,
         }
     except Exception as e:
         print(e)
@@ -98,7 +121,8 @@ def transform_hurricane(row: dict) -> list:
             nd.NAME: f"Hurricane at {loc_data['city_name']}",
             nd.DISASTER_TYPE: nd.HURRICANE,
             nd.DATE: row.get('date', ''),
-            nd.LOCATION: f"{lat}, {lon}",
+            nd.LATITUDE: lat,
+            nd.LONGITUDE: lon,
             nd.DESCRIPTION: f"Category: {category}, Wind Speed: {wind_speed} mph"
         }
     except Exception as e:
@@ -168,6 +192,8 @@ def load_location(lat: float, lon: float):
                 ct.NAME: city_name,
                 ct.STATE_NAME: state_name,
                 ct.NATION_NAME: nation_name,
+                ct.LATITUDE: lat,
+                ct.LONGITUDE: lon,
             })
             print(f"Created city: {city_name} ({state_name}, {nation_name})")
         except Exception as e:
