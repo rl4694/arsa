@@ -6,6 +6,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
 from datetime import datetime
+import re
 
 DISASTERS_RESP = 'records'
 COLLECTION = 'natural_disasters'
@@ -23,15 +24,59 @@ HURRICANE = 'hurricane'
 DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE]
 KEY = (NAME, DATE, LATITUDE, LONGITUDE)
 
+def validate_date(date_string: str) -> None:
+    """
+    Validate date string in format 'yyyy-mm-dd' or '-yyyy-mm-dd' (for negative/BCE years).
+    Supports 3-digit years (e.g., '500-01-01') and negative years (e.g., '-500-01-01').
+    
+    Args:
+        date_string: Date string to validate
+        
+    Raises:
+        ValueError: If date format is invalid or values are out of range
+    """
+    # Pattern: optional minus sign, 1-4 digits for year, month, day
+    pattern = r'^(-?)(\d{1,4})-(\d{1,2})-(\d{1,2})$'
+    match = re.match(pattern, date_string)
+    
+    if not match:
+        raise ValueError(f'Invalid date format: {date_string}. Expected format: yyyy-mm-dd or -yyyy-mm-dd')
+    
+    negative, year_str, month_str, day_str = match.groups()
+    
+    try:
+        year = int(year_str)
+        month = int(month_str)
+        day = int(day_str)
+        
+        # Apply negative sign if present
+        if negative:
+            year = -year
+        
+        # Validate ranges
+        if month < 1 or month > 12:
+            raise ValueError(f'Month must be between 1 and 12, got {month}')
+        
+        if day < 1 or day > 31:
+            raise ValueError(f'Day must be between 1 and 31, got {day}')
+        
+        # For positive years only, try to validate with datetime
+        # (datetime only supports years 1-9999)
+        if year > 0 and year <= 9999:
+            try:
+                datetime(year, month, day)
+            except ValueError as e:
+                raise ValueError(f'Invalid date: {date_string} - {str(e)}')
+    except ValueError as e:
+        raise ValueError(f'Invalid date string: {date_string} - {str(e)}')
+
+
 class NaturalDisasters(CRUD):
     def validate(self, fields: dict):
         super().validate(fields)
-        # Check if date is in the format 'yyyy-mm-dd'
+        # Check if date is in the format 'yyyy-mm-dd' or '-yyyy-mm-dd'
         if DATE in fields:
-            try:
-                datetime.strptime(fields[DATE], "%Y-%m-%d")
-            except:
-                raise ValueError(f'Invalid date string: {fields[DATE]}')
+            validate_date(fields[DATE])
 
 disasters = NaturalDisasters(
     COLLECTION,
