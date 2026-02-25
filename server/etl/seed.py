@@ -13,6 +13,7 @@ import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 from server.etl.seed_nations import seed_nations
 import server.etl.seed_disasters as sd
+import server.etl.seed_locations as sl
 
 
 # Initialize constants
@@ -68,7 +69,6 @@ def is_json_populated(filename: str) -> bool:
     try:
         with open(filename, 'r') as f:
             data = json.load(f)
-            # Check if data is a non-empty dict or list
             if isinstance(data, dict):
                 return len(data) > 0
             elif isinstance(data, list):
@@ -84,16 +84,14 @@ def main():
     print("Seeding nations...")
     seed_nations(NATIONS_FILE)
 
-    # Seed cities, states, and natural disasters
-    print("Seeding disaster data...")
-    is_disasters_cached = (
+    # Seed cities and states from disaster CSV coordinates
+    print("Seeding locations (cities and states)...")
+    is_locations_cached = (
         is_json_populated(CITIES_JSON_FILE) and
-        is_json_populated(STATES_JSON_FILE) and
-        is_json_populated(DISASTERS_JSON_FILE)
+        is_json_populated(STATES_JSON_FILE)
     )
 
-    # Use JSON files if they exist
-    if is_disasters_cached:
+    if is_locations_cached:
         for i, record in enumerate(load_json(CITIES_JSON_FILE).values()):
             ct.cities.create(record)
             if i > LOAD_COUNT:
@@ -103,29 +101,36 @@ def main():
             st.states.create(record)
             if i > LOAD_COUNT:
                 break
+    else:
+        sl.seed_locations()
+        try:
+            save_json(CITIES_JSON_FILE, ct.cities.read())
+            save_json(STATES_JSON_FILE, st.states.read())
+        except Exception as e:
+            print(f"Warning: Could not save locations to JSON: {e}")
 
+    # Seed natural disasters
+    print("Seeding disasters...")
+    is_disasters_cached = is_json_populated(DISASTERS_JSON_FILE)
+
+    if is_disasters_cached:
         counts = {disaster_type: 0 for disaster_type in nd.DISASTER_TYPES}
-        for i, record in enumerate(load_json(DISASTERS_JSON_FILE).values()):
+        for record in load_json(DISASTERS_JSON_FILE).values():
             disaster_type = record.get(nd.DISASTER_TYPE, 'unknown')
-            if counts[disaster_type] > LOAD_COUNT:
+            if counts.get(disaster_type, 0) > LOAD_COUNT:
                 continue
             sd.load_disaster(record)
-            counts[disaster_type] += 1
-    # Use API calls otherwise
+            counts[disaster_type] = counts.get(disaster_type, 0) + 1
     else:
         sd.seed_disasters(EARTHQUAKES_FILE, nd.EARTHQUAKE)
         sd.seed_disasters(LANDSLIDE_FILE, nd.LANDSLIDE)
         sd.seed_disasters(TSUNAMI_FILE, nd.TSUNAMI)
         # TODO: upload hurricane file
-        # sd.seed_disasters(HURRICANES_FILE, sd.HURRICANE)
-
-        # Cache cities, states, and natural disasters into JSON files
+        # sd.seed_disasters(HURRICANES_FILE, nd.HURRICANE)
         try:
-            save_json(CITIES_JSON_FILE, ct.cities.read())
-            save_json(STATES_JSON_FILE, st.states.read())
             save_json(DISASTERS_JSON_FILE, nd.disasters.read())
         except Exception as e:
-            print(f"Warning: Could not save to JSON: {e}")
+            print(f"Warning: Could not save disasters to JSON: {e}")
 
     print("Seeding complete")
 

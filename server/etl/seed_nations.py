@@ -36,3 +36,7 @@ def seed_nations(filename: str):
     raw = extract(filename)
     transformed = transform(raw)
     load(transformed)
+
+
+if __name__ == '__main__':
+    seed_nations('server/etl/nations.csv')
