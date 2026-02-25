@@ -80,6 +80,8 @@ def load_location(lat: float, lon: float) -> dict:
                 ct.NAME: city_name,
                 ct.STATE_NAME: state_name,
                 ct.NATION_NAME: nation_name,
+                ct.LATITUDE: lat,
+                ct.LONGITUDE: lon,
             })
             print(f"Created city: {city_name} ({state_name}, {nation_name})")
         except Exception as e:
