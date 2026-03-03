@@ -29,7 +29,7 @@ state_model = api.model('State', {
     NATION_NAME: fields.String(required=True, description='Nation Code'),
 })
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class StateList(Resource):
     """
     Collection-level operations for states.
@@ -68,11 +68,8 @@ class State(Resource):
     @api.doc('get_state')
     def get(self, state_id):
         """Retrieve a single state by ID."""
-        try:
-            record = states.select(state_id)
-            return {STATES_RESP: record}
-        except:
-            api.abort(404, "State not found")
+        record = states.select(state_id)
+        return {STATES_RESP: record}
 
     @api.expect(state_model)
     @api.doc('update_state')
@@ -100,18 +97,12 @@ class State(Resource):
         #     record = states.select(new_id)
         #     return {STATES_RESP: record}
 
-        try:
-            states.update(state_id, request.json)
-            record = states.select(state_id)
-            return {STATES_RESP: record}
-        except KeyError:
-            api.abort(404, "State not found")
+        states.update(state_id, request.json)
+        record = states.select(state_id)
+        return {STATES_RESP: record}
 
     @api.doc('delete_state')
     def delete(self, state_id):
         """Delete a state by ID."""
-        try:
-            states.delete(state_id)
-            return '', 204
-        except KeyError:
-            api.abort(404, "State not found")
+        states.delete(state_id)
+        return '', 204

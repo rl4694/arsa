@@ -32,7 +32,7 @@ nation_model = api.model('Nation', {
 
 
 # NATIONS ENDPOINTS
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class NationList(Resource):
     """
     Collection-level operations for nations.
@@ -49,14 +49,14 @@ class NationList(Resource):
         """Create a new nation."""
         data = request.json
         
-        try:
-            country = pycountry.countries.get(name=data['name'])
-            code = country.alpha_2
-        except:
-            api.abort(400, f"Invalid nation name: {data['name']}")
-
-        data['code'] = code
-        data['_id'] = code
+        # Commenting this out because it complicates adding custom nations
+        # try:
+        #     country = pycountry.countries.get(name=data['name'])
+        #     code = country.alpha_2
+        # except:
+        #     api.abort(400, f"Invalid nation name: {data['name']}")
+        # data['code'] = code
+        # data['_id'] = code
         
         _id = nations.create(data, return_duplicate_id=False)
         created = nations.select(_id)
@@ -72,42 +72,32 @@ class Nation(Resource):
     @api.doc('get_nation')
     def get(self, nation_id):
         """Retrieve a single nation by ID."""
-        try:
-            record = nations.select(nation_id)
-            return {NATIONS_RESP: record}
-        except:
-            api.abort(404, "Nation not found")
+        record = nations.select(nation_id)
+        return {NATIONS_RESP: record}
 
     @api.expect(nation_model)
     @api.doc('update_nation')
     def put(self, nation_id):
         """Update a nation by ID."""
-        try:
-            payload = request.json
-            if 'name' in payload:
-                try:
-                    country = pycountry.countries.get(name=payload['name'])
-                    payload['code'] = country.alpha_2
-                    
-                except:
-                    api.abort(400, f"Invalid nation name: {payload['name']}")
-                    nations.delete(nation_id)
-                    new_id = nations.create(payload, return_duplicate_id=False)
-                    record = nations.select(new_id)
-                    return {NATIONS_RESP: record}
+        payload = request.json
+        # Commenting this out because it complicates adding custom nations
+        # if 'name' in payload:
+        #     try:
+        #         country = pycountry.countries.get(name=payload['name'])
+        #         payload['code'] = country.alpha_2
+        #     except:
+        #         api.abort(400, f"Invalid nation name: {payload['name']}")
+        #         nations.delete(nation_id)
+        #         new_id = nations.create(payload, return_duplicate_id=False)
+        #         record = nations.select(new_id)
+        #         return {NATIONS_RESP: record}
 
-            nations.update(nation_id, payload)
-            record = nations.select(nation_id)
-            return {NATIONS_RESP: record}
-        
-        except KeyError:
-            api.abort(404, "Nation not found")
+        nations.update(nation_id, payload)
+        record = nations.select(nation_id)
+        return {NATIONS_RESP: record}
 
     @api.doc('delete_nation')
     def delete(self, nation_id):
         """Delete a nation by ID."""
-        try:
-            nations.delete(nation_id)
-            return '', 204
-        except KeyError:
-            api.abort(404, "Nation not found")
+        nations.delete(nation_id)
+        return '', 204

@@ -2,9 +2,10 @@
 This file implements CRUD operations for cities.
 """
 
-from flask import request
+from flask import request, jsonify
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
+from numbers import Real
 
 CITIES_RESP = 'records'
 COLLECTION = 'cities'
@@ -22,8 +23,8 @@ cities = CRUD(
         NAME: str,
         STATE_NAME: str,
         NATION_NAME: str,
-        LATITUDE: float,
-        LONGITUDE: float,
+        LATITUDE: Real,
+        LONGITUDE: Real,
     }
 )
 
@@ -39,7 +40,7 @@ city_model = api.model('City', {
 })
 
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class CityList(Resource):
     """
     Handle collection-level operations for cities.
@@ -69,28 +70,19 @@ class City(Resource):
     @api.doc('get_city')
     def get(self, city_id):
         """Retrieve a single city by ID."""
-        try:
-            record = cities.select(city_id)
-            return {CITIES_RESP: record}
-        except:
-            api.abort(404, "City not found")
+        record = cities.select(city_id)
+        return {CITIES_RESP: record}
 
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
         """Update a city by ID."""
-        try:
-            cities.update(city_id, request.json)
-            record = cities.select(city_id)
-            return {CITIES_RESP: record}
-        except KeyError:
-            api.abort(404, "City not found")
+        cities.update(city_id, request.json)
+        record = cities.select(city_id)
+        return {CITIES_RESP: record}
 
     @api.doc('delete_city')
     def delete(self, city_id):
         """Delete a city by ID."""
-        try:
-            cities.delete(city_id)
-            return '', 204
-        except KeyError:
-            api.abort(404, "City not found")
+        cities.delete(city_id)
+        return '', 204

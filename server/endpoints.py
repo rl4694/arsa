@@ -30,6 +30,7 @@ api.add_namespace(users_ns, path='/users')
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
 
+ERROR_RESP = 'error'
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 MESSAGE = 'Message'
@@ -44,6 +45,11 @@ location_model = api.model('Location', {
     'longitude': fields.Float(description='Longitude'),
     'display_name': fields.String(description='Full address')
 })
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return {ERROR_RESP: str(e)}, 404
 
 
 @api.route(HELLO_EP)
