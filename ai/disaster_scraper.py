@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # parser.add_argument("--pro-only", action="store_true", help="Skip Flash/Lite models and only use high-end Pro models")
     parser.add_argument(
         "--server",
-        default="http://127.0.0.1:5000",
+        default="http://127.0.0.1:8000",
         help="Server base URL for the natural disasters API"
     )
 

@@ -67,7 +67,7 @@ jobs:
           python ai/disaster_scraper.py --key "$GEMINI_API_KEY" > curls.sh
           cat curls.sh
           if [ -s curls.sh ]; then
-            bash curls.sh
+            bash curls.sh || true
           else
             echo "No curl commands generated. Skipping execution."
           fi
