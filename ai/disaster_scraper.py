@@ -18,7 +18,7 @@ FULL_MODEL_LIST = [
 ]
 
 # Bookmark system for rate limiting
-RUN_BOOKMARK = "last_successful_run.txt"
+RUN_BOOKMARK = "ai/last_successful_run.txt"
 
 def already_ran_today(target_date):
     if not os.path.exists(RUN_BOOKMARK):
