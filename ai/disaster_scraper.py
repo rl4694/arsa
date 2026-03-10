@@ -33,12 +33,19 @@ def record_successful_run(target_date):
     with open(RUN_BOOKMARK, "w") as f:
         f.write(target_date)
 
-def fetch_disasters(api_key, target_date, country, pro_only=False):
+def fetch_disasters(api_key, target_date, country, server):
+
+    api_key = api_key.strip(' "\'\n\r')
+    if not api_key:
+        print("Error: API key is empty.", file=sys.stderr)
+        sys.exit(1)
+
     client = genai.Client(api_key=api_key)
     location_context = f"in {country}" if country else "worldwide"
+    server = server.rstrip("/") # small input fix
 
     # Filter list if user requested only high-end 'Pro' models
-    priority_list = [m for m in FULL_MODEL_LIST if "pro" in m] if pro_only else FULL_MODEL_LIST
+    priority_list = FULL_MODEL_LIST
 
     prompt = f"""
 Find significant natural disasters reported on {target_date} {location_context}.
@@ -46,7 +53,7 @@ Include earthquakes, hurricanes, floods, landslides, or tsunamis.
 
 Output ONLY curl commands with no explanation.
 Each command must follow this format exactly:
-curl -X POST http://127.0.0.1:5000/natural_disasters/ \\
+curl -X POST {server}/natural_disasters/ \\
 -H "Content-Type: application/json" \\
 -d '{{
 "name": "[event name]",
@@ -67,15 +74,15 @@ curl -X POST http://127.0.0.1:5000/natural_disasters/ \\
         for model_name in priority_list:
             print(f"Trying {model_name}...", file=sys.stderr, end=" ")
             
-            config = {"temperature": 0.0}
+            config_kwargs = {}
             if use_search:
-                config["tools"] = [types.Tool(google_search=types.GoogleSearch())]
+                config_kwargs["tools"] = [types.Tool(google_search=types.GoogleSearch())]
 
             try:
                 response = client.models.generate_content(
                     model=model_name,
                     contents=prompt,
-                    config=types.GenerateContentConfig(**config)
+                    config=types.GenerateContentConfig(**config_kwargs) if config_kwargs else None
                 )
                 
                 if response.text:
@@ -100,7 +107,12 @@ if __name__ == "__main__":
     parser.add_argument("--country", default=None)
     # New Optional Field: Forces the script to only use Pro-tier models
     # This doesn't seem to work right now, so it might be replaced
-    parser.add_argument("--pro-only", action="store_true", help="Skip Flash/Lite models and only use high-end Pro models")
+    # parser.add_argument("--pro-only", action="store_true", help="Skip Flash/Lite models and only use high-end Pro models")
+    parser.add_argument(
+        "--server",
+        default="http://127.0.0.1:5000",
+        help="Server base URL for the natural disasters API"
+    )
 
     args = parser.parse_args()
 
@@ -108,4 +120,4 @@ if __name__ == "__main__":
         print(f"Script already ran successfully for {args.date}. Skipping.", file=sys.stderr)
         sys.exit(0)
 
-    fetch_disasters(args.key, args.date, args.country, args.pro_only)
+    fetch_disasters(args.key, args.date, args.country, args.server)
