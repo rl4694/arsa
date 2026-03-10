@@ -46,4 +46,4 @@ urllib3==2.5.0
 webencodings==0.5.1
 Werkzeug==3.0.6
 pycountry==24.6.1
-google-genai==0.5.0
+google-genai
