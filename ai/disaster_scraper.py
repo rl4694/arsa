@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 from datetime import date
 from google import genai
@@ -15,6 +16,22 @@ FULL_MODEL_LIST = [
     "gemini-2.5-flash",             # Stable Price/Performance (This is the only one that works so far)
     "gemini-2.5-flash-lite",        # Massive volume/Low latency
 ]
+
+# Bookmark system for rate limiting
+RUN_BOOKMARK = "last_successful_run.txt"
+
+def already_ran_today(target_date):
+    if not os.path.exists(RUN_BOOKMARK):
+        return False
+
+    with open(RUN_BOOKMARK, "r") as f:
+        last_run = f.read().strip()
+
+    return last_run == target_date
+
+def record_successful_run(target_date):
+    with open(RUN_BOOKMARK, "w") as f:
+        f.write(target_date)
 
 def fetch_disasters(api_key, target_date, country, pro_only=False):
     client = genai.Client(api_key=api_key)
@@ -64,6 +81,7 @@ curl -X POST http://127.0.0.1:5000/natural_disasters/ \\
                 if response.text:
                     print("SUCCESS!", file=sys.stderr)
                     print(response.text)
+                    record_successful_run(target_date)
                     return
 
             except errors.APIError as e:
@@ -85,4 +103,9 @@ if __name__ == "__main__":
     parser.add_argument("--pro-only", action="store_true", help="Skip Flash/Lite models and only use high-end Pro models")
 
     args = parser.parse_args()
+
+    if already_ran_today(args.date):
+        print(f"Script already ran successfully for {args.date}. Skipping.", file=sys.stderr)
+        sys.exit(0)
+
     fetch_disasters(args.key, args.date, args.country, args.pro_only)

@@ -49,6 +49,12 @@ jobs:
         run: make all_tests
         continue-on-error: true
 
+      - name: Run disaster ingestion
+        run: |
+          python ai/disaster_scraper.py --key $GEMINI_API_KEY | bash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
       - name: Deploy to PythonAnywhere
         run: ./deploy.sh
         env:
