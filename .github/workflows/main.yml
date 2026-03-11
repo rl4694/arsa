@@ -60,13 +60,16 @@ jobs:
         continue-on-error: true
 
       - name: Run disaster ingestion
+        if: github.event_name != 'pull_request'
         run: |
           if [ -z "$GEMINI_API_KEY" ]; then
             echo "GEMINI_API_KEY is empty or missing. Skipping disaster ingestion execution."
             exit 0
           fi
 
-          python ai/disaster_scraper.py --key "$GEMINI_API_KEY" > curls.sh
+          python ai/disaster_scraper.py \
+            --key "$GEMINI_API_KEY" \
+            --server "https://${DEMO_PA_DOMAIN}" > curls.sh
           cat curls.sh
           if [ -s curls.sh ]; then
             bash curls.sh || true
@@ -75,6 +78,7 @@ jobs:
           fi
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
 
       - name: Save bookmark artifact
         if: always()
