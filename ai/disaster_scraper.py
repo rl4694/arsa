@@ -1,5 +1,6 @@
 import argparse
 import os
+import requests
 import sys
 from datetime import date
 from google import genai
@@ -32,6 +33,25 @@ def already_ran_today(target_date):
 def record_successful_run(target_date):
     with open(RUN_BOOKMARK, "w") as f:
         f.write(target_date)
+
+def results_exist_for_date(server, target_date):
+    """
+    Query the disasters API to see if entries already exist for the date.
+    """
+    try:
+        url = f"{server.rstrip('/')}/natural_disasters?date={target_date}"
+        r = requests.get(url, timeout=10)
+
+        if r.status_code != 200:
+            return False
+
+        data = r.json()
+        records = data.get("records", [])
+
+        return len(records) > 0
+
+    except Exception:
+        return False
 
 def fetch_disasters(api_key, target_date, country, server):
 
@@ -116,8 +136,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Check Bookmark First
     if already_ran_today(args.date):
         print(f"Script already ran successfully for {args.date}. Skipping.", file=sys.stderr)
+        sys.exit(0)
+
+    # Check API
+    if results_exist_for_date(args.server, args.date):
+        print(f"Disasters already exist for {args.date}. Skipping generation.", file=sys.stderr)
         sys.exit(0)
 
     fetch_disasters(args.key, args.date, args.country, args.server)

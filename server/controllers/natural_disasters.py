@@ -106,10 +106,36 @@ disaster_model = api.model('NaturalDisaster', {
 
 @api.route('/', strict_slashes=False)
 class DisasterList(Resource):
-    @api.doc('list_disasters')
+    @api.doc('list_disasters',
+             params={
+                 'date': 'Return disasters occurring on this date (YYYY-MM-DD)',
+                 'start_date': 'Return disasters after this date (YYYY-MM-DD)',
+                 'end_date': 'Return disasters before this date (YYYY-MM-DD)'
+             })
     def get(self):
-        """Get all natural disasters."""
-        return {DISASTERS_RESP: disasters.read()}
+        """Get natural disasters optionally filtered by date."""
+
+        date = request.args.get('date')
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+
+        records = disasters.read()
+
+        filtered = list(records.values())
+
+        if date:
+            validate_date(date)
+            filtered = [r for r in filtered if r.get(DATE) == date]
+
+        if start_date:
+            validate_date(start_date)
+            filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) >= start_date]
+
+        if end_date:
+            validate_date(end_date)
+            filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
+
+        return {DISASTERS_RESP: filtered}
 
     @api.expect(disaster_model)
     @api.doc('create_disaster')
