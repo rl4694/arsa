@@ -143,11 +143,11 @@ def transform_hurricane(row: dict) -> dict:
         print(e)
 
 
-def load_disaster(transformed: dict):
+def load_disaster(transformed: list):
     """Load a disaster into database"""
     try:
-        _id = nd.disasters.create(transformed)
-        print(f"Created disaster: {_id}")
+        nd.disasters.create_many(transformed)
+        print(f"Created disasters")
     except Exception as e:
         print("Warning could not create disaster: ", e)
 
@@ -165,10 +165,15 @@ def seed_disasters(filename: str, disaster_type: str):
 
     rows = extract(filename)
     transform_func = transforms[disaster_type]
+    transformed_list = []
+    count = 0
     for row in rows:
         transformed = transform_func(row)
         if transformed is not None:
-            load_disaster(transformed)
+            transformed_list.append(transformed)
+        count += 1
+        print(f"Transformed disaster of type {disaster_type}: {count} / {len(rows)}")
+    load_disaster(transformed_list)
 
 
 if __name__ == '__main__':

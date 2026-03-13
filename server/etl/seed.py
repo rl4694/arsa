@@ -13,7 +13,7 @@ import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 from server.etl.seed_nations import seed_nations
 import server.etl.seed_disasters as sd
-import server.etl.seed_locations as sl
+import server.etl.seed_locations as sl, DISASTER_FILES
 
 
 # Initialize constants
@@ -92,17 +92,12 @@ def main():
     )
 
     if is_locations_cached:
-        for i, record in enumerate(load_json(CITIES_JSON_FILE).values()):
-            ct.cities.create(record)
-            if i > LOAD_COUNT:
-                break
-
-        for i, record in enumerate(load_json(STATES_JSON_FILE).values()):
-            st.states.create(record)
-            if i > LOAD_COUNT:
-                break
+        city_data = list(load_json(CITIES_JSON_FILE).values())
+        ct.cities.create_many(city_data)
+        state_data = list(load_json(STATES_JSON_FILE).values())
+        st.states.create_many(state_data)
     else:
-        sl.seed_locations()
+        sl.seed_locations(DISASTER_FILES)
         try:
             save_json(CITIES_JSON_FILE, ct.cities.read())
             save_json(STATES_JSON_FILE, st.states.read())
@@ -114,13 +109,8 @@ def main():
     is_disasters_cached = is_json_populated(DISASTERS_JSON_FILE)
 
     if is_disasters_cached:
-        counts = {disaster_type: 0 for disaster_type in nd.DISASTER_TYPES}
-        for record in load_json(DISASTERS_JSON_FILE).values():
-            disaster_type = record.get(nd.DISASTER_TYPE, 'unknown')
-            if counts.get(disaster_type, 0) > LOAD_COUNT:
-                continue
-            sd.load_disaster(record)
-            counts[disaster_type] = counts.get(disaster_type, 0) + 1
+        disaster_data = list(load_json(DISASTERS_JSON_FILE).values())
+        nd.disasters.create_many(disaster_data)
     else:
         sd.seed_disasters(EARTHQUAKES_FILE, nd.EARTHQUAKE)
         sd.seed_disasters(LANDSLIDE_FILE, nd.LANDSLIDE)

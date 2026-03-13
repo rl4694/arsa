@@ -27,8 +27,10 @@ def transform(raw: list) -> list:
 
 def load(transformed: list):
     """Load nation data into database"""
-    for nation in transformed:
-        nt.nations.create(nation)
+    try:
+        nt.nations.create_many(transformed)
+    except:
+        print("Warning: Failed to create nations", e)
 
 
 def seed_nations(filename: str):
