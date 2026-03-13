@@ -105,6 +105,14 @@ def create(collection, doc, db=SE_DB):
 
 
 @needs_db
+def create_many(collection, docs, db=SE_DB):
+    """
+    Insert a list of docs into collection.
+    """
+    return client[db][collection].insert_many(docs)
+
+
+@needs_db
 def read_one(collection, filt, db=SE_DB):
     """
     Find with a filter and return on the first doc found.

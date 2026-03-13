@@ -41,16 +41,20 @@ class TestFindDuplicate:
         assert duplicate is None
 
     def test_excluded_id(self, temp_record):
-        duplicate = crud.find_duplicate(SAMPLE_RECORD, temp_record)
+        duplicate = crud.find_duplicate(SAMPLE_RECORD, excluded_id=temp_record)
         assert duplicate is None
 
     def test_bad_fields(self):
         with pytest.raises(ValueError):
             crud.find_duplicate(123)
+    
+    def test_bad_search_list(self):
+        with pytest.raises(ValueError):
+            crud.find_duplicate(SAMPLE_RECORD, search_list=123)
 
     def test_bad_excluded_id(self):
         with pytest.raises(ValueError):
-            crud.find_duplicate(SAMPLE_RECORD, 123)
+            crud.find_duplicate(SAMPLE_RECORD, excluded_id=123)
 
 
 class TestCreate:
@@ -65,20 +69,35 @@ class TestCreate:
         assert record[FIELD3] == SAMPLE_FIELD3
         crud.delete(_id)
 
-    def test_bad_recursive_type(self):
+
+class TestCreateMany:
+    def test_valid(self):
+        SAMPLE_RECORD2 = {
+            FIELD1: "another1",
+            FIELD2: "another2",
+            FIELD3: "another3",
+        }
+        _ids = crud.create_many([SAMPLE_RECORD, SAMPLE_RECORD2])
+        records = crud.read()
+        for _id in _ids:
+            assert is_valid_id(_id)
+            assert _id in records
+            crud.delete(_id)
+
+    def test_bad_fields_list_type(self):
         with pytest.raises(ValueError):
-            crud.create(SAMPLE_RECORD, 123)
+            crud.create_many(123)
 
     def test_bad_fields_type(self):
         with pytest.raises(ValueError):
-            crud.create(123)
+            crud.create_many([123])
 
     def test_bad_field_type(self):
         with pytest.raises(ValueError):
-            crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: 123})
-    
+            crud.create_many([{FIELD1: SAMPLE_FIELD1, FIELD2: 123}])
+
     def test_missing_field(self):
-        _id = crud.create({FIELD1: SAMPLE_FIELD1, FIELD2: SAMPLE_FIELD2})
+        _id = crud.create_many([{FIELD1: SAMPLE_FIELD1, FIELD2: SAMPLE_FIELD2}])[0]
         assert is_valid_id(_id)
         record = crud.read()[_id]
         assert record[FIELD1] == SAMPLE_FIELD1
@@ -86,6 +105,14 @@ class TestCreate:
         assert record[FIELD3] == None
         assert FIELD3 in record
         crud.delete(_id)
+
+    def test_existing_duplicate(self, temp_record):
+        with pytest.raises(ValueError):
+            crud.create_many([SAMPLE_RECORD])
+
+    def test_new_duplicate(self):
+        with pytest.raises(ValueError):
+            crud.create_many([SAMPLE_RECORD, SAMPLE_RECORD])
 
 
 class TestCount:

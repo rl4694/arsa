@@ -56,7 +56,7 @@ class CityList(Resource):
     def post(self):
         """Create a new city."""
         data = request.json
-        _id = cities.create(data, return_duplicate_id=False)
+        _id = cities.create(data)
         created = cities.select(_id)
         return {CITIES_RESP: created}, 201
 

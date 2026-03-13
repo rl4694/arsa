@@ -58,7 +58,7 @@ class NationList(Resource):
         # data['code'] = code
         # data['_id'] = code
         
-        _id = nations.create(data, return_duplicate_id=False)
+        _id = nations.create(data)
         created = nations.select(_id)
         return {NATIONS_RESP: created}, 201
 
@@ -88,7 +88,7 @@ class Nation(Resource):
         #     except:
         #         api.abort(400, f"Invalid nation name: {payload['name']}")
         #         nations.delete(nation_id)
-        #         new_id = nations.create(payload, return_duplicate_id=False)
+        #         new_id = nations.create(payload)
         #         record = nations.select(new_id)
         #         return {NATIONS_RESP: record}
 

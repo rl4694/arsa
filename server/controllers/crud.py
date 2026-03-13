@@ -44,49 +44,66 @@ class CRUD:
             if field is not None and not is_valid_type:
                 raise ValueError(f'Bad type for field {field}: {type(field)}')
 
-    def find_duplicate(self, fields: dict, excluded_id: str = ''):
+    def find_duplicate(self, fields: dict, search_list: list = None, excluded_id: str = ''):
+        """
+        Find a record with the same key fields as the provided record fields.
+        - search_list: list of records to search from. Defaults to the cache
+        - excluded_id: _id of the record to exclude from the duplicate search
+        """
         if not isinstance(fields, dict):
             raise ValueError(f'Bad type for fields: {type(fields)}')
+        if not isinstance(search_list, list):
+            if search_list is None:
+                search_list = list(self.cache.read().values())
+            else:
+                raise ValueError(f'Bad type for search_list: {type(search_list)}')
         if not isinstance(excluded_id, str):
             raise ValueError(f'Bad type for fields: {type(excluded_id)}')
 
-        records = self.cache.read()
-        for record in records.values():
+        for record in search_list:
             # Check if all key fields from current record and query match
-            if (not (len(excluded_id) > 0 and record.get('_id') == excluded_id)
-                and all(fields.get(key) == record.get(key) for key in self.keys)):
+            has_matching_keys = all(fields.get(key) == record.get(key) for key in self.keys)
+            if record.get('_id') != excluded_id and has_matching_keys:
                 return record
         return None
 
-    def create(self, fields: dict, return_duplicate_id: bool = True) -> str:
+    def create(self, fields: dict) -> str:
         """
         Create a new record from the provided fields.
         """
+        return self.create_many([fields])[0]
+
+    def create_many(self, fields_list: list) -> list:
+        """
+        Create a list of records from the provided fields list. Faster than
+        create() for multiple records because this batches the database
+        calls into a single network request.
+        """
         # Validate parameters
-        self.validate(fields)
-        if not isinstance(return_duplicate_id, bool):
-            rdi_type = type(return_duplicate_id)
-            raise ValueError(f'Bad type for return_duplicate_id: {rdi_type}')
-        
-        # Build the record from the fields
-        new_record = {}
-        for attribute in self.attributes:
-            new_record[attribute] = fields.get(attribute)
+        if not isinstance(fields_list, list):
+            raise ValueError(f'Bad type for fields_list: {type(fields_list)}')
 
-        # Check if record already exists
-        duplicate = self.find_duplicate(fields)
-        if duplicate:
-            if return_duplicate_id:
-                return str(duplicate['_id'])
-            else:
-                raise ValueError('Duplicate detected.')
+        new_records = []
+        dup_search_list = list(self.cache.read().values())
+        for fields in fields_list:
+            # Validate the fields
+            self.validate(fields)
+            # Build the record from the fields
+            new_record = {}
+            for attribute in self.attributes:
+                new_record[attribute] = fields.get(attribute)
+                if self.find_duplicate(fields, search_list=dup_search_list):
+                    raise ValueError('Duplicate detected.')
+            # Add the record to the lists
+            new_records.append(new_record)
+            dup_search_list.append(new_record)
 
-        # Create the record
-        result = dbc.create(self.collection, new_record)
-        if not result or not getattr(result, 'inserted_id', None):
-            raise RuntimeError('Create failed: no inserted_id')
+        # Create the records list
+        result = dbc.create_many(self.collection, new_records)
+        if not result or not getattr(result, 'inserted_ids', None):
+            raise RuntimeError('Create failed: no inserted_ids')
         self.cache.reload()
-        return str(result.inserted_id)
+        return [str(_id) for _id in result.inserted_ids]
 
     def count(self) -> int:
         """
@@ -128,7 +145,7 @@ class CRUD:
                 record[attribute] = field
 
         # Check if updated fields is a duplicate
-        if self.find_duplicate(fields, _id):
+        if self.find_duplicate(fields, excluded_id=_id):
             raise ValueError('Duplicate detected.')
 
         # Update the record
