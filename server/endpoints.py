@@ -13,7 +13,7 @@ from server.controllers.states import api as states_ns
 from server.controllers.nations import api as nations_ns
 from server.controllers.natural_disasters import api as disasters_ns
 from server.controllers.users import api as users_ns
-from server.etl.geocoding import reverse_geocode
+from server.controllers.geocoding import reverse_geocode
 
 # import werkzeug.exceptions as wz
 

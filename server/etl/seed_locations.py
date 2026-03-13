@@ -9,7 +9,7 @@ import csv
 import server.controllers.cities as ct
 import server.controllers.states as st
 import server.controllers.nations as nt
-from server.etl.geocoding import reverse_geocode
+from server.controllers.geocoding import reverse_geocode
 
 
 ETL_PATH = 'server/etl/'

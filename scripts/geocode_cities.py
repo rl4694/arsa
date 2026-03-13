@@ -2,7 +2,7 @@ import json
 import time
 from pathlib import Path
 
-from server.etl.geocoding import forward_geocode
+from server.controllers.geocoding import forward_geocode
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 INPUT_PATH = BASE_DIR / "server" / "etl" / "cities.json"

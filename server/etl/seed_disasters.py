@@ -6,7 +6,7 @@ Run with: python3 server/etl/seed_disasters.py
 
 import csv
 import server.controllers.natural_disasters as nd
-from server.etl.geocoding import reverse_geocode
+from server.controllers.geocoding import reverse_geocode
 from datetime import datetime
 
 

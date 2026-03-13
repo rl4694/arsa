@@ -2,19 +2,19 @@ import pytest
 from unittest.mock import patch, MagicMock
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 from server.endpoints import GEOCODE_EP
-import server.etl.geocoding as geo
+import server.controllers.geocoding as geo
 
 
 @pytest.fixture(autouse=True)
 def patch_dependencies():
-    with patch('server.etl.geocoding.geocode') as mock_geocode:
+    with patch('server.controllers.geocoding.geocode') as mock_geocode:
         yield
 
 
 class TestReverseGeocode:
     """Test the reverse_geocode function."""
     
-    @patch('server.etl.geocoding.reverse')
+    @patch('server.controllers.geocoding.reverse')
     def test_valid_coordinates(self, mock_reverse):
         """Test reverse geocoding with valid coordinates."""
         # Mock the location response
@@ -39,7 +39,7 @@ class TestReverseGeocode:
         assert result['longitude'] == -74.0060
         assert 'display_name' in result
     
-    @patch('server.etl.geocoding.reverse')
+    @patch('server.controllers.geocoding.reverse')
     def test_location_with_province_instead_of_state(self, mock_reverse):
         """Test that province is used when state is not available."""
         mock_location = MagicMock()
@@ -60,8 +60,8 @@ class TestReverseGeocode:
         assert result['state'] == 'Ontario'
         assert result['country'] == 'Canada'
 
-    @patch('server.etl.geocoding.geocode')
-    @patch('server.etl.geocoding.reverse')
+    @patch('server.controllers.geocoding.geocode')
+    @patch('server.controllers.geocoding.reverse')
     def test_location_not_found(self, mock_reverse, mock_geocode):
         """Test when coordinates don't map to any location."""
         mock_reverse.return_value = None
@@ -111,7 +111,7 @@ class TestReverseGeocode:
             geo.reverse_geocode(0.0, "not a number")
         assert "must be numbers" in str(exc_info.value)
     
-    @patch('server.etl.geocoding.reverse')
+    @patch('server.controllers.geocoding.reverse')
     def test_geocoder_timeout(self, mock_reverse):
         """Test handling of geocoder timeout."""
         mock_reverse.side_effect = GeocoderTimedOut()
@@ -119,7 +119,7 @@ class TestReverseGeocode:
         with pytest.raises(GeocoderTimedOut):
             geo.reverse_geocode(40.7128, -74.0060)
     
-    @patch('server.etl.geocoding.reverse')
+    @patch('server.controllers.geocoding.reverse')
     def test_geocoder_service_error(self, mock_reverse):
         """Test handling of geocoder service error."""
         mock_reverse.side_effect = GeocoderServiceError("Service unavailable")
