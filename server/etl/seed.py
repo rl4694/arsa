@@ -13,7 +13,7 @@ import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 from server.etl.seed_nations import seed_nations
 import server.etl.seed_disasters as sd
-import server.etl.seed_locations as sl, DISASTER_FILES
+import server.etl.seed_locations as sl
 
 
 # Initialize constants
@@ -97,7 +97,7 @@ def main():
         state_data = list(load_json(STATES_JSON_FILE).values())
         st.states.create_many(state_data)
     else:
-        sl.seed_locations(DISASTER_FILES)
+        sl.seed_locations(sl.DISASTER_FILES)
         try:
             save_json(CITIES_JSON_FILE, ct.cities.read())
             save_json(STATES_JSON_FILE, st.states.read())
