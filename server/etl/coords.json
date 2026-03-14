@@ -1,1198 +1,1412 @@
 {
-  "699909f49c4b13f1312adb9b": {
-    "_id": "699909f49c4b13f1312adb9b",
-    "name": "\u6d0b\u53bf",
-    "state_name": "\u9655\u897f\u7701",
-    "nation_name": "\u4e2d\u56fd",
-    "latitude": 32.5625,
-    "longitude": 107.45
-  },
-  "69990a3ac1c326ee19da87e5": {
-    "_id": "69990a3ac1c326ee19da87e5",
+  "7.671200,-82.339600": {
     "name": "Llano Tugr\u00ed",
     "state_name": "Ng\u00e4be-Bugl\u00e9",
-    "nation_name": "Panam\u00e1",
+    "nation_name": "Panama",
     "latitude": 7.6712,
     "longitude": -82.3396
   },
-  "69990a3bc1c326ee19da87e9": {
-    "_id": "69990a3bc1c326ee19da87e9",
+  "18.330000,-102.913000": {
     "name": "L\u00e1zaro C\u00e1rdenas",
     "state_name": "Michoac\u00e1n",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 18.33,
     "longitude": -102.913
   },
-  "69990a3bc1c326ee19da87ec": {
-    "_id": "69990a3bc1c326ee19da87ec",
+  "18.366700,-103.252000": {
     "name": "Villa de \u00c1lvarez",
     "state_name": "Colima",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 18.3667,
     "longitude": -103.252
   },
-  "69990a40c1c326ee19da87f3": {
-    "_id": "69990a40c1c326ee19da87f3",
+  "-6.223700,146.471000": {
     "name": "Lae",
     "state_name": "Morobe",
-    "nation_name": "Papua Niugini",
+    "nation_name": "Papua New Guinea",
     "latitude": -6.2237,
     "longitude": 146.471
   },
-  "69990a42c1c326ee19da87f6": {
-    "_id": "69990a42c1c326ee19da87f6",
-    "name": "\u5b9d\u5174\u53bf",
-    "state_name": "\u56db\u5ddd\u7701",
-    "nation_name": "\u4e2d\u56fd",
+  "29.726300,102.279000": {
+    "name": "Baoxing",
+    "state_name": "Sichuan",
+    "nation_name": "China",
     "latitude": 29.7263,
     "longitude": 102.279
   },
-  "69990a45c1c326ee19da87fa": {
-    "_id": "69990a45c1c326ee19da87fa",
+  "17.597800,120.809000": {
     "name": "Laoag",
     "state_name": "Ilocos Norte",
     "nation_name": "Philippines",
     "latitude": 17.5978,
     "longitude": 120.809
   },
-  "69990a47c1c326ee19da87fe": {
-    "_id": "69990a47c1c326ee19da87fe",
+  "-14.862800,-70.308100": {
     "name": "Juliaca",
     "state_name": "Puno",
-    "nation_name": "Per\u00fa",
+    "nation_name": "Peru",
     "latitude": -14.8628,
     "longitude": -70.3081
   },
-  "69990a4dc1c326ee19da8802": {
-    "_id": "69990a4dc1c326ee19da8802",
+  "11.553800,-86.991900": {
     "name": "Masaya",
     "state_name": "Masaya",
     "nation_name": "Nicaragua",
     "latitude": 11.5538,
     "longitude": -86.9919
   },
-  "69990a53c1c326ee19da8806": {
-    "_id": "69990a53c1c326ee19da8806",
-    "name": "\u6771\u677e\u5cf6\u5e02",
-    "state_name": "\u5bae\u57ce\u770c",
-    "nation_name": "\u65e5\u672c",
+  "37.701500,141.587000": {
+    "name": "Higashimatsushima",
+    "state_name": "Miyagi Prefecture",
+    "nation_name": "Japan",
     "latitude": 37.7015,
     "longitude": 141.587
   },
-  "69990a59c1c326ee19da880a": {
-    "_id": "69990a59c1c326ee19da880a",
+  "-6.929100,105.251000": {
     "name": "Serang",
     "state_name": "Banten",
     "nation_name": "Indonesia",
     "latitude": -6.9291,
     "longitude": 105.251
   },
-  "69990a62c1c326ee19da880e": {
-    "_id": "69990a62c1c326ee19da880e",
-    "name": "\u03a0\u03ac\u03c6\u03bf\u03c2",
-    "state_name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2",
-    "nation_name": "\u039a\u03cd\u03c0\u03c1\u03bf\u03c2 - K\u0131br\u0131s",
+  "35.145600,31.909500": {
+    "name": "Paphos",
+    "state_name": "Cyprus",
+    "nation_name": "Cyprus",
     "latitude": 35.1456,
     "longitude": 31.9095
   },
-  "69990a63c1c326ee19da8811": {
-    "_id": "69990a63c1c326ee19da8811",
-    "name": "\u6c11\u4e50\u53bf",
-    "state_name": "\u7518\u8083\u7701",
-    "nation_name": "\u4e2d\u56fd",
+  "37.816700,101.299000": {
+    "name": "Minle",
+    "state_name": "Gansu",
+    "nation_name": "China",
     "latitude": 37.8167,
     "longitude": 101.299
   },
-  "69990a6fc1c326ee19da8814": {
-    "_id": "69990a6fc1c326ee19da8814",
+  "12.159800,-87.854200": {
     "name": "Chinandega",
     "state_name": "Chinandega",
     "nation_name": "Nicaragua",
     "latitude": 12.1598,
     "longitude": -87.8542
   },
-  "69990a70c1c326ee19da8817": {
-    "_id": "69990a70c1c326ee19da8817",
+  "16.950200,-99.787700": {
     "name": "Acapulco",
     "state_name": "Guerrero",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 16.9502,
     "longitude": -99.7877
   },
-  "69990a73c1c326ee19da881b": {
-    "_id": "69990a73c1c326ee19da881b",
+  "-14.892000,167.085000": {
     "name": "Luganville",
     "state_name": "Sanma",
     "nation_name": "Vanuatu",
     "latitude": -14.892,
     "longitude": 167.085
   },
-  "69990a76c1c326ee19da881f": {
-    "_id": "69990a76c1c326ee19da881f",
-    "name": "Mirago\u00e2ne",
+  "18.352100,-73.480400": {
+    "name": "Miragoane",
     "state_name": "D\u00e9partement des Nippes",
-    "nation_name": "Ayiti",
+    "nation_name": "Haiti",
     "latitude": 18.3521,
     "longitude": -73.4804
   },
-  "69990a7bc1c326ee19da8822": {
-    "_id": "69990a7bc1c326ee19da8822",
+  "6.454700,126.742000": {
     "name": "Mati",
     "state_name": "Davao Oriental",
     "nation_name": "Philippines",
     "latitude": 6.4547,
     "longitude": 126.742
   },
-  "69990a7fc1c326ee19da8825": {
-    "_id": "69990a7fc1c326ee19da8825",
-    "name": "Taguig",
+  "13.698900,120.713000": {
+    "name": "Para\u00f1aque",
     "state_name": "Metro Manila",
     "nation_name": "Philippines",
     "latitude": 13.6989,
     "longitude": 120.713
   },
-  "69990a81c1c326ee19da8828": {
-    "_id": "69990a81c1c326ee19da8828",
+  "7.590400,-82.881300": {
     "name": "David",
     "state_name": "Chiriqu\u00ed",
-    "nation_name": "Panam\u00e1",
+    "nation_name": "Panama",
     "latitude": 7.5904,
     "longitude": -82.8813
   },
-  "69990a84c1c326ee19da882b": {
-    "_id": "69990a84c1c326ee19da882b",
+  "34.586100,98.255100": {
     "name": "Madoi County",
     "state_name": "Qinghai",
     "nation_name": "China",
     "latitude": 34.5861,
     "longitude": 98.2551
   },
-  "69990a87c1c326ee19da882e": {
-    "_id": "69990a87c1c326ee19da882e",
+  "38.229600,141.665000": {
     "name": "Ishinomaki",
     "state_name": "Miyagi Prefecture",
     "nation_name": "Japan",
     "latitude": 38.2296,
     "longitude": 141.665
   },
-  "69990a8bc1c326ee19da8831": {
-    "_id": "69990a8bc1c326ee19da8831",
-    "name": "\u91dc\u77f3\u5e02",
-    "state_name": "\u5ca9\u624b\u770c",
-    "nation_name": "\u65e5\u672c",
+  "38.475200,141.607000": {
+    "name": "Kamaishi",
+    "state_name": "Iwate Prefecture",
+    "nation_name": "Japan",
     "latitude": 38.4752,
     "longitude": 141.607
   },
-  "69990a9ec1c326ee19da8836": {
-    "_id": "69990a9ec1c326ee19da8836",
+  "37.685600,141.992000": {
+    "name": "Higashimatsushima",
+    "state_name": "Miyagi Prefecture",
+    "nation_name": "Japan",
+    "latitude": 37.6856,
+    "longitude": 141.992
+  },
+  "37.897300,26.795300": {
     "name": "\u0130zmir",
-    "state_name": "\u0130zmir",
-    "nation_name": "T\u00fcrkiye",
+    "state_name": "Izmir",
+    "nation_name": "Turkey",
     "latitude": 37.8973,
     "longitude": 26.7953
   },
-  "69990aa1c1c326ee19da883a": {
-    "_id": "69990aa1c1c326ee19da883a",
+  "-27.928500,-71.393700": {
     "name": "Vallenar",
-    "state_name": "Regi\u00f3n de Atacama",
+    "state_name": "Atacama Region",
     "nation_name": "Chile",
     "latitude": -27.9285,
     "longitude": -71.3937
   },
-  "69990aa9c1c326ee19da883e": {
-    "_id": "69990aa9c1c326ee19da883e",
+  "-28.013000,-71.195800": {
+    "name": "Vallenar",
+    "state_name": "Atacama Region",
+    "nation_name": "Chile",
+    "latitude": -28.013,
+    "longitude": -71.1958
+  },
+  "12.006500,124.130000": {
     "name": "Masbate City",
     "state_name": "Masbate",
     "nation_name": "Philippines",
     "latitude": 12.0065,
     "longitude": 124.13
   },
-  "69990aaec1c326ee19da8841": {
-    "_id": "69990aaec1c326ee19da8841",
+  "15.916300,-95.953300": {
     "name": "Salina Cruz",
     "state_name": "Oaxaca",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 15.9163,
     "longitude": -95.9533
   },
-  "69990ab2c1c326ee19da8844": {
-    "_id": "69990ab2c1c326ee19da8844",
+  "-23.296600,-68.420400": {
     "name": "Calama",
-    "state_name": "Regi\u00f3n de Antofagasta",
+    "state_name": "Antofagasta Region",
     "nation_name": "Chile",
     "latitude": -23.2966,
     "longitude": -68.4204
   },
-  "69990ab8c1c326ee19da8848": {
-    "_id": "69990ab8c1c326ee19da8848",
+  "44.464600,-115.118000": {
     "name": "Boise",
     "state_name": "Idaho",
     "nation_name": "United States",
     "latitude": 44.4646,
     "longitude": -115.118
   },
-  "69990ab6c1c326ee19da884b": {
-    "_id": "69990ab6c1c326ee19da884b",
+  "32.562500,107.450000": {
+    "name": "Yangxian",
+    "state_name": "Shaanxi",
+    "nation_name": "China",
+    "latitude": 32.5625,
+    "longitude": 107.45
+  },
+  "45.420000,-122.663000": {
     "name": "Albany",
     "state_name": "Oregon",
     "nation_name": "United States",
     "latitude": 45.42,
     "longitude": -122.663
   },
-  "69990ab7c1c326ee19da884e": {
-    "_id": "69990ab7c1c326ee19da884e",
+  "-11.129500,-75.358700": {
     "name": "Cerro de Pasco",
     "state_name": "Pasco",
-    "nation_name": "Per\u00fa",
+    "nation_name": "Peru",
     "latitude": -11.1295,
     "longitude": -75.3587
   },
-  "69990ab8c1c326ee19da8852": {
-    "_id": "69990ab8c1c326ee19da8852",
-    "name": "\u0918\u094b\u0930\u093e\u0939\u0940",
-    "state_name": "\u0932\u0941\u092e\u094d\u092c\u093f\u0928\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
-    "nation_name": "\u0928\u0947\u092a\u093e\u0932",
+  "28.837800,81.708000": {
+    "name": "Ghorahi",
+    "state_name": "Lumbini Province",
+    "nation_name": "Nepal",
     "latitude": 28.8378,
     "longitude": 81.708
   },
-  "69990ab9c1c326ee19da8855": {
-    "_id": "69990ab9c1c326ee19da8855",
+  "10.333600,123.897800": {
     "name": "Cebu City",
     "state_name": "Central Visayas",
     "nation_name": "Philippines",
     "latitude": 10.3336,
     "longitude": 123.8978
   },
-  "69990abac1c326ee19da8858": {
-    "_id": "69990abac1c326ee19da8858",
+  "10.700400,124.966800": {
     "name": "Ormoc",
     "state_name": "Leyte",
     "nation_name": "Philippines",
     "latitude": 10.7004,
     "longitude": 124.9668
   },
-  "69990abdc1c326ee19da885c": {
-    "_id": "69990abdc1c326ee19da885c",
+  "48.279700,-117.266500": {
     "name": "Trail",
     "state_name": "British Columbia",
     "nation_name": "Canada",
     "latitude": 48.2797,
     "longitude": -117.2665
   },
-  "69990abec1c326ee19da885f": {
-    "_id": "69990abec1c326ee19da885f",
+  "24.953100,-107.622000": {
     "name": "Guasave",
     "state_name": "Sinaloa",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 24.9531,
     "longitude": -107.622
   },
-  "69990ac0c1c326ee19da8862": {
-    "_id": "69990ac0c1c326ee19da8862",
+  "23.890000,100.084500": {
     "name": "Linxiang District",
     "state_name": "Yunnan",
     "nation_name": "China",
     "latitude": 23.89,
     "longitude": 100.0845
   },
-  "69990ac1c1c326ee19da8864": {
-    "_id": "69990ac1c1c326ee19da8864",
+  "25.096700,102.695000": {
     "name": "Kunming",
     "state_name": "Yunnan",
     "nation_name": "China",
     "latitude": 25.0967,
     "longitude": 102.695
   },
-  "69990ac2c1c326ee19da8866": {
-    "_id": "69990ac2c1c326ee19da8866",
+  "45.864700,-122.817800": {
     "name": "Gresham",
     "state_name": "Oregon",
     "nation_name": "United States",
     "latitude": 45.8647,
     "longitude": -122.8178
   },
-  "69990ac5c1c326ee19da886b": {
-    "_id": "69990ac5c1c326ee19da886b",
+  "45.377000,-122.070400": {
+    "name": "Albany",
+    "state_name": "Oregon",
+    "nation_name": "United States",
+    "latitude": 45.377,
+    "longitude": -122.0704
+  },
+  "23.143830,105.529997": {
     "name": "T\u00e2n Giang",
-    "state_name": "T\u1ec9nh Cao B\u1eb1ng",
-    "nation_name": "Vi\u1ec7t Nam",
+    "state_name": "Cao B\u1eb1ng Province",
+    "nation_name": "Vietnam",
     "latitude": 23.14383048,
     "longitude": 105.5299971
   },
-  "69990ac6c1c326ee19da886e": {
-    "_id": "69990ac6c1c326ee19da886e",
+  "12.565500,124.041900": {
     "name": "Iriga",
     "state_name": "Camarines Sur",
     "nation_name": "Philippines",
     "latitude": 12.5655,
     "longitude": 124.0419
   },
-  "69990ac6c1c326ee19da8870": {
-    "_id": "69990ac6c1c326ee19da8870",
+  "45.521000,-122.670000": {
     "name": "Portland",
     "state_name": "Oregon",
     "nation_name": "United States",
     "latitude": 45.521,
     "longitude": -122.67
   },
-  "69990ac8c1c326ee19da8873": {
-    "_id": "69990ac8c1c326ee19da8873",
+  "35.507000,-83.071000": {
     "name": "Knoxville",
     "state_name": "Tennessee",
     "nation_name": "United States",
     "latitude": 35.507,
     "longitude": -83.071
   },
-  "69990acac1c326ee19da8877": {
-    "_id": "69990acac1c326ee19da8877",
+  "46.110000,-122.893000": {
+    "name": "Gresham",
+    "state_name": "Oregon",
+    "nation_name": "United States",
+    "latitude": 46.11,
+    "longitude": -122.893
+  },
+  "47.432000,-122.334000": {
     "name": "Tacoma",
     "state_name": "Washington",
     "nation_name": "United States",
     "latitude": 47.432,
     "longitude": -122.334
   },
-  "69990accc1c326ee19da8879": {
-    "_id": "69990accc1c326ee19da8879",
+  "48.538000,-121.750000": {
     "name": "Port Moody",
     "state_name": "British Columbia",
     "nation_name": "Canada",
     "latitude": 48.538,
     "longitude": -121.75
   },
-  "69990ad0c1c326ee19da887d": {
-    "_id": "69990ad0c1c326ee19da887d",
+  "48.720000,-122.200000": {
+    "name": "Port Moody",
+    "state_name": "British Columbia",
+    "nation_name": "Canada",
+    "latitude": 48.72,
+    "longitude": -122.2
+  },
+  "46.129900,-122.909000": {
+    "name": "Gresham",
+    "state_name": "Oregon",
+    "nation_name": "United States",
+    "latitude": 46.1299,
+    "longitude": -122.909
+  },
+  "47.538000,-122.273000": {
     "name": "Seattle",
     "state_name": "Washington",
     "nation_name": "United States",
     "latitude": 47.538,
     "longitude": -122.273
   },
-  "69990ad1c1c326ee19da8882": {
-    "_id": "69990ad1c1c326ee19da8882",
+  "48.929000,-122.037000": {
+    "name": "Port Moody",
+    "state_name": "British Columbia",
+    "nation_name": "Canada",
+    "latitude": 48.929,
+    "longitude": -122.037
+  },
+  "36.794600,5.765000": {
     "name": "Jijel",
     "state_name": "Jijel",
     "nation_name": "Algeria",
     "latitude": 36.7946,
     "longitude": 5.765
   },
-  "69990ad2c1c326ee19da8884": {
-    "_id": "69990ad2c1c326ee19da8884",
+  "47.757300,-122.207200": {
     "name": "Victoria",
     "state_name": "British Columbia",
     "nation_name": "Canada",
     "latitude": 47.7573,
     "longitude": -122.2072
   },
-  "69990ad3c1c326ee19da8888": {
-    "_id": "69990ad3c1c326ee19da8888",
+  "1.531000,110.344200": {
     "name": "Kuching",
     "state_name": "Sarawak",
     "nation_name": "Malaysia",
     "latitude": 1.531,
     "longitude": 110.3442
   },
-  "69990ad5c1c326ee19da888b": {
-    "_id": "69990ad5c1c326ee19da888b",
+  "-8.507300,116.662000": {
     "name": "Mataram",
-    "state_name": "Nusa Tenggara Barat",
+    "state_name": "West Nusa Tenggara",
     "nation_name": "Indonesia",
     "latitude": -8.5073,
     "longitude": 116.662
   },
-  "69990ad6c1c326ee19da888f": {
-    "_id": "69990ad6c1c326ee19da888f",
+  "8.484100,-13.228700": {
     "name": "Freetown",
     "state_name": "Western Area Urban",
     "nation_name": "Sierra Leone",
     "latitude": 8.4841,
     "longitude": -13.2287
   },
-  "69990ad5c1c326ee19da8892": {
-    "_id": "69990ad5c1c326ee19da8892",
-    "name": "Bandar Victoria",
+  "5.031000,115.066800": {
+    "name": "Victoria",
     "state_name": "Labuan",
     "nation_name": "Malaysia",
     "latitude": 5.031,
     "longitude": 115.0668
   },
-  "69990ad6c1c326ee19da8895": {
-    "_id": "69990ad6c1c326ee19da8895",
+  "19.427100,-99.127600": {
     "name": "Mexico City",
     "state_name": "Mexico City",
     "nation_name": "Mexico",
     "latitude": 19.4271,
     "longitude": -99.1276
   },
-  "69990ad6c1c326ee19da8899": {
-    "_id": "69990ad6c1c326ee19da8899",
+  "40.840300,14.252000": {
     "name": "Naples",
     "state_name": "Campania",
     "nation_name": "Italy",
     "latitude": 40.8403,
     "longitude": 14.252
   },
-  "69990ad8c1c326ee19da889d": {
-    "_id": "69990ad8c1c326ee19da889d",
-    "name": "\u09aa\u099e\u09cd\u099a\u0997\u09a1\u09bc",
-    "state_name": "\u09b0\u0982\u09aa\u09c1\u09b0 \u09ac\u09bf\u09ad\u09be\u0997",
-    "nation_name": "\u09ac\u09be\u0982\u09b2\u09be\u09a6\u09c7\u09b6",
+  "26.882600,88.278800": {
+    "name": "Panchagarh",
+    "state_name": "Rangpur Division",
+    "nation_name": "Bangladesh",
     "latitude": 26.8826,
     "longitude": 88.2788
   },
-  "69990ad9c1c326ee19da88a0": {
-    "_id": "69990ad9c1c326ee19da88a0",
+  "34.162000,-118.050000": {
     "name": "Santa Clarita",
     "state_name": "California",
     "nation_name": "United States",
     "latitude": 34.162,
     "longitude": -118.05
   },
-  "69990adbc1c326ee19da88a4": {
-    "_id": "69990adbc1c326ee19da88a4",
+  "26.857200,88.314300": {
+    "name": "Panchagarh",
+    "state_name": "Rangpur Division",
+    "nation_name": "Bangladesh",
+    "latitude": 26.8572,
+    "longitude": 88.3143
+  },
+  "9.290000,123.226000": {
     "name": "Carcar",
     "state_name": "Cebu",
     "nation_name": "Philippines",
     "latitude": 9.29,
     "longitude": 123.226
   },
-  "69990addc1c326ee19da88a8": {
-    "_id": "69990addc1c326ee19da88a8",
+  "14.545000,121.560000": {
+    "name": "Taguig",
+    "state_name": "Metro Manila",
+    "nation_name": "Philippines",
+    "latitude": 14.545,
+    "longitude": 121.56
+  },
+  "37.913700,-79.430500": {
     "name": "Lynchburg",
     "state_name": "Virginia",
     "nation_name": "United States",
     "latitude": 37.9137,
     "longitude": -79.4305
   },
-  "69990addc1c326ee19da88ac": {
-    "_id": "69990addc1c326ee19da88ac",
+  "-41.052800,145.906300": {
     "name": "Burnie",
     "state_name": "Tasmania",
     "nation_name": "Australia",
     "latitude": -41.0528,
     "longitude": 145.9063
   },
-  "69990adec1c326ee19da88af": {
-    "_id": "69990adec1c326ee19da88af",
+  "28.203900,83.980600": {
     "name": "Pokhara",
     "state_name": "Gandaki Province",
     "nation_name": "Nepal",
     "latitude": 28.2039,
     "longitude": 83.9806
   },
-  "69990ae1c1c326ee19da88b2": {
-    "_id": "69990ae1c1c326ee19da88b2",
-    "name": "\u092d\u0930\u0924\u092a\u0941\u0930",
-    "state_name": "\u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
-    "nation_name": "\u0928\u0947\u092a\u093e\u0932",
+  "27.944700,84.227900": {
+    "name": "Bharatpur",
+    "state_name": "Bagamati Province",
+    "nation_name": "Nepal",
     "latitude": 27.9447,
     "longitude": 84.2279
   },
-  "69990ae2c1c326ee19da88b5": {
-    "_id": "69990ae2c1c326ee19da88b5",
+  "34.049600,131.572900": {
     "name": "Hofu",
     "state_name": "Yamaguchi Prefecture",
     "nation_name": "Japan",
     "latitude": 34.0496,
     "longitude": 131.5729
   },
-  "69990ae3c1c326ee19da88b9": {
-    "_id": "69990ae3c1c326ee19da88b9",
+  "36.770029,-83.712126": {
+    "name": "Knoxville",
+    "state_name": "Tennessee",
+    "nation_name": "United States",
+    "latitude": 36.770029,
+    "longitude": -83.712126
+  },
+  "34.385200,132.459200": {
     "name": "Hiroshima",
     "state_name": "Hiroshima Prefecture",
     "nation_name": "Japan",
     "latitude": 34.3852,
     "longitude": 132.4592
   },
-  "69990ae4c1c326ee19da88bc": {
-    "_id": "69990ae4c1c326ee19da88bc",
+  "31.483000,103.586800": {
     "name": "Wenchuan",
     "state_name": "Sichuan",
     "nation_name": "China",
     "latitude": 31.483,
     "longitude": 103.5868
   },
-  "69990ae5c1c326ee19da88c0": {
-    "_id": "69990ae5c1c326ee19da88c0",
+  "27.478000,88.527000": {
     "name": "Siliguri",
     "state_name": "West Bengal",
     "nation_name": "India",
     "latitude": 27.478,
     "longitude": 88.527
   },
-  "69990ae7c1c326ee19da88c2": {
-    "_id": "69990ae7c1c326ee19da88c2",
-    "name": "\u092d\u0915\u094d\u0924\u092a\u0941\u0930",
-    "state_name": "\u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
-    "nation_name": "\u0928\u0947\u092a\u093e\u0932",
+  "28.000000,85.710000": {
+    "name": "Bhaktapur",
+    "state_name": "Bagamati Province",
+    "nation_name": "Nepal",
     "latitude": 28.0,
     "longitude": 85.71
   },
-  "69990ae9c1c326ee19da88c6": {
-    "_id": "69990ae9c1c326ee19da88c6",
+  "28.104600,83.879100": {
+    "name": "Bharatpur",
+    "state_name": "Bagamati Province",
+    "nation_name": "Nepal",
+    "latitude": 28.1046,
+    "longitude": 83.8791
+  },
+  "56.556100,-132.726900": {
     "name": "Wrangell",
     "state_name": "Alaska",
     "nation_name": "United States",
     "latitude": 56.5561,
     "longitude": -132.7269
   },
-  "69990aefc1c326ee19da88cc": {
-    "_id": "69990aefc1c326ee19da88cc",
+  "56.569200,-132.734800": {
+    "name": "Wrangell",
+    "state_name": "Alaska",
+    "nation_name": "United States",
+    "latitude": 56.5692,
+    "longitude": -132.7348
+  },
+  "56.578700,-132.561700": {
+    "name": "Wrangell",
+    "state_name": "Alaska",
+    "nation_name": "United States",
+    "latitude": 56.5787,
+    "longitude": -132.5617
+  },
+  "47.284600,-122.556200": {
+    "name": "Tacoma",
+    "state_name": "Washington",
+    "nation_name": "United States",
+    "latitude": 47.2846,
+    "longitude": -122.5562
+  },
+  "-7.571000,109.918700": {
     "name": "Tegal",
-    "state_name": "Jawa Tengah",
+    "state_name": "Central Java",
     "nation_name": "Indonesia",
     "latitude": -7.571,
     "longitude": 109.9187
   },
-  "69990af1c1c326ee19da88d0": {
-    "_id": "69990af1c1c326ee19da88d0",
+  "35.067200,-85.369700": {
     "name": "Dalton",
     "state_name": "Georgia",
     "nation_name": "United States",
     "latitude": 35.0672,
     "longitude": -85.3697
   },
-  "69990af1c1c326ee19da88d2": {
-    "_id": "69990af1c1c326ee19da88d2",
+  "35.105200,-85.336100": {
     "name": "Chattanooga",
     "state_name": "Tennessee",
     "nation_name": "United States",
     "latitude": 35.1052,
     "longitude": -85.3361
   },
-  "69990af2c1c326ee19da88d6": {
-    "_id": "69990af2c1c326ee19da88d6",
+  "-23.013744,-44.322498": {
     "name": "Angra dos Reis",
     "state_name": "Rio de Janeiro",
     "nation_name": "Brazil",
     "latitude": -23.01374445,
     "longitude": -44.32249842
   },
-  "69990af5c1c326ee19da88d9": {
-    "_id": "69990af5c1c326ee19da88d9",
+  "45.233500,-123.158700": {
+    "name": "Albany",
+    "state_name": "Oregon",
+    "nation_name": "United States",
+    "latitude": 45.2335,
+    "longitude": -123.1587
+  },
+  "-22.892344,-43.074098": {
     "name": "Niter\u00f3i",
     "state_name": "Rio de Janeiro",
     "nation_name": "Brazil",
     "latitude": -22.89234445,
     "longitude": -43.07409842
   },
-  "69990af6c1c326ee19da88dc": {
-    "_id": "69990af6c1c326ee19da88dc",
+  "25.309863,94.482147": {
     "name": "Imphal",
     "state_name": "Manipur",
     "nation_name": "India",
     "latitude": 25.3098633,
     "longitude": 94.48214677
   },
-  "69990af8c1c326ee19da88e0": {
-    "_id": "69990af8c1c326ee19da88e0",
-    "name": "\u06af\u0644\u06af\u062a",
-    "state_name": "\u06af\u0644\u06af\u062a \u0628\u0644\u062a\u0633\u062a\u0627\u0646",
-    "nation_name": "\u067e\u0627\u06a9\u0633\u062a\u0627\u0646",
+  "36.656700,74.860900": {
+    "name": "Gilgit",
+    "state_name": "Gilgit-Baltistan",
+    "nation_name": "Pakistan",
     "latitude": 36.6567,
     "longitude": 74.8609
   },
-  "69990afac1c326ee19da88e4": {
-    "_id": "69990afac1c326ee19da88e4",
-    "name": "\u092d\u093f\u092e\u0926\u0924\u094d\u0924",
-    "state_name": "\u0938\u0941\u0926\u0942\u0930\u092a\u0936\u094d\u091a\u093f\u092e \u092a\u094d\u0930\u0926\u0947\u0936",
-    "nation_name": "\u0928\u0947\u092a\u093e\u0932",
+  "10.395000,123.915300": {
+    "name": "Cebu City",
+    "state_name": "Central Visayas",
+    "nation_name": "Philippines",
+    "latitude": 10.395,
+    "longitude": 123.9153
+  },
+  "29.733400,79.636700": {
+    "name": "Bhimdatta",
+    "state_name": "Sudurpashchim Province",
+    "nation_name": "Nepal",
     "latitude": 29.7334,
     "longitude": 79.6367
   },
-  "69990afcc1c326ee19da88e6": {
-    "_id": "69990afcc1c326ee19da88e6",
+  "10.570000,123.720000": {
     "name": "Bogo",
     "state_name": "Cebu",
     "nation_name": "Philippines",
     "latitude": 10.57,
     "longitude": 123.72
   },
-  "69990afec1c326ee19da88ea": {
-    "_id": "69990afec1c326ee19da88ea",
+  "10.770000,123.980000": {
+    "name": "Bogo",
+    "state_name": "Cebu",
+    "nation_name": "Philippines",
+    "latitude": 10.77,
+    "longitude": 123.98
+  },
+  "-22.233100,-42.601800": {
     "name": "Juiz de Fora",
     "state_name": "Minas Gerais",
-    "nation_name": "Brasil",
+    "nation_name": "Brazil",
     "latitude": -22.2331,
     "longitude": -42.6018
   },
-  "69990affc1c326ee19da88ed": {
-    "_id": "69990affc1c326ee19da88ed",
-    "name": "\u06af\u0648\u062c\u0631 \u062e\u0627\u0646",
-    "state_name": "\u067e\u0646\u062c\u0627\u0628",
-    "nation_name": "\u067e\u0627\u06a9\u0633\u062a\u0627\u0646",
+  "33.877800,74.333300": {
+    "name": "Gujar Khan",
+    "state_name": "Punjab",
+    "nation_name": "Pakistan",
     "latitude": 33.8778,
     "longitude": 74.3333
   },
-  "69990b01c1c326ee19da88f0": {
-    "_id": "69990b01c1c326ee19da88f0",
+  "44.937800,-73.056200": {
     "name": "Saint-J\u00e9r\u00f4me",
-    "state_name": "Qu\u00e9bec",
+    "state_name": "Quebec",
     "nation_name": "Canada",
     "latitude": 44.9378,
     "longitude": -73.0562
   },
-  "69990b02c1c326ee19da88f3": {
-    "_id": "69990b02c1c326ee19da88f3",
+  "30.766600,78.796300": {
     "name": "Dehradun",
     "state_name": "Uttarakhand",
     "nation_name": "India",
     "latitude": 30.7666,
     "longitude": 78.7963
   },
-  "69990b01c1c326ee19da88f7": {
-    "_id": "69990b01c1c326ee19da88f7",
-    "name": "\u092c\u0941\u091f\u0935\u0932",
-    "state_name": "\u0932\u0941\u092e\u094d\u092c\u093f\u0928\u0940 \u092a\u094d\u0930\u0926\u0947\u0936",
-    "nation_name": "\u0928\u0947\u092a\u093e\u0932",
+  "27.739400,83.575400": {
+    "name": "Bharatpur",
+    "state_name": "Bagamati Province",
+    "nation_name": "Nepal",
+    "latitude": 27.7394,
+    "longitude": 83.5754
+  },
+  "10.335000,123.872500": {
+    "name": "Cebu City",
+    "state_name": "Central Visayas",
+    "nation_name": "Philippines",
+    "latitude": 10.335,
+    "longitude": 123.8725
+  },
+  "28.368300,83.293400": {
+    "name": "Butwal",
+    "state_name": "Lumbini Province",
+    "nation_name": "Nepal",
     "latitude": 28.3683,
     "longitude": 83.2934
   },
-  "69990b04c1c326ee19da88fa": {
-    "_id": "69990b04c1c326ee19da88fa",
+  "28.088900,83.293400": {
+    "name": "Butwal",
+    "state_name": "Lumbini Province",
+    "nation_name": "Nepal",
+    "latitude": 28.0889,
+    "longitude": 83.2934
+  },
+  "16.098800,-96.222559": {
     "name": "Puerto Escondido",
     "state_name": "Oaxaca",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 16.09880042,
     "longitude": -96.22255907
   },
-  "69990b0ac1c326ee19da88ff": {
-    "_id": "69990b0ac1c326ee19da88ff",
+  "30.765200,78.592500": {
+    "name": "Dehradun",
+    "state_name": "Uttarakhand",
+    "nation_name": "India",
+    "latitude": 30.7652,
+    "longitude": 78.5925
+  },
+  "30.733100,79.068500": {
+    "name": "Dehradun",
+    "state_name": "Uttarakhand",
+    "nation_name": "India",
+    "latitude": 30.7331,
+    "longitude": 79.0685
+  },
+  "31.018800,78.412900": {
+    "name": "Dehradun",
+    "state_name": "Uttarakhand",
+    "nation_name": "India",
+    "latitude": 31.0188,
+    "longitude": 78.4129
+  },
+  "37.676076,-119.779508": {
     "name": "Madera",
     "state_name": "California",
     "nation_name": "United States",
     "latitude": 37.67607624,
     "longitude": -119.7795082
   },
-  "69990b0cc1c326ee19da8902": {
-    "_id": "69990b0cc1c326ee19da8902",
+  "16.777872,120.961328": {
     "name": "Dagupan",
     "state_name": "Pangasinan",
     "nation_name": "Philippines",
     "latitude": 16.77787239,
     "longitude": 120.9613282
   },
-  "69990b0dc1c326ee19da8905": {
-    "_id": "69990b0dc1c326ee19da8905",
+  "-8.813700,-36.954100": {
     "name": "Santa Cruz do Capibaribe",
     "state_name": "Pernambuco",
-    "nation_name": "Brasil",
+    "nation_name": "Brazil",
     "latitude": -8.8137,
     "longitude": -36.9541
   },
-  "69990b0ec1c326ee19da8909": {
-    "_id": "69990b0ec1c326ee19da8909",
+  "10.390000,123.920000": {
+    "name": "Cebu City",
+    "state_name": "Central Visayas",
+    "nation_name": "Philippines",
+    "latitude": 10.39,
+    "longitude": 123.92
+  },
+  "-8.054300,-34.881300": {
     "name": "Recife",
     "state_name": "Pernambuco",
     "nation_name": "Brazil",
     "latitude": -8.0543,
     "longitude": -34.8813
   },
-  "69990b10c1c326ee19da890b": {
-    "_id": "69990b10c1c326ee19da890b",
+  "30.404300,79.331800": {
     "name": "Almora",
     "state_name": "Uttarakhand",
     "nation_name": "India",
     "latitude": 30.4043,
     "longitude": 79.3318
   },
-  "69990b10c1c326ee19da890e": {
-    "_id": "69990b10c1c326ee19da890e",
+  "19.244400,-103.724400": {
     "name": "Colima City",
     "state_name": "Colima",
     "nation_name": "Mexico",
     "latitude": 19.2444,
     "longitude": -103.7244
   },
-  "69990b11c1c326ee19da8911": {
-    "_id": "69990b11c1c326ee19da8911",
+  "17.497400,-99.538000": {
     "name": "Chilpancingo",
     "state_name": "Guerrero",
     "nation_name": "Mexico",
     "latitude": 17.4974,
     "longitude": -99.538
   },
-  "69990b14c1c326ee19da8914": {
-    "_id": "69990b14c1c326ee19da8914",
+  "27.831964,84.547046": {
+    "name": "Bharatpur",
+    "state_name": "Bagamati Province",
+    "nation_name": "Nepal",
+    "latitude": 27.83196401,
+    "longitude": 84.54704621
+  },
+  "19.580500,-101.702300": {
     "name": "Zamora",
     "state_name": "Michoac\u00e1n",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 19.5805,
     "longitude": -101.7023
   },
-  "69990b16c1c326ee19da8917": {
-    "_id": "69990b16c1c326ee19da8917",
+  "10.607300,124.970500": {
+    "name": "Ormoc",
+    "state_name": "Leyte",
+    "nation_name": "Philippines",
+    "latitude": 10.6073,
+    "longitude": 124.9705
+  },
+  "49.022900,-122.800100": {
     "name": "White Rock",
     "state_name": "British Columbia",
     "nation_name": "Canada",
     "latitude": 49.0229,
     "longitude": -122.8001
   },
-  "69990b17c1c326ee19da891a": {
-    "_id": "69990b17c1c326ee19da891a",
+  "21.759500,-104.833400": {
     "name": "Tepic",
     "state_name": "Nayarit",
-    "nation_name": "M\u00e9xico",
+    "nation_name": "Mexico",
     "latitude": 21.7595,
     "longitude": -104.8334
   },
-  "69990b18c1c326ee19da891d": {
-    "_id": "69990b18c1c326ee19da891d",
+  "39.427400,-107.129100": {
     "name": "Glenwood Springs",
     "state_name": "Colorado",
     "nation_name": "United States",
     "latitude": 39.4274,
     "longitude": -107.1291
   },
-  "69990b1cc1c326ee19da8922": {
-    "_id": "69990b1cc1c326ee19da8922",
+  "39.497700,-107.222500": {
+    "name": "Glenwood Springs",
+    "state_name": "Colorado",
+    "nation_name": "United States",
+    "latitude": 39.4977,
+    "longitude": -107.2225
+  },
+  "28.387500,82.647400": {
+    "name": "Butwal",
+    "state_name": "Lumbini Province",
+    "nation_name": "Nepal",
+    "latitude": 28.3875,
+    "longitude": 82.6474
+  },
+  "26.324724,94.514651": {
     "name": "Kohima",
     "state_name": "Nagaland",
     "nation_name": "India",
     "latitude": 26.324724,
     "longitude": 94.514651
   },
-  "69990b1fc1c326ee19da8928": {
-    "_id": "69990b1fc1c326ee19da8928",
+  "10.370000,123.890000": {
+    "name": "Cebu City",
+    "state_name": "Central Visayas",
+    "nation_name": "Philippines",
+    "latitude": 10.37,
+    "longitude": 123.89
+  },
+  "10.420000,123.910000": {
+    "name": "Cebu City",
+    "state_name": "Central Visayas",
+    "nation_name": "Philippines",
+    "latitude": 10.42,
+    "longitude": 123.91
+  },
+  "40.000000,25.000000": {
+    "name": "Alexandroupolis",
+    "state_name": "Eastern Macedonia and Thrace",
+    "nation_name": "Greece",
+    "latitude": 40.0,
+    "longitude": 25.0
+  },
+  "51.450000,-2.583000": {
     "name": "Bristol",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 51.45,
     "longitude": -2.583
   },
-  "69990b1fc1c326ee19da892c": {
-    "_id": "69990b1fc1c326ee19da892c",
-    "name": "\u0627\u0644\u0644\u0627\u0630\u0642\u064a\u0629",
-    "state_name": "\u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0644\u0627\u0630\u0642\u064a\u0629",
-    "nation_name": "\u0633\u0648\u0631\u064a\u0627",
+  "36.080000,36.250000": {
+    "name": "Latakia",
+    "state_name": "Lattakia Governorate",
+    "nation_name": "Syria",
     "latitude": 36.08,
     "longitude": 36.25
   },
-  "69990b20c1c326ee19da8930": {
-    "_id": "69990b20c1c326ee19da8930",
-    "name": "\ubb38\ucc9c\uc2dc",
-    "state_name": "\uac15\uc6d0\ub3c4",
-    "nation_name": "\uc870\uc120\ubbfc\uc8fc\uc8fc\uc758\uc778\ubbfc\uacf5\ud654\uad6d",
+  "40.000000,128.000000": {
+    "name": "Munchon",
+    "state_name": "Kangwon",
+    "nation_name": "North Korea",
     "latitude": 40.0,
     "longitude": 128.0
   },
-  "69990b22c1c326ee19da8934": {
-    "_id": "69990b22c1c326ee19da8934",
-    "name": "\ubcf4\ub839\uc2dc",
-    "state_name": "\ucda9\uccad\ub0a8\ub3c4",
-    "nation_name": "\ub300\ud55c\ubbfc\uad6d",
+  "39.960000,26.240000": {
+    "name": "\u00c7anakkale Merkez",
+    "state_name": "Canakkale",
+    "nation_name": "Turkey",
+    "latitude": 39.96,
+    "longitude": 26.24
+  },
+  "37.500000,119.500000": {
+    "name": "Laixi",
+    "state_name": "Shandong",
+    "nation_name": "China",
+    "latitude": 37.5,
+    "longitude": 119.5
+  },
+  "37.000000,126.000000": {
+    "name": "Boryeong",
+    "state_name": "South Chungcheong",
+    "nation_name": "South Korea",
     "latitude": 37.0,
     "longitude": 126.0
   },
-  "69990b27c1c326ee19da893b": {
-    "_id": "69990b27c1c326ee19da893b",
+  "50.600000,-2.466000": {
     "name": "Cardiff",
-    "state_name": "Cymru / Wales",
+    "state_name": "Wales",
     "nation_name": "United Kingdom",
     "latitude": 50.6,
     "longitude": -2.4659999999999997
   },
-  "69990b28c1c326ee19da893e": {
-    "_id": "69990b28c1c326ee19da893e",
-    "name": "\u5c3e\u9df2\u5e02",
-    "state_name": "\u4e09\u91cd\u770c",
-    "nation_name": "\u65e5\u672c",
+  "33.600000,136.000000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
     "latitude": 33.6,
     "longitude": 136.0
   },
-  "69990b28c1c326ee19da8942": {
-    "_id": "69990b28c1c326ee19da8942",
+  "49.465000,-2.585000": {
     "name": "Castel",
     "state_name": "Guernsey",
     "nation_name": "Guernsey",
     "latitude": 49.465,
     "longitude": -2.585
   },
-  "69990b2ec1c326ee19da8949": {
-    "_id": "69990b2ec1c326ee19da8949",
+  "50.116000,-5.483000": {
     "name": "Plymouth",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 50.11600000000001,
     "longitude": -5.483
   },
-  "69990b30c1c326ee19da894c": {
-    "_id": "69990b30c1c326ee19da894c",
+  "41.040000,28.980000": {
     "name": "Kocaeli",
     "state_name": "Kocaeli",
-    "nation_name": "T\u00fcrkiye",
+    "nation_name": "Turkey",
     "latitude": 41.04,
     "longitude": 28.98
   },
-  "69990b30c1c326ee19da894f": {
-    "_id": "69990b30c1c326ee19da894f",
+  "38.000000,125.700000": {
     "name": "Haeju-si",
     "state_name": "South Hwanghae",
     "nation_name": "North Korea",
     "latitude": 38.0,
     "longitude": 125.7
   },
-  "69990b33c1c326ee19da8951": {
-    "_id": "69990b33c1c326ee19da8951",
+  "54.680000,-1.210000": {
     "name": "Leeds",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 54.68,
     "longitude": -1.21
   },
-  "69990b34c1c326ee19da8955": {
-    "_id": "69990b34c1c326ee19da8955",
+  "28.271000,-16.641000": {
     "name": "Santa Cruz de Tenerife",
-    "state_name": "Canarias",
-    "nation_name": "Espa\u00f1a",
+    "state_name": "Canary Islands",
+    "nation_name": "Spain",
     "latitude": 28.271,
     "longitude": -16.641
   },
-  "69990b36c1c326ee19da8958": {
-    "_id": "69990b36c1c326ee19da8958",
-    "name": "\uc18d\ucd08\uc2dc",
-    "state_name": "\uac15\uc6d0\ud2b9\ubcc4\uc790\uce58\ub3c4",
-    "nation_name": "\ub300\ud55c\ubbfc\uad6d",
+  "37.500000,129.500000": {
+    "name": "Sokcho",
+    "state_name": "Gangwon State",
+    "nation_name": "South Korea",
     "latitude": 37.5,
     "longitude": 129.5
   },
-  "69990b36c1c326ee19da895c": {
-    "_id": "69990b36c1c326ee19da895c",
+  "36.404000,25.396000": {
     "name": "Thira Municipal Unit",
     "state_name": "South Aegean",
     "nation_name": "Greece",
     "latitude": 36.404,
     "longitude": 25.396
   },
-  "69990b37c1c326ee19da895f": {
-    "_id": "69990b37c1c326ee19da895f",
+  "45.500000,11.000000": {
     "name": "Verona",
     "state_name": "Veneto",
     "nation_name": "Italy",
     "latitude": 45.5,
     "longitude": 11.0
   },
-  "69990b3bc1c326ee19da8964": {
-    "_id": "69990b3bc1c326ee19da8964",
+  "36.300000,126.000000": {
     "name": "Boryeong-si",
     "state_name": "South Chungcheong",
     "nation_name": "South Korea",
     "latitude": 36.3,
     "longitude": 126.0
   },
-  "69990b3dc1c326ee19da8967": {
-    "_id": "69990b3dc1c326ee19da8967",
+  "51.500000,0.466000": {
     "name": "Greater London",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 51.5,
     "longitude": 0.466
   },
-  "69990b3ec1c326ee19da896a": {
-    "_id": "69990b3ec1c326ee19da896a",
+  "32.500000,130.600000": {
     "name": "Yatsushiro",
     "state_name": "Kumamoto Prefecture",
     "nation_name": "Japan",
     "latitude": 32.5,
     "longitude": 130.6
   },
-  "69990b3fc1c326ee19da896f": {
-    "_id": "69990b3fc1c326ee19da896f",
+  "51.500000,0.100000": {
+    "name": "Greater London",
+    "state_name": "England",
+    "nation_name": "United Kingdom",
+    "latitude": 51.5,
+    "longitude": 0.1
+  },
+  "51.500000,-0.080000": {
+    "name": "Greater London",
+    "state_name": "England",
+    "nation_name": "United Kingdom",
+    "latitude": 51.5,
+    "longitude": -0.08
+  },
+  "51.208000,-4.122000": {
     "name": "North Devon",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 51.208,
     "longitude": -4.122
   },
-  "69990b41c1c326ee19da8973": {
-    "_id": "69990b41c1c326ee19da8973",
+  "39.500000,20.000000": {
     "name": "Corfu",
     "state_name": "Ioanian Islands",
     "nation_name": "Greece",
     "latitude": 39.5,
     "longitude": 20.0
   },
-  "69990b43c1c326ee19da8977": {
-    "_id": "69990b43c1c326ee19da8977",
+  "10.633000,-64.300000": {
     "name": "Puerto La Cruz",
-    "state_name": "Anzo\u00e1tegui",
+    "state_name": "Anzoategui State",
     "nation_name": "Venezuela",
     "latitude": 10.633,
     "longitude": -64.3
   },
-  "69990b44c1c326ee19da897a": {
-    "_id": "69990b44c1c326ee19da897a",
+  "38.400000,22.300000": {
     "name": "Municipal Unit of Galaxidi",
     "state_name": "Central Greece",
     "nation_name": "Greece",
     "latitude": 38.4,
     "longitude": 22.3
   },
-  "69990b45c1c326ee19da897e": {
-    "_id": "69990b45c1c326ee19da897e",
+  "31.700000,35.500000": {
     "name": "Megilot Yam HaMelakh Regional Council",
     "state_name": "Judea and Samaria",
     "nation_name": "Palestinian Territories",
     "latitude": 31.7,
     "longitude": 35.5
   },
-  "69990b47c1c326ee19da8982": {
-    "_id": "69990b47c1c326ee19da8982",
+  "13.600000,123.200000": {
+    "name": "Iriga",
+    "state_name": "Camarines Sur",
+    "nation_name": "Philippines",
+    "latitude": 13.6,
+    "longitude": 123.2
+  },
+  "-36.800000,-73.000000": {
     "name": "Concepcion",
     "state_name": "Biobio Region",
     "nation_name": "Chile",
     "latitude": -36.8,
     "longitude": -73.0
   },
-  "69990b48c1c326ee19da8985": {
-    "_id": "69990b48c1c326ee19da8985",
+  "35.683000,35.800000": {
+    "name": "Latakia",
+    "state_name": "Lattakia Governorate",
+    "nation_name": "Syria",
+    "latitude": 35.683,
+    "longitude": 35.8
+  },
+  "-6.174000,106.829000": {
     "name": "Central Jakarta",
     "state_name": "Java",
     "nation_name": "Indonesia",
     "latitude": -6.1739999999999995,
     "longitude": 106.829
   },
-  "69990b4ac1c326ee19da8987": {
-    "_id": "69990b4ac1c326ee19da8987",
+  "49.500000,-2.500000": {
     "name": "Vale",
     "state_name": "Guernsey",
     "nation_name": "Guernsey",
     "latitude": 49.5,
     "longitude": -2.5
   },
-  "69990b50c1c326ee19da898d": {
-    "_id": "69990b50c1c326ee19da898d",
+  "38.400000,27.100000": {
+    "name": "\u0130zmir",
+    "state_name": "Izmir",
+    "nation_name": "Turkey",
+    "latitude": 38.4,
+    "longitude": 27.1
+  },
+  "38.400000,27.300000": {
+    "name": "\u0130zmir",
+    "state_name": "Izmir",
+    "nation_name": "Turkey",
+    "latitude": 38.4,
+    "longitude": 27.3
+  },
+  "49.920000,-6.320000": {
     "name": "Truro",
     "state_name": "England",
     "nation_name": "United Kingdom",
     "latitude": 49.92,
     "longitude": -6.32
   },
-  "69990b52c1c326ee19da8991": {
-    "_id": "69990b52c1c326ee19da8991",
+  "50.800000,5.700000": {
     "name": "Maastricht",
     "state_name": "Limburg",
-    "nation_name": "Nederland",
+    "nation_name": "Netherlands",
     "latitude": 50.8,
     "longitude": 5.7
   },
-  "69990b53c1c326ee19da8996": {
-    "_id": "69990b53c1c326ee19da8996",
+  "33.560000,35.370000": {
+    "name": "Sidon",
+    "state_name": "South Governorate",
+    "nation_name": "Lebanon",
+    "latitude": 33.56,
+    "longitude": 35.37
+  },
+  "33.270000,35.220000": {
+    "name": "Tyre",
+    "state_name": "South Governorate",
+    "nation_name": "Lebanon",
+    "latitude": 33.27,
+    "longitude": 35.22
+  },
+  "37.100000,138.000000": {
     "name": "Itoigawa",
     "state_name": "Niigata Prefecture",
     "nation_name": "Japan",
     "latitude": 37.1,
     "longitude": 138.0
   },
-  "69990b57c1c326ee19da899b": {
-    "_id": "69990b57c1c326ee19da899b",
+  "10.700000,-64.100000": {
+    "name": "Puerto La Cruz",
+    "state_name": "Anzoategui State",
+    "nation_name": "Venezuela",
+    "latitude": 10.7,
+    "longitude": -64.1
+  },
+  "34.800000,139.000000": {
+    "name": "Shimada",
+    "state_name": "Shizuoka Prefecture",
+    "nation_name": "Japan",
+    "latitude": 34.8,
+    "longitude": 139.0
+  },
+  "33.300000,131.700000": {
     "name": "Oita",
     "state_name": "Oita Prefecture",
     "nation_name": "Japan",
     "latitude": 33.3,
     "longitude": 131.7
   },
-  "69990b59c1c326ee19da899e": {
-    "_id": "69990b59c1c326ee19da899e",
-    "name": "\u9759\u5ca1\u5e02",
-    "state_name": "\u9759\u5ca1\u770c",
-    "nation_name": "\u65e5\u672c",
+  "34.400000,137.700000": {
+    "name": "Shizuoka",
+    "state_name": "Shizuoka Prefecture",
+    "nation_name": "Japan",
     "latitude": 34.4,
     "longitude": 137.7
   },
-  "69990b5ac1c326ee19da89a1": {
-    "_id": "69990b5ac1c326ee19da89a1",
+  "-6.000000,107.000000": {
     "name": "Bogor",
-    "state_name": "Jawa Barat",
+    "state_name": "West Java",
     "nation_name": "Indonesia",
     "latitude": -6.0,
     "longitude": 107.0
   },
-  "69990b5bc1c326ee19da89a4": {
-    "_id": "69990b5bc1c326ee19da89a4",
+  "13.100000,121.600000": {
     "name": "Calapan",
     "state_name": "Oriental Mindoro",
     "nation_name": "Philippines",
     "latitude": 13.1,
     "longitude": 121.6
   },
-  "69990b5cc1c326ee19da89a7": {
-    "_id": "69990b5cc1c326ee19da89a7",
+  "17.000000,121.000000": {
     "name": "San Fernando",
     "state_name": "La Union",
     "nation_name": "Philippines",
     "latitude": 17.0,
     "longitude": 121.0
   },
-  "69990b5dc1c326ee19da89aa": {
-    "_id": "69990b5dc1c326ee19da89aa",
+  "-16.600000,-72.700000": {
     "name": "Samuel Pastor",
     "state_name": "Arequipa",
     "nation_name": "Peru",
     "latitude": -16.6,
     "longitude": -72.7
   },
-  "69990b5dc1c326ee19da89ad": {
-    "_id": "69990b5dc1c326ee19da89ad",
+  "35.200000,140.600000": {
     "name": "Isumi",
     "state_name": "Chiba Prefecture",
     "nation_name": "Japan",
     "latitude": 35.2,
     "longitude": 140.6
   },
-  "69990b5fc1c326ee19da89b0": {
-    "_id": "69990b5fc1c326ee19da89b0",
+  "40.900000,28.900000": {
     "name": "Istanbul",
     "state_name": "Istanbul",
     "nation_name": "Turkey",
     "latitude": 40.9,
     "longitude": 28.9
   },
-  "69990b61c1c326ee19da89b3": {
-    "_id": "69990b61c1c326ee19da89b3",
+  "25.000000,125.500000": {
     "name": "Miyakojima",
     "state_name": "Okinawa Prefecture",
     "nation_name": "Japan",
     "latitude": 25.0,
     "longitude": 125.5
   },
-  "69990b62c1c326ee19da89b6": {
-    "_id": "69990b62c1c326ee19da89b6",
-    "name": "\u5982\u768b\u5e02",
-    "state_name": "\u6c5f\u82cf\u7701",
-    "nation_name": "\u4e2d\u56fd",
+  "31.500000,121.500000": {
+    "name": "Rugao",
+    "state_name": "Jiangsu",
+    "nation_name": "China",
     "latitude": 31.5,
     "longitude": 121.5
   },
-  "69990b64c1c326ee19da89b9": {
-    "_id": "69990b64c1c326ee19da89b9",
-    "name": "\u677e\u6238\u5e02",
-    "state_name": "\u5343\u8449\u770c",
-    "nation_name": "\u65e5\u672c",
+  "35.200000,140.800000": {
+    "name": "Matsudo",
+    "state_name": "Chiba Prefecture",
+    "nation_name": "Japan",
     "latitude": 35.2,
     "longitude": 140.8
   },
-  "69990b66c1c326ee19da89bd": {
-    "_id": "69990b66c1c326ee19da89bd",
+  "16.800000,-99.900000": {
+    "name": "Acapulco",
+    "state_name": "Guerrero",
+    "nation_name": "Mexico",
+    "latitude": 16.8,
+    "longitude": -99.9
+  },
+  "-17.300000,-70.800000": {
     "name": "Moquegua",
     "state_name": "Moquegua",
     "nation_name": "Peru",
     "latitude": -17.3,
     "longitude": -70.8
   },
-  "69990b67c1c326ee19da89c0": {
-    "_id": "69990b67c1c326ee19da89c0",
+  "34.300000,134.000000": {
     "name": "Takamatsu",
     "state_name": "Kagawa Prefecture",
     "nation_name": "Japan",
     "latitude": 34.3,
     "longitude": 134.0
   },
-  "69990b69c1c326ee19da89c3": {
-    "_id": "69990b69c1c326ee19da89c3",
+  "-3.690000,128.150000": {
     "name": "Ambon",
     "state_name": "Maluku",
     "nation_name": "Indonesia",
     "latitude": -3.69,
     "longitude": 128.15
   },
-  "69990b6bc1c326ee19da89c5": {
-    "_id": "69990b6bc1c326ee19da89c5",
-    "name": "\u639b\u5ddd\u5e02",
-    "state_name": "\u9759\u5ca1\u770c",
-    "nation_name": "\u65e5\u672c",
+  "34.000000,137.000000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
     "latitude": 34.0,
     "longitude": 137.0
   },
-  "69990b6dc1c326ee19da89ca": {
-    "_id": "69990b6dc1c326ee19da89ca",
+  "36.500000,126.500000": {
+    "name": "Boryeong-si",
+    "state_name": "South Chungcheong",
+    "nation_name": "South Korea",
+    "latitude": 36.5,
+    "longitude": 126.5
+  },
+  "-32.800000,-70.700000": {
     "name": "San Felipe",
     "state_name": "Valparaiso Region",
     "nation_name": "Chile",
     "latitude": -32.8,
     "longitude": -70.7
   },
-  "69990b70c1c326ee19da89ce": {
-    "_id": "69990b70c1c326ee19da89ce",
+  "13.000000,121.000000": {
     "name": "Batangas City",
     "state_name": "Batangas",
     "nation_name": "Philippines",
     "latitude": 13.0,
     "longitude": 121.0
   },
-  "69990b72c1c326ee19da89d2": {
-    "_id": "69990b72c1c326ee19da89d2",
-    "name": "Tidore Kepulauan",
-    "state_name": "Maluku Utara",
+  "-3.700000,128.200000": {
+    "name": "Ambon",
+    "state_name": "Maluku",
+    "nation_name": "Indonesia",
+    "latitude": -3.7,
+    "longitude": 128.2
+  },
+  "1.375000,127.520000": {
+    "name": "Tidore Islands",
+    "state_name": "North Maluku",
     "nation_name": "Indonesia",
     "latitude": 1.375,
     "longitude": 127.52
   },
-  "69990b73c1c326ee19da89d5": {
-    "_id": "69990b73c1c326ee19da89d5",
+  "40.000000,26.000000": {
     "name": "\u00c7anakkale",
-    "state_name": "\u00c7anakkale",
-    "nation_name": "T\u00fcrkiye",
+    "state_name": "Canakkale",
+    "nation_name": "Turkey",
     "latitude": 40.0,
     "longitude": 26.0
   },
-  "69990b78c1c326ee19da89db": {
-    "_id": "69990b78c1c326ee19da89db",
-    "name": "\ubaa9\ud3ec\uc2dc",
-    "state_name": "\uc804\ub77c\ub0a8\ub3c4",
-    "nation_name": "\ub300\ud55c\ubbfc\uad6d",
+  "35.500000,141.000000": {
+    "name": "Matsudo",
+    "state_name": "Chiba Prefecture",
+    "nation_name": "Japan",
+    "latitude": 35.5,
+    "longitude": 141.0
+  },
+  "-3.000000,128.000000": {
+    "name": "Ambon",
+    "state_name": "Maluku",
+    "nation_name": "Indonesia",
+    "latitude": -3.0,
+    "longitude": 128.0
+  },
+  "35.500000,126.000000": {
+    "name": "Mokpo",
+    "state_name": "South Jeolla",
+    "nation_name": "South Korea",
     "latitude": 35.5,
     "longitude": 126.0
   },
-  "69990b78c1c326ee19da89e0": {
-    "_id": "69990b78c1c326ee19da89e0",
+  "23.000000,117.000000": {
     "name": "Shantou",
     "state_name": "Guangdong",
     "nation_name": "China",
     "latitude": 23.0,
     "longitude": 117.0
   },
-  "69990b7cc1c326ee19da89e3": {
-    "_id": "69990b7cc1c326ee19da89e3",
+  "18.400000,121.600000": {
     "name": "Tuguegarao",
     "state_name": "Cagayan",
     "nation_name": "Philippines",
     "latitude": 18.4,
     "longitude": 121.6
   },
-  "69990b7ec1c326ee19da89e8": {
-    "_id": "69990b7ec1c326ee19da89e8",
+  "16.200000,-88.500000": {
     "name": "San Pedro Sula",
     "state_name": "Cort\u00e9s",
     "nation_name": "Honduras",
     "latitude": 16.2,
     "longitude": -88.5
   },
-  "69990b80c1c326ee19da89ec": {
-    "_id": "69990b80c1c326ee19da89ec",
+  "33.600000,136.300000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
+    "latitude": 33.6,
+    "longitude": 136.3
+  },
+  "34.600000,135.400000": {
     "name": "Osaka",
     "state_name": "Osaka Prefecture",
     "nation_name": "Japan",
     "latitude": 34.6,
     "longitude": 135.4
   },
-  "69990b81c1c326ee19da89ee": {
-    "_id": "69990b81c1c326ee19da89ee",
+  "37.500000,138.200000": {
     "name": "Kashiwazaki",
     "state_name": "Niigata Prefecture",
     "nation_name": "Japan",
     "latitude": 37.5,
     "longitude": 138.2
   },
-  "69990b87c1c326ee19da89f5": {
-    "_id": "69990b87c1c326ee19da89f5",
+  "33.800000,136.900000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
+    "latitude": 33.8,
+    "longitude": 136.9
+  },
+  "33.700000,136.500000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
+    "latitude": 33.7,
+    "longitude": 136.5
+  },
+  "33.700000,135.200000": {
+    "name": "Owase",
+    "state_name": "Mie Prefecture",
+    "nation_name": "Japan",
+    "latitude": 33.7,
+    "longitude": 135.2
+  },
+  "35.200000,139.500000": {
     "name": "Yokosuka",
     "state_name": "Kanagawa Prefecture",
     "nation_name": "Japan",
     "latitude": 35.2,
     "longitude": 139.5
   },
-  "69990b89c1c326ee19da89f7": {
-    "_id": "69990b89c1c326ee19da89f7",
+  "35.200000,139.400000": {
     "name": "Chigasaki",
     "state_name": "Kanagawa Prefecture",
     "nation_name": "Japan",

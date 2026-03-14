@@ -1,16 +1,20 @@
+"""
+ETL script for seeding nation data
+"""
+
 import sys
 import csv
 import server.controllers.nations as nt
 
 
 def extract(filename: str) -> list:
-    """Extract nation data from its CSV file"""
+    """Extract nation data from its file"""
     try:
         with open(filename) as f:
             extracted = csv.DictReader(f, delimiter='\t')
             return list(extracted)
     except Exception as e:
-        print(f'Problem reading csv file: {str(e)}')
+        print(f'Problem reading file: {str(e)}')
         exit(1)
 
 
@@ -29,8 +33,8 @@ def load(transformed: list):
     """Load nation data into database"""
     try:
         nt.nations.create_many(transformed)
-    except:
-        print("Warning: Failed to create nations", e)
+    except Exception as e:
+        print("Warning: Failed to create nations,", e)
 
 
 def seed_nations(filename: str):

@@ -9,8 +9,8 @@ from geopy.extra.rate_limiter import RateLimiter
 
 # Initialize geocoder with a user agent (required by Nominatim)
 geolocator = Nominatim(user_agent="geodata-app")
-reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1.0, max_retries=1)
-geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1.0, max_retries=1)
+reverse = RateLimiter(geolocator.reverse, min_delay_seconds=2.0, max_retries=1)
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2.0, max_retries=1)
 SEARCH_KM = 100
 
 
@@ -65,6 +65,7 @@ def reverse_geocode(lat: float, lon: float) -> dict:
                 bounded=True,
                 viewbox=[(viewbox[0], viewbox[1]), (viewbox[2], viewbox[3])],
                 addressdetails=True,
+                language="en",
             )
 
         if location is None:

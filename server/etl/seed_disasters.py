@@ -1,10 +1,9 @@
 """
-ETL script for seeding natural disaster data from CSV files.
-
-Run with: python3 server/etl/seed_disasters.py
+ETL script for seeding natural disaster data
 """
 
 import csv
+import json
 import server.controllers.natural_disasters as nd
 from server.controllers.geocoding import reverse_geocode
 from datetime import datetime
@@ -34,15 +33,6 @@ def transform_date(year: str, month: str, day: str) -> str:
             f"-{int(float(day or 1)):02d}")
 
 
-def _city_name(lat: float, lon: float) -> str:
-    """Return a city name for the given coordinates via reverse geocoding."""
-    try:
-        loc = reverse_geocode(lat, lon)
-        return loc.get('city') or f"{lat:.2f}, {lon:.2f}"
-    except Exception:
-        return f"{lat:.2f}, {lon:.2f}"
-
-
 def transform_earthquake(row: dict) -> dict:
     """Transform earthquake data into format CRUD API can understand"""
     try:
@@ -58,12 +48,12 @@ def transform_earthquake(row: dict) -> dict:
             return None
 
         return {
-            nd.NAME: f"Earthquake at {_city_name(lat, lon)}",
+            nd.NAME: f"Earthquake {row.get('title')}",
             nd.DISASTER_TYPE: nd.EARTHQUAKE,
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
-            nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')},"
+            nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')}, "
                             f"Depth: {row.get('depth', 'N/A')} km"
         }
     except Exception as e:
@@ -87,7 +77,7 @@ def transform_landslide(row: dict) -> dict:
             return None
 
         return {
-            nd.NAME: f"Landslide at {_city_name(lat, lon)}",
+            nd.NAME: f"Landslide at {row.get('event_title')}",
             nd.DISASTER_TYPE: nd.LANDSLIDE,
             nd.DATE: date,
             nd.LATITUDE: lat,
@@ -112,11 +102,12 @@ def transform_tsunami(row: dict) -> dict:
             return None
 
         return {
-            nd.NAME: f"Tsunami at {_city_name(lat, lon)}",
+            nd.NAME: f"Tsunami at {row.get('LOCATION_NAME')}",
             nd.DISASTER_TYPE: nd.TSUNAMI,
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
+            nd.DESCRIPTION: f"{row.get('COMMENTS', '')}"
         }
     except Exception as e:
         print(e)
@@ -132,7 +123,7 @@ def transform_hurricane(row: dict) -> dict:
         wind_speed = row.get('wind_speed', 'N/A')
         category = row.get('category', 'N/A')
         return {
-            nd.NAME: f"Hurricane at {_city_name(lat, lon)}",
+            nd.NAME: f"Hurricane at {city_name}",
             nd.DISASTER_TYPE: nd.HURRICANE,
             nd.DATE: row.get('date', ''),
             nd.LATITUDE: lat,
@@ -152,7 +143,7 @@ def load_disaster(transformed: list):
         print("Warning could not create disaster: ", e)
 
 
-def seed_disasters(filename: str, disaster_type: str):
+def seed_disasters(disaster_file: str, disaster_type: str):
     """Seed disasters from a CSV file for the given disaster type"""
     transforms = {
         nd.EARTHQUAKE: transform_earthquake,
@@ -163,16 +154,25 @@ def seed_disasters(filename: str, disaster_type: str):
     if disaster_type not in transforms:
         raise ValueError(f'Unrecognized disaster_type: {disaster_type}')
 
-    rows = extract(filename)
+    rows = extract(disaster_file)
     transform_func = transforms[disaster_type]
     transformed_list = []
-    count = 0
+    seen = set()
     for row in rows:
         transformed = transform_func(row)
-        if transformed is not None:
+        # Skip disasters that are transformed wrong
+        if transformed is None:
+            continue
+
+        # Build key fields
+        keys = []
+        for key in nd.KEY:
+            keys.append(transformed[key])
+
+        # Add disaster if it is not a duplicate
+        if tuple(keys) not in seen:
+            seen.add(tuple(keys))
             transformed_list.append(transformed)
-        count += 1
-        print(f"Transformed disaster of type {disaster_type}: {count} / {len(rows)}")
     load_disaster(transformed_list)
 
 

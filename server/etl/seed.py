@@ -12,8 +12,11 @@ import server.controllers.states as st
 import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 from server.etl.seed_nations import seed_nations
+from server.etl.clear_db import clear_db
 import server.etl.seed_disasters as sd
-import server.etl.seed_locations as sl
+import server.etl.seed_coords as scd
+import server.etl.seed_cities as sct
+import server.etl.seed_states as ss
 
 
 # Initialize constants
@@ -26,7 +29,6 @@ HURRICANES_FILE = ETL_PATH + 'hurricanes.csv'
 CITIES_JSON_FILE = ETL_PATH + 'cities.json'
 STATES_JSON_FILE = ETL_PATH + 'states.json'
 DISASTERS_JSON_FILE = ETL_PATH + 'disasters.json'
-LOAD_COUNT = 20
 
 # Potential ones to work on
 WILDFIRES_DATASET = 'rtatman/188-million-us-wildfires'
@@ -80,47 +82,34 @@ def is_json_populated(filename: str) -> bool:
 
 
 def main():
+    # Clear database
+    print("Clearing database")
+    num_deleted = clear_db()
+    print(f"Deleted: {num_deleted}")
+
     # Seed nations
     print("Seeding nations...")
     seed_nations(NATIONS_FILE)
 
-    # Seed cities and states from disaster CSV coordinates
-    print("Seeding locations (cities and states)...")
-    is_locations_cached = (
-        is_json_populated(CITIES_JSON_FILE) and
-        is_json_populated(STATES_JSON_FILE)
-    )
+    # Seed coordinates
+    print("Seeding coordinates...")
+    if not is_json_populated(scd.COORDS_FILE):
+        scd.seed_coords(EARTHQUAKES_FILE, 'latitude', 'longitude')
+        scd.seed_coords(LANDSLIDE_FILE, 'latitude', 'longitude')
+        scd.seed_coords(TSUNAMI_FILE, 'LATITUDE', 'LONGITUDE')
 
-    if is_locations_cached:
-        city_data = list(load_json(CITIES_JSON_FILE).values())
-        ct.cities.create_many(city_data)
-        state_data = list(load_json(STATES_JSON_FILE).values())
-        st.states.create_many(state_data)
-    else:
-        sl.seed_locations(sl.DISASTER_FILES)
-        try:
-            save_json(CITIES_JSON_FILE, ct.cities.read())
-            save_json(STATES_JSON_FILE, st.states.read())
-        except Exception as e:
-            print(f"Warning: Could not save locations to JSON: {e}")
-
-    # Seed natural disasters
-    print("Seeding disasters...")
-    is_disasters_cached = is_json_populated(DISASTERS_JSON_FILE)
-
-    if is_disasters_cached:
-        disaster_data = list(load_json(DISASTERS_JSON_FILE).values())
-        nd.disasters.create_many(disaster_data)
-    else:
+    # Seed records from coordinates
+    if is_json_populated(scd.COORDS_FILE):
+        print("Seeding cities")
+        sct.seed_cities(scd.COORDS_FILE)
+        print("Seeding states")
+        ss.seed_states(scd.COORDS_FILE)
+        print("Seeding disasters")
         sd.seed_disasters(EARTHQUAKES_FILE, nd.EARTHQUAKE)
         sd.seed_disasters(LANDSLIDE_FILE, nd.LANDSLIDE)
         sd.seed_disasters(TSUNAMI_FILE, nd.TSUNAMI)
         # TODO: upload hurricane file
         # sd.seed_disasters(HURRICANES_FILE, nd.HURRICANE)
-        try:
-            save_json(DISASTERS_JSON_FILE, nd.disasters.read())
-        except Exception as e:
-            print(f"Warning: Could not save disasters to JSON: {e}")
 
     print("Seeding complete")
 
