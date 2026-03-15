@@ -1,7 +1,6 @@
 # server/controllers/tests/test_crud.py
 import pytest
-from server.controllers.crud import is_valid_id
-from server.controllers.crud import CRUD
+from server.controllers.crud import is_valid_id, CRUD
 
 FIELD1 = 'field1'
 FIELD2 = 'field2'
@@ -29,6 +28,16 @@ def temp_record():
         crud.delete(_id)
     except ValueError:
         print('The record was already deleted.')
+
+
+class TestIsValidId:
+    def test_basic(self):
+        is_valid = is_valid_id('64c13ab08edf48a008793cac')
+        assert is_valid == True
+    
+    def test_invalid_id(self):
+        is_valid = is_valid_id('invalid')
+        assert is_valid == False
 
 
 class TestFindDuplicate:

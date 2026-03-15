@@ -3,55 +3,32 @@ ETL script for seeding state data
 """
 
 import sys
-import json
+import server.etl.common as common
 import server.controllers.states as st
 
 
-def extract(filename: str) -> list:
-    """Extract state data from its file"""
-    try:
-        with open(filename) as f:
-            extracted = json.load(f)
-            return list(extracted.values())
-    except Exception as e:
-        print(f'Problem reading file: {str(e)}')
-        exit(1)
-
-
-def transform(raw: list) -> list:
+def transform(raw: dict) -> list:
     """Transform state data into format CRUD API can understand"""
     transformed = []
-    seen = set()
-    for state in raw:
-        # Build key fields
-        keys = []
-        for key in st.KEY:
-            keys.append(state[key])
-        
+    seen = []
+    for state in raw.values():
         # Add state if it is not a duplicate
-        if tuple(keys) not in seen:
-            seen.add(tuple(keys))
-            transformed.append({
-                st.NAME: state['name'],
-                st.NATION_NAME: state['nation_name'],
-            })
+        new_record = {
+            st.NAME: state['name'],
+            st.NATION_NAME: state['nation_name'],
+        }
+        if not st.states.find_duplicate(new_record, search_list=seen):
+            seen.append(new_record)
+            transformed.append(new_record)
     return transformed
-
-
-def load(transformed: list):
-    """Load state data into database"""
-    try:
-        st.states.create_many(transformed)
-    except Exception as e:
-        print("Warning: Failed to create states,", e)
 
 
 def seed_states(filename: str):
     """Main seed function to be exported"""
-    raw = extract(filename)
+    raw = common.extract_json(filename)
     transformed = transform(raw)
-    load(transformed)
+    common.load(st.states, transformed)
 
 
 if __name__ == '__main__':
-    seed_states('server/etl/coords.json')
+    seed_states(common.COORDS_FILE)

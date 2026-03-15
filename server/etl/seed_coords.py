@@ -2,30 +2,16 @@
 ETL script for mapping disaster coordinates to locations
 """
 
-import csv
 import json
 import os
-import sys
+import server.etl.common as common
 import server.controllers.cities as ct
 import server.controllers.states as st
 import server.controllers.nations as nt
 from server.controllers.geocoding import reverse_geocode
 
 
-COORDS_FILE = 'server/etl/coords.json'
-
-
-def extract(filename: str) -> list:
-    """Extract coordinate data from CSV file"""
-    try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            extracted = csv.DictReader(f)
-            return list(extracted)
-    except FileNotFoundError:
-        print(f"Warning: File not found: {filename}")
-
-
-def transform(raw: list, lat_col: str, lon_col: str) -> tuple:
+def transform(raw: list, lat_col: str, lon_col: str) -> dict:
     """
     Transform disaster file coordinates into location data
 
@@ -68,18 +54,16 @@ def transform(raw: list, lat_col: str, lon_col: str) -> tuple:
     return transformed
 
 
-def load(transformed: dict):
+def load_coords(transformed: dict):
     if not isinstance(transformed, dict):
         raise ValueError(f'Bad type for data: {type(transformed)}')
 
     # Create JSON file if it doesn't exist
-    os.makedirs(os.path.dirname(COORDS_FILE) or '.', exist_ok=True)
+    os.makedirs(os.path.dirname(common.COORDS_FILE) or '.', exist_ok=True)
 
     # Read existing data in JSON file
-    data = {}
     try:
-        with open(COORDS_FILE, 'r') as f:
-            data = json.load(f)
+        data = common.extract_json(common.COORDS_FILE)
     except:
         data = {}
 
@@ -87,14 +71,13 @@ def load(transformed: dict):
     data.update(transformed)
 
     # Write data back into JSON file
-    with open(COORDS_FILE, 'w') as f:
+    with open(common.COORDS_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
 
 def seed_coords(filename: str, lat_col: str, lon_col:str):
     """
-    Iterate over disaster CSV coordinates and save location mappings in
-    JSON file via reverse geocoding.
+    Map coordinates to locations and save the mappings to a JSON file
 
     Args:
         filename: name of disaster CSV file
@@ -104,18 +87,11 @@ def seed_coords(filename: str, lat_col: str, lon_col:str):
     if not (isinstance(filename, str) and isinstance(lat_col, str) and isinstance(lon_col, str)):
         raise ValueError("Error seeding coordinates: filename, lat_col, and lon_col must be strings")
 
-    raw = extract(filename)
+    raw = common.extract_csv(filename)
     transformed = transform(raw, lat_col, lon_col)
-    load(transformed)
-
-
-def main():
-    if len(sys.argv) < 4:
-        print("Usage: python -m server.controllers.seed_coords.py <input_file> <latitude_col> <longitude_col>")
-        exit(1)
-    # Seed locations using CLI arguments
-    seed_coords(sys.argv[1], sys.argv[2], sys.argv[3])
+    load_coords(transformed)
 
 
 if __name__ == '__main__':
-    main()
+    for config in common.COORDS_CONFIG:
+        seed_coords(config[0], config[1], config[2])

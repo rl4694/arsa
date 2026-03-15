@@ -2,29 +2,10 @@
 ETL script for seeding natural disaster data
 """
 
-import csv
-import json
+import server.etl.common as common
 import server.controllers.natural_disasters as nd
 from server.controllers.geocoding import reverse_geocode
 from datetime import datetime
-
-
-ETL_PATH = 'server/etl/'
-EARTHQUAKES_FILE = ETL_PATH + 'earthquakes.csv'
-LANDSLIDE_FILE = ETL_PATH + 'landslides.csv'
-TSUNAMI_FILE = ETL_PATH + 'tsunamis.csv'
-HURRICANES_FILE = ETL_PATH + 'hurricanes.csv'
-
-
-def extract(filename: str) -> list:
-    """Extract disaster data from its CSV file"""
-    try:
-        with open(filename, mode='r', encoding='utf-8') as f:
-            extracted = csv.DictReader(f)
-            return list(extracted)
-    except Exception as e:
-        print(f'Problem reading csv file: {str(e)}')
-        exit(1)
 
 
 def transform_date(year: str, month: str, day: str) -> str:
@@ -134,17 +115,8 @@ def transform_hurricane(row: dict) -> dict:
         print(e)
 
 
-def load_disaster(transformed: list):
-    """Load a disaster into database"""
-    try:
-        nd.disasters.create_many(transformed)
-        print(f"Created disasters")
-    except Exception as e:
-        print("Warning could not create disaster: ", e)
-
-
 def seed_disasters(disaster_file: str, disaster_type: str):
-    """Seed disasters from a CSV file for the given disaster type"""
+    """Seed disasters for the given disaster type"""
     transforms = {
         nd.EARTHQUAKE: transform_earthquake,
         nd.LANDSLIDE: transform_landslide,
@@ -154,31 +126,22 @@ def seed_disasters(disaster_file: str, disaster_type: str):
     if disaster_type not in transforms:
         raise ValueError(f'Unrecognized disaster_type: {disaster_type}')
 
-    rows = extract(disaster_file)
+    rows = common.extract_csv(disaster_file)
     transform_func = transforms[disaster_type]
-    transformed_list = []
-    seen = set()
+    transformed = []
+    seen = []
     for row in rows:
-        transformed = transform_func(row)
-        # Skip disasters that are transformed wrong
-        if transformed is None:
-            continue
-
-        # Build key fields
-        keys = []
-        for key in nd.KEY:
-            keys.append(transformed[key])
-
-        # Add disaster if it is not a duplicate
-        if tuple(keys) not in seen:
-            seen.add(tuple(keys))
-            transformed_list.append(transformed)
-    load_disaster(transformed_list)
+        new_record = transform_func(row)
+        # Add disaster if it is not empty nor a duplicate
+        if new_record is not None and not nd.disasters.find_duplicate(new_record, search_list=seen):
+            seen.append(new_record)
+            transformed.append(new_record)
+    common.load(nd.disasters, transformed)
 
 
 if __name__ == '__main__':
-    seed_disasters(EARTHQUAKES_FILE, nd.EARTHQUAKE)
-    seed_disasters(LANDSLIDE_FILE, nd.LANDSLIDE)
-    seed_disasters(TSUNAMI_FILE, nd.TSUNAMI)
+    seed_disasters(common.EARTHQUAKES_FILE, nd.EARTHQUAKE)
+    seed_disasters(common.LANDSLIDE_FILE, nd.LANDSLIDE)
+    seed_disasters(common.TSUNAMI_FILE, nd.TSUNAMI)
     # TODO: upload hurricane file
-    # seed_disasters(HURRICANES_FILE, nd.HURRICANE)
+    # seed_disasters(common.HURRICANES_FILE, nd.HURRICANE)
