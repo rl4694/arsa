@@ -6,6 +6,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 from server.controllers.crud import CRUD
 from datetime import datetime
+from math import radians, sin, cos, sqrt, atan2
 from numbers import Real
 import re
 
@@ -95,6 +96,10 @@ disasters = NaturalDisasters(
         LATITUDE: Real,
         LONGITUDE: Real,
         DESCRIPTION: str,
+        SEVERITY: Real,
+        SHOW: bool,
+        PARENT_EVENT: str,
+        REPORTS: list,
     }
 )
 
@@ -222,3 +227,81 @@ class LinkReport(Resource):
         })
 
         return {"message": "linked"}
+        
+# for search by radius
+# this calculates great circle distance to help us consolidate
+# nearby events time and space wise
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+
+    a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1-a))
+
+    return R * c
+    
+@api.route('/search')
+class DisasterSearch(Resource):
+
+    @api.doc('search_disasters',
+             params={
+                 'lat': 'Latitude',
+                 'lon': 'Longitude',
+                 'radius_km': 'Search radius in km (default 100)',
+                 'date_start': 'Start date (YYYY-MM-DD)',
+                 'date_end': 'End date (YYYY-MM-DD)',
+                 'type': 'Disaster type'
+             })
+    def get(self):
+        """Search for nearby disasters (used for duplicate detection)."""
+
+        lat = request.args.get('lat', type=float)
+        lon = request.args.get('lon', type=float)
+        radius = request.args.get('radius_km', type=float, default=100)
+
+        date_start = request.args.get('date_start')
+        date_end = request.args.get('date_end')
+        disaster_type = request.args.get('type')
+
+        records = disasters.read().values()
+
+        results = []
+
+        for r in records:
+
+            # Optional: include hidden reports too for dedupe
+            # (remove SHOW filter intentionally)
+
+            if disaster_type and r.get(DISASTER_TYPE) != disaster_type:
+                continue
+
+            if date_start:
+                validate_date(date_start)
+                if not r.get(DATE) or r.get(DATE) < date_start:
+                    continue
+
+            if date_end:
+                validate_date(date_end)
+                if not r.get(DATE) or r.get(DATE) > date_end:
+                    continue
+
+            if lat is not None and lon is not None:
+
+                if r.get(LATITUDE) is None or r.get(LONGITUDE) is None:
+                    continue
+
+                dist = haversine(
+                    lat,
+                    lon,
+                    r.get(LATITUDE),
+                    r.get(LONGITUDE)
+                )
+
+                if dist > radius:
+                    continue
+
+            results.append(r)
+
+        return {DISASTERS_RESP: results}
