@@ -18,6 +18,12 @@ LATITUDE = 'latitude'
 LONGITUDE = 'longitude'
 DESCRIPTION = 'description'
 
+# New Optional Fields:
+SEVERITY = 'severity'
+SHOW = 'show'
+PARENT_EVENT = 'parent_event'
+REPORTS = 'reports'
+
 EARTHQUAKE = 'earthquake'
 LANDSLIDE = 'landslide'
 TSUNAMI = 'tsunami'
@@ -100,7 +106,11 @@ disaster_model = api.model('NaturalDisaster', {
   DATE: fields.String(required=True, default=datetime.now().strftime("%Y-%m-%d")),
   LATITUDE: fields.Float(required=True, default=0.5),
   LONGITUDE: fields.Float(required=True, default=0.5),
-  DESCRIPTION: fields.String()
+  DESCRIPTION: fields.String(),
+  SEVERITY: fields.Float(),
+  SHOW: fields.Boolean(default=True),
+  PARENT_EVENT: fields.String(),
+  REPORTS: fields.List(fields.String())
 })
 
 
@@ -121,7 +131,7 @@ class DisasterList(Resource):
 
         records = disasters.read()
 
-        filtered = list(records.values())
+        filtered = [r for r in records.values() if r.get(SHOW, True)]
 
         if date:
             validate_date(date)
@@ -142,6 +152,10 @@ class DisasterList(Resource):
     def post(self):
         """Create a new natural disaster."""
         data = request.json
+        data.setdefault(SHOW, True)
+        data.setdefault(PARENT_EVENT, None)
+        data.setdefault(REPORTS, [])
+        data.setdefault(SEVERITY, None)
         _id = disasters.create(data)
         created = disasters.select(_id)
         return {DISASTERS_RESP: created}, 201
@@ -168,3 +182,43 @@ class Disaster(Resource):
         """Delete a disaster by ID."""
         disasters.delete(disaster_id)
         return '', 204
+        
+# New Endpoints to Support Reports        
+
+@api.route('/<string:event_id>/reports')
+class DisasterReports(Resource):
+
+    def get(self, event_id):
+        event = disasters.select(event_id)
+
+        report_ids = event.get(REPORTS, [])
+
+        results = []
+        for rid in report_ids:
+            try:
+                results.append(disasters.select(rid))
+            except Exception:
+                continue
+
+        return {"reports": results}
+        
+@api.route('/<string:event_id>/reports/<string:report_id>')
+class LinkReport(Resource):
+
+    def post(self, event_id, report_id):
+
+        event = disasters.select(event_id)
+        report = disasters.select(report_id)
+
+        reports = event.get(REPORTS, [])
+        if report_id not in reports:
+            reports.append(report_id)
+
+        disasters.update(event_id, {REPORTS: reports})
+
+        disasters.update(report_id, {
+            SHOW: False,
+            PARENT_EVENT: event_id
+        })
+
+        return {"message": "linked"}
