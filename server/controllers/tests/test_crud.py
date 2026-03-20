@@ -194,9 +194,10 @@ class TestDelete:
         _id = crud.create(SAMPLE_RECORD)
         records = crud.read()
         assert _id in records
-        crud.delete(_id)
+        num_deleted = crud.delete(_id)
         records = crud.read()
         assert _id not in records
+        assert num_deleted > 0
 
     def test_invalid_id(self):
         with pytest.raises(ValueError):

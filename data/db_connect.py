@@ -129,7 +129,7 @@ def delete(collection: str, filt: dict, db=SE_DB):
     """
     Find with a filter and return on the first doc found.
     """
-    del_result = client[db][collection].delete_one(filt)
+    del_result = client[db][collection].delete_many(filt)
     return del_result.deleted_count
 
 

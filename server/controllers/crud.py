@@ -161,7 +161,8 @@ class CRUD:
         if not is_valid_id(_id):
             raise ValueError(f'Invalid id: {_id}')
 
-        deleted = dbc.delete(self.collection, {'_id': ObjectId(_id)})
-        if deleted == 0:
+        num_deleted = dbc.delete(self.collection, {'_id': ObjectId(_id)})
+        if num_deleted == 0:
             raise KeyError(f'Record not found: {_id}')
         self.cache.reload()
+        return num_deleted
