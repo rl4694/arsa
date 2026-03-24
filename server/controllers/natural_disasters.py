@@ -130,25 +130,25 @@ class DisasterList(Resource):
     def get(self):
         """Get natural disasters optionally filtered by date."""
 
-        # date = request.args.get('date')
-        # start_date = request.args.get('start_date')
-        # end_date = request.args.get('end_date')
+        date = request.args.get('date')
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
 
-        # records = disasters.read()
+        records = disasters.read()
 
-        # filtered = [r for r in records.values() if r.get(SHOW, True)]
+        filtered = [r for r in records.values() if r.get(SHOW, True)]
 
-        # if date:
-        #     validate_date(date)
-        #     filtered = [r for r in filtered if r.get(DATE) == date]
+        if date:
+            validate_date(date)
+            filtered = [r for r in filtered if r.get(DATE) == date]
 
-        # if start_date:
-        #     validate_date(start_date)
-        #     filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) >= start_date]
+        if start_date:
+            validate_date(start_date)
+            filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) >= start_date]
 
-        # if end_date:
-        #     validate_date(end_date)
-        #     filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
+        if end_date:
+            validate_date(end_date)
+            filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
         return {DISASTERS_RESP: disasters.read()}
 
     @api.expect(disaster_model)
