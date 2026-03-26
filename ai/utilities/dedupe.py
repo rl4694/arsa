@@ -1,78 +1,152 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 SERVER = "http://127.0.0.1:5000"
 
 RADIUS_KM = 100
-DATE_WINDOW_DAYS = 5 # adjust as needed
+DATE_WINDOW_DAYS = 5  # adjust as needed
+DRY_RUN = False       # set True to preview links without writing
+
+
+def parse_date(date_str):
+    return datetime.fromisoformat(date_str)
 
 
 def date_diff(d1, d2):
-    return abs((datetime.fromisoformat(d1) - datetime.fromisoformat(d2)).days)
+    return abs((parse_date(d1) - parse_date(d2)).days)
 
 
 def get_all_events():
     r = requests.get(f"{SERVER}/natural_disasters")
+    r.raise_for_status()
     return r.json().get("records", [])
 
 
+def get_date_window(date_str):
+    base = parse_date(date_str)
+    start = (base - timedelta(days=DATE_WINDOW_DAYS)).date().isoformat()
+    end = (base + timedelta(days=DATE_WINDOW_DAYS)).date().isoformat()
+    return start, end
+
+
 def search_nearby(event):
+    date_start, date_end = get_date_window(event["date"])
+
     params = {
         "lat": event["latitude"],
         "lon": event["longitude"],
         "radius_km": RADIUS_KM,
-        "date_start": event["date"],
-        "date_end": event["date"],
+        "date_start": date_start,
+        "date_end": date_end,
         "type": event["type"]
     }
 
     r = requests.get(f"{SERVER}/natural_disasters/search", params=params)
+    r.raise_for_status()
     return r.json().get("records", [])
 
 
 def link(event_id, report_id):
+    if DRY_RUN:
+        print(f"[DRY RUN] Would link {report_id} → {event_id}")
+        return
+
     url = f"{SERVER}/natural_disasters/{event_id}/reports/{report_id}"
     r = requests.post(url)
+    r.raise_for_status()
     print(f"Linked {report_id} → {event_id}")
 
 
-def main():
+def choose_root(event, id_map):
+    """
+    Follow parent chain upward so we always attach to the top-level parent.
+    """
+    current = event
+    seen = set()
 
+    while current.get("parent_event"):
+        parent_id = current["parent_event"]
+
+        if parent_id in seen:
+            print(f"Warning: detected parent cycle at {parent_id}")
+            break
+        seen.add(parent_id)
+
+        parent = id_map.get(parent_id)
+        if not parent:
+            break
+
+        current = parent
+
+    return current
+
+
+def should_skip_candidate(candidate, root_id):
+    """
+    Skip candidates that should not be relinked.
+    """
+    if not candidate.get("show", True):
+        return True
+
+    if candidate.get("parent_event"):
+        return True
+
+    if candidate["_id"] == root_id:
+        return True
+
+    return False
+
+
+def main():
     events = get_all_events()
 
     # Map id → event
     id_map = {e["_id"]: e for e in events}
 
     for event in events:
-
-        # Skip hidden
+        # Skip hidden/child events
         if not event.get("show", True):
             continue
 
-        base_id = event["_id"]
+        if event.get("parent_event"):
+            continue
 
-        nearby = search_nearby(event)
+        root_event = choose_root(event, id_map)
+        root_id = root_event["_id"]
+
+        nearby = search_nearby(root_event)
 
         for candidate in nearby:
-
             cid = candidate["_id"]
 
-            if cid == base_id:
+            if should_skip_candidate(candidate, root_id):
                 continue
 
-            # Skip if already hidden
-            if not candidate.get("show", True):
+            # Extra safety: same type only
+            if candidate.get("type") != root_event.get("type"):
                 continue
 
             # Check stricter date window
-            if date_diff(event["date"], candidate["date"]) > DATE_WINDOW_DAYS:
+            if date_diff(root_event["date"], candidate["date"]) > DATE_WINDOW_DAYS:
                 continue
 
-            # Avoid double linking (simple rule: only link higher id → lower id)
-            if cid < base_id:
+            # Avoid double linking by only linking "later" ids under "earlier" ids
+            # so we do not create A->B and B->A on different passes.
+            if cid < root_id:
                 continue
 
-            link(base_id, cid)
+            try:
+                link(root_id, cid)
+
+                # Update local state so later iterations do not process stale data
+                candidate["show"] = False
+                candidate["parent_event"] = root_id
+
+                # Keep id_map in sync
+                id_map[cid] = candidate
+
+            except requests.RequestException as e:
+                print(f"Failed to link {cid} → {root_id}: {e}")
 
 
 if __name__ == "__main__":
