@@ -4,8 +4,8 @@ This file implements CRUD operations for cities.
 
 from flask import request, jsonify
 from flask_restx import Resource, Namespace, fields
-from server.controllers.crud import CRUD
 from numbers import Real
+import server.controllers.crud as crud
 
 CITIES_RESP = 'records'
 COLLECTION = 'cities'
@@ -16,7 +16,7 @@ LATITUDE = 'latitude'
 LONGITUDE = 'longitude'
 KEY = (NAME, STATE_NAME)
 
-cities = CRUD(
+cities = crud.CRUD(
     COLLECTION,
     KEY,
     {
@@ -59,6 +59,20 @@ class CityList(Resource):
         _id = cities.create(data)
         created = cities.select(_id)
         return {CITIES_RESP: created}, 201
+
+
+@api.route('/fields')
+class CityFields(Resource):
+    @api.doc('get_fields')
+    def get(self):
+        """Get field information for cities."""
+        return [
+            { crud.ATTRIBUTE: NAME, crud.DISPLAY: "City Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: STATE_NAME, crud.DISPLAY: "State Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: LATITUDE, crud.DISPLAY: "Latitude", crud.TYPE: "number" },
+            { crud.ATTRIBUTE: LONGITUDE, crud.DISPLAY: "Longitude", crud.TYPE: "number" },
+        ]
 
 
 @api.route('/<string:city_id>')

@@ -12,6 +12,13 @@ from server.controllers.cache import Cache
 import data.db_connect as dbc
 
 
+# Putting field constants here for now. May move them later
+ATTRIBUTE = "attribute"
+DISPLAY = "display"
+TYPE = "type"
+OPTIONS = "options"
+
+
 def is_valid_id(_id: str) -> bool:
     """Return whether _id is a valid document id"""
     return isinstance(_id, str) and ObjectId.is_valid(_id)

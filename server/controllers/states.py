@@ -4,7 +4,7 @@ This file implements CRUD operations for states.
 
 from flask import request
 from flask_restx import Resource, Namespace, fields
-from server.controllers.crud import CRUD
+import server.controllers.crud as crud
 import pycountry
 
 STATES_RESP = 'records'
@@ -13,7 +13,7 @@ NAME = 'name'
 NATION_NAME = 'nation_name'
 KEY = (NAME, NATION_NAME)
 
-states = CRUD(
+states = crud.CRUD(
     COLLECTION,
     KEY,
     {
@@ -58,6 +58,18 @@ class StateList(Resource):
         _id = states.create(data)
         created = states.select(_id)
         return {STATES_RESP: created}, 201
+
+
+@api.route('/fields')
+class StateFields(Resource):
+    @api.doc('get_fields')
+    def get(self):
+        """Get field information for states."""
+        return [
+            { crud.ATTRIBUTE: NAME, crud.DISPLAY: "City Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "text" },
+        ]
+
 
 @api.route('/<string:state_id>')
 class State(Resource):
