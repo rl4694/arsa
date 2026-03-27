@@ -1,3 +1,9 @@
+"""
+This script clears the database
+
+You can run this script with: `python -m server.etl.clear_db`
+"""
+
 import server.controllers.cities as ct
 import server.controllers.states as st
 import server.controllers.nations as nt

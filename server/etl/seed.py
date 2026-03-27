@@ -1,8 +1,7 @@
 """
 This script seeds our data with data from various APIs.
 
-You can run this script with: `python3 server/etl/seed.py`
-Be sure to empty your database before running this file.
+You can run this script with: `python -m server.etl.seed`
 """
 
 import os

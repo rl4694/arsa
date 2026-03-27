@@ -132,10 +132,18 @@ def seed_disasters(disaster_file: str, disaster_type: str):
     seen = []
     for row in rows:
         new_record = transform_func(row)
-        # Add disaster if it is not empty nor a duplicate
-        if new_record is not None and not nd.disasters.find_duplicate(new_record, search_list=seen):
-            seen.append(new_record)
-            transformed.append(new_record)
+        if new_record is not None:
+            # Add fields common to all disasters
+            new_record.update({
+                'show': True,
+                'reports': [],
+                'parent_event': None,
+                'severity': None,
+            })
+            # Add transformed disaster to list if it is not a duplicate
+            if not nd.disasters.find_duplicate(new_record, search_list=seen):
+                seen.append(new_record)
+                transformed.append(new_record)
     common.load(nd.disasters, transformed)
 
 

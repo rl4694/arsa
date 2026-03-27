@@ -135,7 +135,7 @@ def delete(collection: str, filt: dict, db=SE_DB):
 
 @needs_db
 def update(collection, filters, update_dict, db=SE_DB):
-    return client[db][collection].update_one(filters, {'$set': update_dict})
+    return client[db][collection].update_many(filters, {'$set': update_dict})
 
 
 @needs_db
