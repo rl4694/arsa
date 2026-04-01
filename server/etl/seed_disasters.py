@@ -99,17 +99,25 @@ def transform_hurricane(row: dict) -> dict:
     try:
         if not isinstance(row, dict):
             raise ValueError(f'Bad type for row: {type(row)}')
-        lat = float(row.get('latitude', 0))
-        lon = float(row.get('longitude', 0))
+        lat = float(row['latitude'])
+        lon = float(row['longitude'])
         wind_speed = row.get('wind_speed', 'N/A')
         category = row.get('category', 'N/A')
+        sid = row.get('sid', 'unknown')
+        name = row.get('name', '').strip() or f'Storm {sid}'
+        date = row.get('date', '')
+
+        # Skip malformed rows from source files.
+        if not date:
+            return None
+
         return {
-            nd.NAME: f"Hurricane at {city_name}",
+            nd.NAME: f"Hurricane {name}",
             nd.DISASTER_TYPE: nd.HURRICANE,
-            nd.DATE: row.get('date', ''),
+            nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
-            nd.DESCRIPTION: f"Category: {category}, Wind Speed: {wind_speed} mph"
+            nd.DESCRIPTION: f"SID: {sid}, Category: {category}, Wind Speed: {wind_speed} kt"
         }
     except Exception as e:
         print(e)
@@ -151,5 +159,4 @@ if __name__ == '__main__':
     seed_disasters(common.EARTHQUAKES_FILE, nd.EARTHQUAKE)
     seed_disasters(common.LANDSLIDE_FILE, nd.LANDSLIDE)
     seed_disasters(common.TSUNAMI_FILE, nd.TSUNAMI)
-    # TODO: upload hurricane file
-    # seed_disasters(common.HURRICANES_FILE, nd.HURRICANE)
+    seed_disasters(common.HURRICANES_FILE, nd.HURRICANE)

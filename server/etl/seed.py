@@ -47,8 +47,7 @@ def main():
         seed_disasters(common.EARTHQUAKES_FILE, nd.EARTHQUAKE)
         seed_disasters(common.LANDSLIDE_FILE, nd.LANDSLIDE)
         seed_disasters(common.TSUNAMI_FILE, nd.TSUNAMI)
-        # TODO: upload hurricane file
-        # seed_disasters(HURRICANES_FILE, nd.HURRICANE)
+        seed_disasters(common.HURRICANES_FILE, nd.HURRICANE)
 
     print("Seeding complete")
 
