@@ -20,6 +20,7 @@ COORDS_CONFIG = [
     (EARTHQUAKES_FILE, 'latitude', 'longitude'),
     (LANDSLIDE_FILE, 'latitude', 'longitude'),
     (TSUNAMI_FILE, 'LATITUDE', 'LONGITUDE'),
+    (HURRICANES_FILE, 'latitude', 'longitude'),
 ]
 
 # Potential datasets to work on

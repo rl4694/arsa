@@ -1412,5 +1412,425 @@
     "nation_name": "Japan",
     "latitude": 35.2,
     "longitude": 139.4
+  },
+  "-36.474000,-73.125000": {
+    "name": "Cauquenes",
+    "state_name": "Maule Region",
+    "nation_name": "Chile",
+    "latitude": -36.474,
+    "longitude": -73.125
+  },
+  "-43.583000,172.680000": {
+    "name": "Christchurch",
+    "state_name": "Canterbury",
+    "nation_name": "New Zealand",
+    "latitude": -43.583,
+    "longitude": 172.68
+  },
+  "38.297000,142.372000": {
+    "name": "Ofunato",
+    "state_name": "Iwate Prefecture",
+    "nation_name": "Japan",
+    "latitude": 38.297,
+    "longitude": 142.372
+  },
+  "38.276000,141.588000": {
+    "name": "Ishinomaki",
+    "state_name": "Miyagi Prefecture",
+    "nation_name": "Japan",
+    "latitude": 38.276,
+    "longitude": 141.588
+  },
+  "50.500000,-3.000000": {
+    "name": "Plymouth",
+    "state_name": "England",
+    "nation_name": "United Kingdom",
+    "latitude": 50.5,
+    "longitude": -3.0
+  },
+  "-18.311000,168.218000": {
+    "name": "Port Vila",
+    "state_name": "Shefa Province",
+    "nation_name": "Vanuatu",
+    "latitude": -18.311,
+    "longitude": 168.218
+  },
+  "-18.972000,168.741000": {
+    "name": "L\u00e9nakel",
+    "state_name": "Tafea",
+    "nation_name": "Vanuatu",
+    "latitude": -18.972,
+    "longitude": 168.741
+  },
+  "10.085000,-85.315000": {
+    "name": "San Ram\u00f3n",
+    "state_name": "Alajuela Province",
+    "nation_name": "Costa Rica",
+    "latitude": 10.085,
+    "longitude": -85.315
+  },
+  "52.788000,-132.101000": {
+    "name": "Area E (Moresby Island)",
+    "state_name": "British Columbia",
+    "nation_name": "Canada",
+    "latitude": 52.788,
+    "longitude": -132.101
+  },
+  "13.988000,-91.895000": {
+    "name": "Solol\u00e1",
+    "state_name": "Solol\u00e1",
+    "nation_name": "Guatemala",
+    "latitude": 13.988,
+    "longitude": -91.895
+  },
+  "31.256000,110.733000": {
+    "name": "Yichang",
+    "state_name": "Hubei",
+    "nation_name": "China",
+    "latitude": 31.256,
+    "longitude": 110.733
+  },
+  "-41.704000,174.337000": {
+    "name": "Wellington",
+    "state_name": "Wellington",
+    "nation_name": "New Zealand",
+    "latitude": -41.704,
+    "longitude": 174.337
+  },
+  "-41.731000,174.027000": {
+    "name": "Wellington",
+    "state_name": "Wellington",
+    "nation_name": "New Zealand",
+    "latitude": -41.731,
+    "longitude": 174.027
+  },
+  "-19.965000,-70.814000": {
+    "name": "Iquique",
+    "state_name": "Tarapac\u0430 Region",
+    "nation_name": "Chile",
+    "latitude": -19.965,
+    "longitude": -70.814
+  },
+  "-19.610000,-70.769000": {
+    "name": "Iquique",
+    "state_name": "Tarapac\u0430 Region",
+    "nation_name": "Chile",
+    "latitude": -19.61,
+    "longitude": -70.769
+  },
+  "-20.571000,-70.493000": {
+    "name": "Iquique",
+    "state_name": "Tarapac\u0430 Region",
+    "nation_name": "Chile",
+    "latitude": -20.571,
+    "longitude": -70.493
+  },
+  "39.856000,142.881000": {
+    "name": "Kuji",
+    "state_name": "Iwate Prefecture",
+    "nation_name": "Japan",
+    "latitude": 39.856,
+    "longitude": 142.881
+  },
+  "-4.729000,152.562000": {
+    "name": "Rabaul",
+    "state_name": "East New Britain",
+    "nation_name": "Papua New Guinea",
+    "latitude": -4.729,
+    "longitude": 152.562
+  },
+  "-31.573000,-71.674000": {
+    "name": "Illapel",
+    "state_name": "Coquimbo Region",
+    "nation_name": "Chile",
+    "latitude": -31.573,
+    "longitude": -71.674
+  },
+  "-29.460000,-72.120000": {
+    "name": "La Serena",
+    "state_name": "Coquimbo Region",
+    "nation_name": "Chile",
+    "latitude": -29.46,
+    "longitude": -72.12
+  },
+  "38.670000,20.600000": {
+    "name": "Municipal Unit of Apollonioi",
+    "state_name": "Ioanian Islands",
+    "nation_name": "Greece",
+    "latitude": 38.67,
+    "longitude": 20.6
+  },
+  "0.350000,-80.160000": {
+    "name": "Esmeraldas",
+    "state_name": "Esmeraldas",
+    "nation_name": "Ecuador",
+    "latitude": 0.35,
+    "longitude": -80.16
+  },
+  "-16.043000,167.379000": {
+    "name": "Luganville",
+    "state_name": "Sanma",
+    "nation_name": "Vanuatu",
+    "latitude": -16.043,
+    "longitude": 167.379
+  },
+  "12.526000,-88.123000": {
+    "name": "Usulut\u00e1n",
+    "state_name": "Usulut\u00e1n",
+    "nation_name": "El Salvador",
+    "latitude": 12.526,
+    "longitude": -88.123
+  },
+  "-42.737000,173.054000": {
+    "name": "Christchurch",
+    "state_name": "Canterbury",
+    "nation_name": "New Zealand",
+    "latitude": -42.737,
+    "longitude": 173.054
+  },
+  "37.393000,141.387000": {
+    "name": "Tagajo",
+    "state_name": "Miyagi Prefecture",
+    "nation_name": "Japan",
+    "latitude": 37.393,
+    "longitude": 141.387
+  },
+  "-6.246000,155.172000": {
+    "name": "Buka",
+    "state_name": "Autonomous Region of Bougainville",
+    "nation_name": "Papua New Guinea",
+    "latitude": -6.246,
+    "longitude": 155.172
+  },
+  "27.835000,51.940000": {
+    "name": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0627\u0648\u0644\u06cc",
+    "state_name": "Bushehr Province",
+    "nation_name": "Iran",
+    "latitude": 27.835,
+    "longitude": 51.94
+  },
+  "-33.038000,-72.062000": {
+    "name": "Melipilla",
+    "state_name": "Santiago Metropolitan Region",
+    "nation_name": "Chile",
+    "latitude": -33.038,
+    "longitude": -72.062
+  },
+  "5.504000,125.066000": {
+    "name": "General Santos",
+    "state_name": "Soccsksargen",
+    "nation_name": "Philippines",
+    "latitude": 5.504,
+    "longitude": 125.066
+  },
+  "59.852000,-136.677000": {
+    "name": "Whitehorse",
+    "state_name": "Yukon",
+    "nation_name": "Canada",
+    "latitude": 59.852,
+    "longitude": -136.677
+  },
+  "38.930000,26.365000": {
+    "name": "\u0130zmir",
+    "state_name": "Izmir",
+    "nation_name": "Turkey",
+    "latitude": 38.93,
+    "longitude": 26.365
+  },
+  "36.929000,27.414000": {
+    "name": "Rhodes",
+    "state_name": "South Aegean",
+    "nation_name": "Greece",
+    "latitude": 36.929,
+    "longitude": 27.414
+  },
+  "11.000000,-74.300000": {
+    "name": "Ci\u00e9naga",
+    "state_name": "Magdalena",
+    "nation_name": "Colombia",
+    "latitude": 11.0,
+    "longitude": -74.3
+  },
+  "19.370000,-155.032000": {
+    "name": "Hilo",
+    "state_name": "Hawaii",
+    "nation_name": "United States",
+    "latitude": 19.37,
+    "longitude": -155.032
+  },
+  "-8.287000,116.452000": {
+    "name": "Mataram",
+    "state_name": "West Nusa Tenggara",
+    "nation_name": "Indonesia",
+    "latitude": -8.287,
+    "longitude": 116.452
+  },
+  "10.855000,-62.883000": {
+    "name": "R\u00edo Caribe",
+    "state_name": "Sucre State",
+    "nation_name": "Venezuela",
+    "latitude": 10.855,
+    "longitude": -62.883
+  },
+  "-0.178000,119.840000": {
+    "name": "Palu",
+    "state_name": "Central Sulawesi",
+    "nation_name": "Indonesia",
+    "latitude": -0.178,
+    "longitude": 119.84
+  },
+  "37.506000,20.563000": {
+    "name": "Mesolongi",
+    "state_name": "Western Greece",
+    "nation_name": "Greece",
+    "latitude": 37.506,
+    "longitude": 20.563
+  },
+  "46.320000,30.670000": {
+    "name": "Odesa",
+    "state_name": "Odesa Oblast",
+    "nation_name": "Ukraine",
+    "latitude": 46.32,
+    "longitude": 30.67
+  },
+  "31.077000,109.896000": {
+    "name": "Wushan",
+    "state_name": "Chongqing",
+    "nation_name": "China",
+    "latitude": 31.077,
+    "longitude": 109.896
+  },
+  "-4.051000,152.597000": {
+    "name": "Rabaul",
+    "state_name": "East New Britain",
+    "nation_name": "Papua New Guinea",
+    "latitude": -4.051,
+    "longitude": 152.597
+  },
+  "-19.125000,169.613000": {
+    "name": "L\u00e9nakel",
+    "state_name": "Tafea",
+    "nation_name": "Vanuatu",
+    "latitude": -19.125,
+    "longitude": 169.613
+  },
+  "-30.056000,-72.082000": {
+    "name": "Ovalle",
+    "state_name": "Coquimbo Region",
+    "nation_name": "Chile",
+    "latitude": -30.056,
+    "longitude": -72.082
+  },
+  "38.646000,139.472000": {
+    "name": "Tsuruoka",
+    "state_name": "Yamagata Prefecture",
+    "nation_name": "Japan",
+    "latitude": 38.646,
+    "longitude": 139.472
+  },
+  "38.789000,15.213000": {
+    "name": "Messina",
+    "state_name": "Sicily",
+    "nation_name": "Italy",
+    "latitude": 38.789,
+    "longitude": 15.213
+  },
+  "17.916000,-66.813000": {
+    "name": "Ponce",
+    "state_name": "Puerto Rico",
+    "nation_name": "United States",
+    "latitude": 17.916,
+    "longitude": -66.813
+  },
+  "-8.058000,114.242000": {
+    "name": "Jember",
+    "state_name": "Java",
+    "nation_name": "Indonesia",
+    "latitude": -8.058,
+    "longitude": 114.242
+  },
+  "16.029000,-95.901000": {
+    "name": "Salina Cruz",
+    "state_name": "Oaxaca",
+    "nation_name": "Mexico",
+    "latitude": 16.029,
+    "longitude": -95.901
+  },
+  "18.081000,-102.182000": {
+    "name": "L\u00e1zaro C\u00e1rdenas",
+    "state_name": "Michoac\u00e1n",
+    "nation_name": "Mexico",
+    "latitude": 18.081,
+    "longitude": -102.182
+  },
+  "29.700000,-85.100000": {
+    "name": "Panama City",
+    "state_name": "Florida",
+    "nation_name": "United States",
+    "latitude": 29.7,
+    "longitude": -85.1
+  },
+  "20.600000,109.100000": {
+    "name": "Lingao",
+    "state_name": "Hainan",
+    "nation_name": "China",
+    "latitude": 20.6,
+    "longitude": 109.1
+  },
+  "29.500000,-85.400000": {
+    "name": "Panama City",
+    "state_name": "Florida",
+    "nation_name": "United States",
+    "latitude": 29.5,
+    "longitude": -85.4
+  },
+  "-24.500000,113.500000": {
+    "name": "Carnarvon",
+    "state_name": "Western Australia",
+    "nation_name": "Australia",
+    "latitude": -24.5,
+    "longitude": 113.5
+  },
+  "22.400000,-83.100000": {
+    "name": "Nueva Gerona",
+    "state_name": "Isle of Youth",
+    "nation_name": "Cuba",
+    "latitude": 22.4,
+    "longitude": -83.1
+  },
+  "16.900000,-87.500000": {
+    "name": "Belize City",
+    "state_name": "Belize District",
+    "nation_name": "Belize",
+    "latitude": 16.9,
+    "longitude": -87.5
+  },
+  "22.600000,87.400000": {
+    "name": "Diamond Harbour",
+    "state_name": "West Bengal",
+    "nation_name": "India",
+    "latitude": 22.6,
+    "longitude": 87.4
+  },
+  "19.800000,109.500000": {
+    "name": "Chengmai",
+    "state_name": "Hainan",
+    "nation_name": "China",
+    "latitude": 19.8,
+    "longitude": 109.5
+  },
+  "23.500000,118.000000": {
+    "name": "Zhangpu",
+    "state_name": "Fujian",
+    "nation_name": "China",
+    "latitude": 23.5,
+    "longitude": 118.0
+  },
+  "-20.000000,116.500000": {
+    "name": "Karratha",
+    "state_name": "Western Australia",
+    "nation_name": "Australia",
+    "latitude": -20.0,
+    "longitude": 116.5
   }
 }
