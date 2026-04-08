@@ -8,9 +8,18 @@ args = parser.parse_args()
 
 SERVER = args.server
 
-RADIUS_KM = 10
-DATE_WINDOW_DAYS = 3  # adjust as needed
+DISASTER_RULES = {
+    "earthquake": {"radius_km": 25, "date_window_days": 2},
+    "landslide":  {"radius_km": 10, "date_window_days": 3},
+    "tsunami":    {"radius_km": 150, "date_window_days": 2},
+    "hurricane":  {"radius_km": 300, "date_window_days": 7},
+}
+DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
 DRY_RUN = False       # set True to preview links without writing
+
+
+def get_rule(event_type):
+    return DISASTER_RULES.get(event_type, DEFAULT_RULE)
 
 
 def parse_date(date_str):
@@ -27,20 +36,21 @@ def get_all_events():
     return r.json().get("records", [])
 
 
-def get_date_window(date_str):
+def get_date_window(date_str, date_window_days):
     base = parse_date(date_str)
-    start = (base - timedelta(days=DATE_WINDOW_DAYS)).date().isoformat()
-    end = (base + timedelta(days=DATE_WINDOW_DAYS)).date().isoformat()
+    start = (base - timedelta(days=date_window_days)).date().isoformat()
+    end = (base + timedelta(days=date_window_days)).date().isoformat()
     return start, end
 
 
 def search_nearby(event):
-    date_start, date_end = get_date_window(event["date"])
+    rule = get_rule(event["type"])
+    date_start, date_end = get_date_window(event["date"], rule["date_window_days"])
 
     params = {
         "lat": event["latitude"],
         "lon": event["longitude"],
-        "radius_km": RADIUS_KM,
+        "radius_km": rule["radius_km"],
         "date_start": date_start,
         "date_end": date_end,
         "type": event["type"]
@@ -118,6 +128,7 @@ def main():
 
         root_event = choose_root(event, id_map)
         root_id = root_event["_id"]
+        rule = get_rule(root_event["type"])
 
         nearby = search_nearby(root_event)
 
@@ -132,7 +143,7 @@ def main():
                 continue
 
             # Check stricter date window
-            if date_diff(root_event["date"], candidate["date"]) > DATE_WINDOW_DAYS:
+            if date_diff(root_event["date"], candidate["date"]) > rule["date_window_days"]:
                 continue
 
             # Avoid double linking by only linking "later" ids under "earlier" ids

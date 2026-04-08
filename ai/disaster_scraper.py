@@ -9,11 +9,6 @@ from google.genai import errors
 
 # Comprehensive 2026 Model Priority List
 FULL_MODEL_LIST = [
-    "gemini-3.1-pro-preview",       # Top tier: Latest SOTA reasoning
-    "gemini-3-pro",                 # High end: Advanced multimodal
-    "gemini-3-flash",               # High speed: Frontier performance
-    "gemini-2.5-pro",               # Stable High-end GA
-    "gemini-3.1-flash-lite-preview",# Newest scale-optimized (Mar 2026)
     "gemini-2.5-flash",             # Stable Price/Performance (This is the only one that works so far)
     "gemini-2.5-flash-lite",        # Massive volume/Low latency
 ]
@@ -69,7 +64,10 @@ def fetch_disasters(api_key, target_date, country, server):
 
     prompt = f"""
 Find significant natural disasters reported on {target_date} {location_context}.
-Include earthquakes, hurricanes, floods, landslides, or tsunamis.
+Include earthquakes, hurricanes, landslides, or tsunamis.
+For earthquakes, set "severity" to the earthquake magnitude.
+For hurricanes, set "severity" to the hurricane category number.
+For landslides and tsunamis, set "severity" to null.
 
 Output ONLY curl commands with no explanation.
 Each command must follow this format exactly:
@@ -81,7 +79,8 @@ curl -X POST {server}/natural_disasters/ \\
 "date": "{target_date}",
 "latitude": [decimal],
 "longitude": [decimal],
-"description": "[short description]"
+"description": "[short description]",
+"severity": [number or null]
 }}'
 """
 
