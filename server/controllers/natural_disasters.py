@@ -105,6 +105,8 @@ disasters = NaturalDisasters(
     }
 )
 
+def validate_date(date_string: str) -> None:
+    disasters.validate_date(date_string)
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
 disaster_model = api.model('NaturalDisaster', {

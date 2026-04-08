@@ -1,12 +1,15 @@
 import requests
 from datetime import datetime, timedelta
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--server", required=True)
+parser.add_argument("--token", default=None)
 args = parser.parse_args()
 
-SERVER = args.server
+SERVER = args.server.rstrip("/")
+HEADERS = {"Authorization": f"Bearer {args.token}"} if args.token else {}
 
 DISASTER_RULES = {
     "earthquake": {"radius_km": 25, "date_window_days": 2},
@@ -15,7 +18,7 @@ DISASTER_RULES = {
     "hurricane":  {"radius_km": 300, "date_window_days": 7},
 }
 DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
-DRY_RUN = False       # set True to preview links without writing
+DRY_RUN = False
 
 
 def get_rule(event_type):
@@ -30,10 +33,25 @@ def date_diff(d1, d2):
     return abs((parse_date(d1) - parse_date(d2)).days)
 
 
+def normalize_records_payload(data, context):
+    records = data.get("records", [])
+
+    if isinstance(records, dict):
+        return list(records.values())
+
+    if isinstance(records, list):
+        return records
+
+    raise TypeError(
+        f"{context}: expected 'records' to be a list or dict, got {type(records).__name__}"
+    )
+
+
 def get_all_events():
-    r = requests.get(f"{SERVER}/natural_disasters")
+    r = requests.get(f"{SERVER}/natural_disasters", headers=HEADERS)
     r.raise_for_status()
-    return r.json().get("records", [])
+    data = r.json()
+    return normalize_records_payload(data, "GET /natural_disasters")
 
 
 def get_date_window(date_str, date_window_days):
@@ -53,12 +71,20 @@ def search_nearby(event):
         "radius_km": rule["radius_km"],
         "date_start": date_start,
         "date_end": date_end,
-        "type": event["type"]
+        "type": event["type"],
     }
 
-    r = requests.get(f"{SERVER}/natural_disasters/search", params=params)
-    r.raise_for_status()
-    return r.json().get("records", [])
+    r = requests.get(f"{SERVER}/natural_disasters/search", params=params, headers=HEADERS)
+
+    if not r.ok:
+        print("\nSearch request failed.", file=sys.stderr)
+        print(f"URL: {r.url}", file=sys.stderr)
+        print(f"Status: {r.status_code}", file=sys.stderr)
+        print(f"Body: {r.text}", file=sys.stderr)
+        r.raise_for_status()
+
+    data = r.json()
+    return normalize_records_payload(data, "GET /natural_disasters/search")
 
 
 def link(event_id, report_id):
@@ -67,7 +93,7 @@ def link(event_id, report_id):
         return
 
     url = f"{SERVER}/natural_disasters/{event_id}/reports/{report_id}"
-    r = requests.post(url)
+    r = requests.post(url, headers=HEADERS)
     r.raise_for_status()
     print(f"Linked {report_id} → {event_id}")
 
@@ -100,13 +126,16 @@ def should_skip_candidate(candidate, root_id):
     """
     Skip candidates that should not be relinked.
     """
+    if not isinstance(candidate, dict):
+        return True
+
     if not candidate.get("show", True):
         return True
 
     if candidate.get("parent_event"):
         return True
 
-    if candidate["_id"] == root_id:
+    if candidate.get("_id") == root_id:
         return True
 
     return False
@@ -115,10 +144,20 @@ def should_skip_candidate(candidate, root_id):
 def main():
     events = get_all_events()
 
-    # Map id → event
-    id_map = {e["_id"]: e for e in events}
-
+    # Keep only valid dict events with _id
+    clean_events = []
     for event in events:
+        if not isinstance(event, dict):
+            print(f"Skipping non-dict event: {event}")
+            continue
+        if "_id" not in event:
+            print(f"Skipping event with no _id: {event}")
+            continue
+        clean_events.append(event)
+
+    id_map = {e["_id"]: e for e in clean_events}
+
+    for event in clean_events:
         # Skip hidden/child events
         if not event.get("show", True):
             continue
@@ -128,15 +167,19 @@ def main():
 
         root_event = choose_root(event, id_map)
         root_id = root_event["_id"]
-        rule = get_rule(root_event["type"])
+        rule = get_rule(root_event.get("type"))
 
-        nearby = search_nearby(root_event)
+        try:
+            nearby = search_nearby(root_event)
+        except requests.RequestException as e:
+            print(f"Failed nearby search for root {root_id}: {e}")
+            continue
 
         for candidate in nearby:
-            cid = candidate["_id"]
-
             if should_skip_candidate(candidate, root_id):
                 continue
+
+            cid = candidate["_id"]
 
             # Extra safety: same type only
             if candidate.get("type") != root_event.get("type"):

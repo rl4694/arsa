@@ -3,30 +3,56 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--server", required=True)
+parser.add_argument("--token", default=None)
 args = parser.parse_args()
 
-SERVER = args.server
+SERVER = args.server.rstrip("/")
+HEADERS = {"Authorization": f"Bearer {args.token}"} if args.token else {}
 
-r = requests.get(f"{SERVER}/natural_disasters")
-records = r.json()["records"]
 
-for r in records:
-    _id = r["_id"]
+def get_all_records():
+    r = requests.get(f"{SERVER}/natural_disasters", headers=HEADERS)
+    r.raise_for_status()
+    data = r.json()
+    records = data.get("records", [])
 
-    update = {}
+    if isinstance(records, dict):
+        return list(records.values())
 
-    if "show" not in r:
-        update["show"] = True
+    if isinstance(records, list):
+        return records
 
-    if "reports" not in r:
-        update["reports"] = []
+    raise TypeError(f"Expected records to be a list or dict, got {type(records).__name__}")
 
-    if "parent_event" not in r:
-        update["parent_event"] = None
 
-    if "severity" not in r:
-        update["severity"] = None
+def main():
+    records = get_all_records()
 
-    if update:
-        requests.put(f"{SERVER}/natural_disasters/{_id}", json=update)
-        print(f"Backfilled {_id}")
+    for record in records:
+        _id = record["_id"]
+        update = {}
+
+        if "show" not in record:
+            update["show"] = True
+
+        if "reports" not in record:
+            update["reports"] = []
+
+        if "parent_event" not in record:
+            update["parent_event"] = None
+
+        if "severity" not in record:
+            update["severity"] = None
+
+        if update:
+            resp = requests.put(
+                f"{SERVER}/natural_disasters/{_id}",
+                json=update,
+                headers=HEADERS
+            )
+            resp.raise_for_status()
+            print(f"Backfilled {_id}")
+
+
+if __name__ == "__main__":
+    main()
