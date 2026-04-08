@@ -1,0 +1,40 @@
+name: Disaster Backfill and Dedupe
+
+on:
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/
+
+jobs:
+  backfill-and-dedupe:
+    runs-on: ubuntu-latest
+    environment: pa_deploy
+
+    steps:
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          architecture: 'x64'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install Python packages
+        run: make dev_env
+
+      - name: Run backfill
+        run: |
+          python ai/utilities/backfill_disasters.py --server "https://${DEMO_PA_DOMAIN}"
+        env:
+          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+
+      - name: Run dedupe
+        run: |
+          python ai/utilities/dedupe_disasters.py --server "https://${DEMO_PA_DOMAIN}"
+        env:
+          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}

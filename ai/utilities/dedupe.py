@@ -1,10 +1,15 @@
 import requests
 from datetime import datetime, timedelta
+import argparse
 
-SERVER = "http://127.0.0.1:5000"
+parser = argparse.ArgumentParser()
+parser.add_argument("--server", required=True)
+args = parser.parse_args()
 
-RADIUS_KM = 100
-DATE_WINDOW_DAYS = 5  # adjust as needed
+SERVER = args.server
+
+RADIUS_KM = 10
+DATE_WINDOW_DAYS = 3  # adjust as needed
 DRY_RUN = False       # set True to preview links without writing
 
 
