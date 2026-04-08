@@ -10,6 +10,7 @@ from numbers import Real
 import server.controllers.crud as crud
 import re
 from server.controllers.users import require_auth
+from ai.utilities.dedupe import consolidate_new_event
 
 DISASTERS_RESP = 'records'
 COLLECTION = 'natural_disasters'
@@ -153,18 +154,54 @@ class DisasterList(Resource):
         if end_date:
             validate_date(end_date)
             filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
-        return {DISASTERS_RESP: disasters.read()}
+        return {DISASTERS_RESP: filtered}
 
     @require_auth
     @api.expect(disaster_model)
     @api.doc('create_disaster')
     def post(self):
-        """Create a new natural disaster."""
-        data = request.json
+        """Create a new natural disaster, auto-consolidating into an existing parent when applicable."""
+        data = request.json or {}
+
         data.setdefault(SHOW, True)
         data.setdefault(PARENT_EVENT, None)
         data.setdefault(REPORTS, [])
         data.setdefault(SEVERITY, None)
+
+        token = None
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header.split(" ", 1)[1].strip()
+
+        server_base = request.host_url.rstrip("/")
+
+        consolidation = consolidate_new_event(
+            data,
+            server=server_base,
+            token=token
+        )
+
+        if consolidation["action"] == "link":
+            parent = consolidation["parent"]
+
+            data[SHOW] = False
+            data[PARENT_EVENT] = parent["_id"]
+            data[REPORTS] = []
+
+            child_id = disasters.create(data)
+            created = disasters.select(child_id)
+
+            parent_reports = parent.get(REPORTS, [])
+            if child_id not in parent_reports:
+                parent_reports.append(child_id)
+
+            disasters.update(parent["_id"], {REPORTS: parent_reports})
+
+            return {
+                DISASTERS_RESP: created,
+                "consolidated_into": parent["_id"]
+            }, 201
+
         _id = disasters.create(data)
         created = disasters.select(_id)
         return {DISASTERS_RESP: created}, 201

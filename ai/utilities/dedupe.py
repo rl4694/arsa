@@ -3,14 +3,6 @@ from datetime import datetime, timedelta
 import argparse
 import sys
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--server", required=True)
-parser.add_argument("--token", default=None)
-args = parser.parse_args()
-
-SERVER = args.server.rstrip("/")
-HEADERS = {"Authorization": f"Bearer {args.token}"} if args.token else {}
-
 DISASTER_RULES = {
     "earthquake": {"radius_km": 25, "date_window_days": 2},
     "landslide":  {"radius_km": 10, "date_window_days": 3},
@@ -19,6 +11,45 @@ DISASTER_RULES = {
 }
 DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
 DRY_RUN = False
+
+SERVER = None
+HEADERS = {}
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--server", required=True)
+    parser.add_argument("--token", default=None)
+    return parser.parse_args()
+
+
+def configure(server, token=None):
+    """
+    Configure module-level SERVER and HEADERS.
+    """
+    global SERVER, HEADERS
+    SERVER = server.rstrip("/")
+    HEADERS = {"Authorization": f"Bearer {token}"} if token else {}
+    return SERVER, HEADERS
+
+
+def get_server_and_headers(server=None, token=None, headers=None):
+    """
+    Resolve server/headers for both CLI use and imported helper use.
+    """
+    resolved_server = server.rstrip("/") if server else SERVER
+
+    if headers is not None:
+        resolved_headers = headers
+    elif token is not None:
+        resolved_headers = {"Authorization": f"Bearer {token}"}
+    else:
+        resolved_headers = HEADERS
+
+    if not resolved_server:
+        raise ValueError("SERVER is not configured. Pass server=... or call configure(...).")
+
+    return resolved_server, resolved_headers
 
 
 def get_rule(event_type):
@@ -47,8 +78,9 @@ def normalize_records_payload(data, context):
     )
 
 
-def get_all_events():
-    r = requests.get(f"{SERVER}/natural_disasters", headers=HEADERS)
+def get_all_events(server=None, token=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+    r = requests.get(f"{resolved_server}/natural_disasters", headers=resolved_headers)
     r.raise_for_status()
     data = r.json()
     return normalize_records_payload(data, "GET /natural_disasters")
@@ -61,7 +93,9 @@ def get_date_window(date_str, date_window_days):
     return start, end
 
 
-def search_nearby(event):
+def search_nearby(event, server=None, token=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+
     rule = get_rule(event["type"])
     date_start, date_end = get_date_window(event["date"], rule["date_window_days"])
 
@@ -74,7 +108,11 @@ def search_nearby(event):
         "type": event["type"],
     }
 
-    r = requests.get(f"{SERVER}/natural_disasters/search", params=params, headers=HEADERS)
+    r = requests.get(
+        f"{resolved_server}/natural_disasters/search",
+        params=params,
+        headers=resolved_headers
+    )
 
     if not r.ok:
         print("\nSearch request failed.", file=sys.stderr)
@@ -87,13 +125,15 @@ def search_nearby(event):
     return normalize_records_payload(data, "GET /natural_disasters/search")
 
 
-def link(event_id, report_id):
+def link(event_id, report_id, server=None, token=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+
     if DRY_RUN:
         print(f"[DRY RUN] Would link {report_id} → {event_id}")
         return
 
-    url = f"{SERVER}/natural_disasters/{event_id}/reports/{report_id}"
-    r = requests.post(url, headers=HEADERS)
+    url = f"{resolved_server}/natural_disasters/{event_id}/reports/{report_id}"
+    r = requests.post(url, headers=resolved_headers)
     r.raise_for_status()
     print(f"Linked {report_id} → {event_id}")
 
@@ -141,8 +181,88 @@ def should_skip_candidate(candidate, root_id):
     return False
 
 
+def pick_parent_candidate(event, server=None, token=None, headers=None):
+    """
+    Find an existing visible top-level parent candidate for a newly added event.
+
+    Returns the chosen parent record dict, or None if no suitable parent exists.
+    """
+    try:
+        nearby = search_nearby(event, server=server, token=token, headers=headers)
+    except requests.RequestException:
+        return None
+
+    rule = get_rule(event.get("type"))
+    candidates = []
+
+    for candidate in nearby:
+        if not isinstance(candidate, dict):
+            continue
+
+        if not candidate.get("show", True):
+            continue
+
+        if candidate.get("parent_event"):
+            continue
+
+        if candidate.get("_id") == event.get("_id"):
+            continue
+
+        if candidate.get("type") != event.get("type"):
+            continue
+
+        candidate_date = candidate.get("date")
+        event_date = event.get("date")
+        if not candidate_date or not event_date:
+            continue
+
+        if date_diff(event_date, candidate_date) > rule["date_window_days"]:
+            continue
+
+        candidates.append(candidate)
+
+    if not candidates:
+        return None
+
+    # prefer the earliest/smallest id so later records fold under older ones.
+    candidates.sort(key=lambda c: c.get("_id", ""))
+    return candidates[0]
+
+
+def consolidate_new_event(new_event, new_event_id=None, server=None, token=None, headers=None):
+    """
+    Helper for backend/API usage.
+
+    Given a new event dict (and optionally its created id), find an existing parent.
+    Returns a dict describing what should happen, without forcing the caller
+    to run the whole batch dedupe script.
+
+    Return shapes:
+      {"action": "standalone", "parent": None}
+      {"action": "link", "parent": <parent_record>}
+    """
+    event_for_match = dict(new_event)
+    if new_event_id and "_id" not in event_for_match:
+        event_for_match["_id"] = new_event_id
+
+    parent = pick_parent_candidate(
+        event_for_match,
+        server=server,
+        token=token,
+        headers=headers
+    )
+
+    if not parent:
+        return {"action": "standalone", "parent": None}
+
+    return {"action": "link", "parent": parent}
+
+
 def main():
-    events = get_all_events()
+    args = parse_args()
+    server, headers = configure(args.server, args.token)
+
+    events = get_all_events(server=server, headers=headers)
 
     # Keep only valid dict events with _id
     clean_events = []
@@ -170,7 +290,7 @@ def main():
         rule = get_rule(root_event.get("type"))
 
         try:
-            nearby = search_nearby(root_event)
+            nearby = search_nearby(root_event, server=server, headers=headers)
         except requests.RequestException as e:
             print(f"Failed nearby search for root {root_id}: {e}")
             continue
@@ -195,7 +315,7 @@ def main():
                 continue
 
             try:
-                link(root_id, cid)
+                link(root_id, cid, server=server, headers=headers)
 
                 # Update local state so later iterations do not process stale data
                 candidate["show"] = False
