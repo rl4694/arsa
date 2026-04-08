@@ -6,6 +6,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 import server.controllers.crud as crud
 import pycountry
+from server.controllers.users import require_auth
 
 STATES_RESP = 'records'
 COLLECTION = 'states'
@@ -40,6 +41,7 @@ class StateList(Resource):
         """Return all states."""
         return {STATES_RESP: states.read()}
 
+    @require_auth
     @api.expect(state_model)
     @api.doc('create_state')
     def post(self):
@@ -83,6 +85,7 @@ class State(Resource):
         record = states.select(state_id)
         return {STATES_RESP: record}
 
+    @require_auth
     @api.expect(state_model)
     @api.doc('update_state')
     def put(self, state_id):
@@ -113,6 +116,7 @@ class State(Resource):
         record = states.select(state_id)
         return {STATES_RESP: record}
 
+    @require_auth
     @api.doc('delete_state')
     def delete(self, state_id):
         """Delete a state by ID."""

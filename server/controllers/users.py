@@ -1,8 +1,9 @@
 """
 This file implements user registration and login.
 """
+from functools import wraps
 from flask import request
-from flask_restx import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 import data.db_connect as dbc
@@ -16,6 +17,23 @@ PASSWORD = 'password'
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'arsa-dev-secret')
 _serializer = URLSafeTimedSerializer(SECRET_KEY)
+
+
+def require_auth(f):
+    """Decorator that validates the Bearer token on protected routes."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth_header = request.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            abort(401, 'Authorization token required')
+        token = auth_header[len('Bearer '):]
+        try:
+            _serializer.loads(token, salt='auth')
+        except Exception:
+            abort(401, 'Invalid or expired token')
+        return f(*args, **kwargs)
+    return decorated
+
 
 api = Namespace('users', description='User operations')
 

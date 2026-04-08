@@ -6,6 +6,7 @@ from flask import request, jsonify
 from flask_restx import Resource, Namespace, fields
 from numbers import Real
 import server.controllers.crud as crud
+from server.controllers.users import require_auth
 
 CITIES_RESP = 'records'
 COLLECTION = 'cities'
@@ -51,6 +52,7 @@ class CityList(Resource):
         """Return all cities."""
         return {CITIES_RESP: cities.read()}
 
+    @require_auth
     @api.expect(city_model)
     @api.doc('create_city')
     def post(self):
@@ -87,6 +89,7 @@ class City(Resource):
         record = cities.select(city_id)
         return {CITIES_RESP: record}
 
+    @require_auth
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
@@ -95,6 +98,7 @@ class City(Resource):
         record = cities.select(city_id)
         return {CITIES_RESP: record}
 
+    @require_auth
     @api.doc('delete_city')
     def delete(self, city_id):
         """Delete a city by ID."""

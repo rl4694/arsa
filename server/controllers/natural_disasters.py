@@ -9,6 +9,7 @@ from math import radians, sin, cos, sqrt, atan2
 from numbers import Real
 import server.controllers.crud as crud
 import re
+from server.controllers.users import require_auth
 
 DISASTERS_RESP = 'records'
 COLLECTION = 'natural_disasters'
@@ -152,6 +153,7 @@ class DisasterList(Resource):
             filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
         return {DISASTERS_RESP: disasters.read()}
 
+    @require_auth
     @api.expect(disaster_model)
     @api.doc('create_disaster')
     def post(self):
@@ -194,6 +196,7 @@ class Disaster(Resource):
         record = disasters.select(disaster_id)
         return {DISASTERS_RESP: record}
 
+    @require_auth
     @api.expect(disaster_model)
     @api.doc('update_disaster')
     def put(self, disaster_id):
@@ -202,6 +205,7 @@ class Disaster(Resource):
         record = disasters.select(disaster_id)
         return {DISASTERS_RESP: record}
 
+    @require_auth
     @api.doc('delete_disaster')
     def delete(self, disaster_id):
         """Delete a disaster by ID."""

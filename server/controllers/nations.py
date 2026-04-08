@@ -6,6 +6,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 import server.controllers.crud as crud
 import pycountry
+from server.controllers.users import require_auth
 
 NATIONS_RESP = 'records'
 COLLECTION = 'nations'
@@ -43,6 +44,7 @@ class NationList(Resource):
         """Return all nations."""
         return {NATIONS_RESP: nations.read()}
 
+    @require_auth
     @api.expect(nation_model)
     @api.doc('create_nation')
     def post(self):
@@ -86,6 +88,7 @@ class Nation(Resource):
         record = nations.select(nation_id)
         return {NATIONS_RESP: record}
 
+    @require_auth
     @api.expect(nation_model)
     @api.doc('update_nation')
     def put(self, nation_id):
@@ -107,6 +110,7 @@ class Nation(Resource):
         record = nations.select(nation_id)
         return {NATIONS_RESP: record}
 
+    @require_auth
     @api.doc('delete_nation')
     def delete(self, nation_id):
         """Delete a nation by ID."""
