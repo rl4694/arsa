@@ -10,14 +10,16 @@ import server.controllers.nations as nt
 import server.controllers.natural_disasters as nd
 import data.db_connect as dbc
 
-def clear_db():
+def clear_db(delete_ai_disasters: bool):
+    disaster_filter = {} if delete_ai_disasters else {"date": {"$lt": "2026-01-01"}}
+
     num_deleted = 0
     num_deleted += dbc.delete(ct.cities.collection, {})
     num_deleted += dbc.delete(st.states.collection, {})
     num_deleted += dbc.delete(nt.nations.collection, {})
-    num_deleted += dbc.delete(nd.disasters.collection, {})
+    num_deleted += dbc.delete(nd.disasters.collection, disaster_filter)
     return num_deleted
 
 if __name__ == '__main__':
-    num_deleted = clear_db()
+    num_deleted = clear_db(True)
     print(num_deleted)

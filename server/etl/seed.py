@@ -22,7 +22,7 @@ from server.etl.seed_states import seed_states
 def main():
     # Clear database
     print("Clearing database...")
-    num_deleted = clear_db()
+    num_deleted = clear_db(False)
     print(f"Deleted: {num_deleted}")
 
     # Seed nations

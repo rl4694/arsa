@@ -21,6 +21,7 @@ def transform_earthquake(row: dict) -> dict:
             raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['latitude'])
         lon = float(row['longitude'])
+        magnitude = float(row.get('magnitude') or 0.0)
 
         day, month, year = row.get('date_time').split(' ')[0].split('-')
         date = transform_date(year, month, day)
@@ -34,8 +35,8 @@ def transform_earthquake(row: dict) -> dict:
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
-            nd.DESCRIPTION: f"Magnitude: {row.get('mag', 'N/A')}, "
-                            f"Depth: {row.get('depth', 'N/A')} km"
+            nd.SEVERITY: magnitude,
+            nd.DESCRIPTION: f"Depth: {row.get('depth', 'N/A')} km"
         }
     except Exception as e:
         print(e)
@@ -50,6 +51,12 @@ def transform_landslide(row: dict) -> dict:
         lon = float(row['longitude'])
         size = row.get('landslide_size', 'N/A')
         trigger = row.get('trigger', 'N/A')
+        severity_map = {
+            'small': 2.0,
+            'medium': 4.0,
+            'large': 6.0,
+            'very_large': 8.0,
+        }
 
         month, day, year = row.get('event_date').split(' ')[0].split('/')
         date = transform_date(year, month, day)
@@ -63,7 +70,8 @@ def transform_landslide(row: dict) -> dict:
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
-            nd.DESCRIPTION: f"Size: {size}, Trigger: {trigger}"
+            nd.SEVERITY: severity_map.get(size, 0.0),
+            nd.DESCRIPTION: f"Trigger: {trigger}"
         }
     except Exception as e:
         print(e)
@@ -76,6 +84,7 @@ def transform_tsunami(row: dict) -> dict:
             raise ValueError(f'Bad type for row: {type(row)}')
         lat = float(row['LATITUDE'])
         lon = float(row['LONGITUDE'])
+        severity = abs(float(row.get('EQ_MAGNITUDE') or 0.0))
         # Default to '01' if field is an empty string
         date = transform_date(row.get('YEAR'), row.get('MONTH'), row.get('DAY'))
         # Skip negative years
@@ -88,6 +97,7 @@ def transform_tsunami(row: dict) -> dict:
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
+            nd.SEVERITY: severity,
             nd.DESCRIPTION: f"{row.get('COMMENTS', '')}"
         }
     except Exception as e:
@@ -102,7 +112,7 @@ def transform_hurricane(row: dict) -> dict:
         lat = float(row['latitude'])
         lon = float(row['longitude'])
         wind_speed = row.get('wind_speed', 'N/A')
-        category = row.get('category', 'N/A')
+        severity = abs(float(row.get('category') or 0.0)) * 2
         sid = row.get('sid', 'unknown')
         name = row.get('name', '').strip() or f'Storm {sid}'
         date = row.get('date', '')
@@ -117,7 +127,8 @@ def transform_hurricane(row: dict) -> dict:
             nd.DATE: date,
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
-            nd.DESCRIPTION: f"SID: {sid}, Category: {category}, Wind Speed: {wind_speed} kt"
+            nd.SEVERITY: severity,
+            nd.DESCRIPTION: f"SID: {sid}, Wind Speed: {wind_speed} kt"
         }
     except Exception as e:
         print(e)
@@ -146,7 +157,6 @@ def seed_disasters(disaster_file: str, disaster_type: str):
                 'show': True,
                 'reports': [],
                 'parent_event': None,
-                'severity': None,
             })
             # Add transformed disaster to list if it is not a duplicate
             if not nd.disasters.find_duplicate(new_record, search_list=seen):
