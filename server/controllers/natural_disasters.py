@@ -167,18 +167,11 @@ class DisasterList(Resource):
         data.setdefault(PARENT_EVENT, None)
         data.setdefault(REPORTS, [])
         data.setdefault(SEVERITY, None)
-
-        token = None
-        auth_header = request.headers.get("Authorization", "")
-        if auth_header.startswith("Bearer "):
-            token = auth_header.split(" ", 1)[1].strip()
-
         server_base = request.host_url.rstrip("/")
 
         consolidation = consolidate_new_event(
             data,
-            server=server_base,
-            token=token
+            server=server_base
         )
 
         if consolidation["action"] == "link":

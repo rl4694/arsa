@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timedelta
 import argparse
 import sys
+import os
 
 DISASTER_RULES = {
     "earthquake": {"radius_km": 25, "date_window_days": 2},
@@ -13,27 +14,27 @@ DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
 DRY_RUN = False
 
 SERVER = None
+AUTH_BYPASS_KEY = os.environ.get("AUTH_BYPASS_KEY", "")
 HEADERS = {}
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--server", required=True)
-    parser.add_argument("--token", default=None)
     return parser.parse_args()
 
 
-def configure(server, token=None):
+def configure(server):
     """
     Configure module-level SERVER and HEADERS.
     """
     global SERVER, HEADERS
     SERVER = server.rstrip("/")
-    HEADERS = {"Authorization": f"Bearer {token}"} if token else {}
+    HEADERS = {"Authorization": f"{AUTH_BYPASS_KEY}"}
     return SERVER, HEADERS
 
 
-def get_server_and_headers(server=None, token=None, headers=None):
+def get_server_and_headers(server=None, headers=None):
     """
     Resolve server/headers for both CLI use and imported helper use.
     """
@@ -41,8 +42,6 @@ def get_server_and_headers(server=None, token=None, headers=None):
 
     if headers is not None:
         resolved_headers = headers
-    elif token is not None:
-        resolved_headers = {"Authorization": f"Bearer {token}"}
     else:
         resolved_headers = HEADERS
 
@@ -78,8 +77,8 @@ def normalize_records_payload(data, context):
     )
 
 
-def get_all_events(server=None, token=None, headers=None):
-    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+def get_all_events(server=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, headers)
     r = requests.get(f"{resolved_server}/natural_disasters", headers=resolved_headers)
     r.raise_for_status()
     data = r.json()
@@ -93,8 +92,8 @@ def get_date_window(date_str, date_window_days):
     return start, end
 
 
-def search_nearby(event, server=None, token=None, headers=None):
-    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+def search_nearby(event, server=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, headers)
 
     rule = get_rule(event["type"])
     date_start, date_end = get_date_window(event["date"], rule["date_window_days"])
@@ -125,8 +124,8 @@ def search_nearby(event, server=None, token=None, headers=None):
     return normalize_records_payload(data, "GET /natural_disasters/search")
 
 
-def link(event_id, report_id, server=None, token=None, headers=None):
-    resolved_server, resolved_headers = get_server_and_headers(server, token, headers)
+def link(event_id, report_id, server=None, headers=None):
+    resolved_server, resolved_headers = get_server_and_headers(server, headers)
 
     if DRY_RUN:
         print(f"[DRY RUN] Would link {report_id} → {event_id}")
@@ -181,14 +180,14 @@ def should_skip_candidate(candidate, root_id):
     return False
 
 
-def pick_parent_candidate(event, server=None, token=None, headers=None):
+def pick_parent_candidate(event, server=None, headers=None):
     """
     Find an existing visible top-level parent candidate for a newly added event.
 
     Returns the chosen parent record dict, or None if no suitable parent exists.
     """
     try:
-        nearby = search_nearby(event, server=server, token=token, headers=headers)
+        nearby = search_nearby(event, server=server, headers=headers)
     except requests.RequestException:
         return None
 
@@ -229,7 +228,7 @@ def pick_parent_candidate(event, server=None, token=None, headers=None):
     return candidates[0]
 
 
-def consolidate_new_event(new_event, new_event_id=None, server=None, token=None, headers=None):
+def consolidate_new_event(new_event, new_event_id=None, server=None, headers=None):
     """
     Helper for backend/API usage.
 
@@ -248,7 +247,6 @@ def consolidate_new_event(new_event, new_event_id=None, server=None, token=None,
     parent = pick_parent_candidate(
         event_for_match,
         server=server,
-        token=token,
         headers=headers
     )
 
@@ -260,7 +258,7 @@ def consolidate_new_event(new_event, new_event_id=None, server=None, token=None,
 
 def main():
     args = parse_args()
-    server, headers = configure(args.server, args.token)
+    server, headers = configure(args.server)
 
     events = get_all_events(server=server, headers=headers)
 

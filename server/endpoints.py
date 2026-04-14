@@ -17,9 +17,17 @@ from server.controllers.geocoding import reverse_geocode
 
 # import werkzeug.exceptions as wz
 
+authorizations = {
+    'apikey': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
+
 app = Flask(__name__)
 CORS(app)
-api = Api(app)
+api = Api(app, authorizations=authorizations, security='apikey')
 
 api.add_namespace(cities_ns, path='/cities')
 api.add_namespace(states_ns, path='/states')
