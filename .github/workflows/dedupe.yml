@@ -10,6 +10,10 @@ jobs:
   backfill-and-dedupe:
     runs-on: ubuntu-latest
     environment: pa_deploy
+    env:
+      DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      AUTH_BYPASS_KEY: ${{ secrets.AUTH_BYPASS_KEY }}
 
     steps:
       - name: Set up Python 3.12
@@ -29,12 +33,27 @@ jobs:
 
       - name: Run backfill
         run: |
-          python ai/utilities/backfill_disasters.py --server "https://${DEMO_PA_DOMAIN}"
-        env:
-          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+          python ai/utilities/backfill.py --server "https://${DEMO_PA_DOMAIN}"
 
       - name: Run dedupe
         run: |
-          python ai/utilities/dedupe_disasters.py --server "https://${DEMO_PA_DOMAIN}"
-        env:
-          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+          python ai/utilities/dedupe.py --server "https://${DEMO_PA_DOMAIN}"
+
+      - name: Run AI disaster backfill
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "GEMINI_API_KEY is empty or missing. Skipping AI disaster backfill execution."
+            exit 0
+          fi
+
+          python ai/disaster_backfill.py \
+            --key "$GEMINI_API_KEY" \
+            --server "https://${DEMO_PA_DOMAIN}" > repair_curls.sh
+
+          cat repair_curls.sh
+
+          if [ -s repair_curls.sh ]; then
+            bash repair_curls.sh || true
+          else
+            echo "No curl commands generated. Skipping execution."
+          fi

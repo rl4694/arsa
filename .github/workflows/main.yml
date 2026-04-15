@@ -79,6 +79,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+          AUTH_BYPASS_KEY: ${{ secrets.AUTH_BYPASS_KEY }}
 
       - name: Save bookmark artifact
         if: always()
