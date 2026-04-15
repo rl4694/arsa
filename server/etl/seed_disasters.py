@@ -50,7 +50,7 @@ def transform_landslide(row: dict) -> dict:
         lat = float(row['latitude'])
         lon = float(row['longitude'])
         size = row.get('landslide_size', 'N/A')
-        trigger = row.get('trigger', 'N/A')
+        description = row.get('event_description', 'N/A')
         severity_map = {
             'small': 2.0,
             'medium': 4.0,
@@ -71,7 +71,7 @@ def transform_landslide(row: dict) -> dict:
             nd.LATITUDE: lat,
             nd.LONGITUDE: lon,
             nd.SEVERITY: severity_map.get(size, 0.0),
-            nd.DESCRIPTION: f"Trigger: {trigger}"
+            nd.DESCRIPTION: f"{description}"
         }
     except Exception as e:
         print(e)

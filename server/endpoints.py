@@ -4,7 +4,6 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 # from http import HTTPStatus
 import logging
-import os
 from logging.handlers import RotatingFileHandler
 
 from flask import Flask, request
@@ -34,7 +33,11 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app, authorizations=authorizations, security='apikey')
 
-_file_handler = RotatingFileHandler(LOG_FILE, maxBytes=1_000_000, backupCount=3)
+_file_handler = RotatingFileHandler(
+    LOG_FILE,
+    maxBytes=1_000_000,
+    backupCount=3
+)
 _file_handler.setFormatter(
     logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
 )
