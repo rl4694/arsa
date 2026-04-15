@@ -3,6 +3,10 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 # from http import HTTPStatus
+import logging
+import os
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask, request
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
@@ -13,6 +17,7 @@ from server.controllers.states import api as states_ns
 from server.controllers.nations import api as nations_ns
 from server.controllers.natural_disasters import api as disasters_ns
 from server.controllers.users import api as users_ns
+from server.controllers.logs import api as logs_ns, LOG_FILE
 from server.controllers.geocoding import reverse_geocode
 
 # import werkzeug.exceptions as wz
@@ -29,11 +34,21 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app, authorizations=authorizations, security='apikey')
 
+_file_handler = RotatingFileHandler(LOG_FILE, maxBytes=1_000_000, backupCount=3)
+_file_handler.setFormatter(
+    logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+)
+_file_handler.setLevel(logging.INFO)
+app.logger.addHandler(_file_handler)
+app.logger.setLevel(logging.INFO)
+logging.getLogger('werkzeug').addHandler(_file_handler)
+
 api.add_namespace(cities_ns, path='/cities')
 api.add_namespace(states_ns, path='/states')
 api.add_namespace(nations_ns, path='/nations')
 api.add_namespace(disasters_ns, path='/natural_disasters')
 api.add_namespace(users_ns, path='/users')
+api.add_namespace(logs_ns, path='/logs')
 
 ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
