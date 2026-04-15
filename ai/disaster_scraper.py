@@ -86,7 +86,8 @@ curl -X POST {server}/natural_disasters/ \\
 
     # Stage 1: Search-enabled Loop (requires specific quota)
     # Stage 2: No-Search Loop (fallback to internal knowledge)
-    for use_search in [True, False]:
+    # for use_search in [True, False]: (disabling no search for now)
+    for use_search in [True]:
         mode = "WITH SEARCH" if use_search else "INTERNAL KNOWLEDGE (NO SEARCH)"
         print(f"\n--- Strategy: {mode} ---", file=sys.stderr)
 
