@@ -1,7 +1,7 @@
 import argparse
 import json
 import math
-import re
+import os
 import requests
 import sys
 from google import genai
@@ -34,9 +34,43 @@ def is_missing_severity(record):
     return True
 
 
+def has_bad_description(record):
+    value = record.get("description")
+
+    if value is None:
+        return False
+
+    if not isinstance(value, str):
+        return False
+
+    normalized = value.strip().lower()
+    return normalized in {
+        "trigger: n/a",
+        "trigger:n/a",
+        "n/a",
+        "na",
+    }
+
+
+def needs_repair(record):
+    return is_missing_severity(record) or has_bad_description(record)
+
+
+def get_bypass_headers():
+    auth_bypass_key = os.environ.get("AUTH_BYPASS_KEY", "").strip()
+    headers = {}
+
+    if auth_bypass_key:
+        headers["X-Auth-Bypass-Key"] = auth_bypass_key
+
+    return headers
+
+
 def fetch_all_disasters(server):
     url = f"{server.rstrip('/')}/natural_disasters"
-    r = requests.get(url, timeout=30)
+    headers = get_bypass_headers()
+
+    r = requests.get(url, headers=headers, timeout=30)
     r.raise_for_status()
 
     data = r.json()
@@ -58,14 +92,22 @@ def build_prompt(records, server):
     records_json = json.dumps(records, indent=2, ensure_ascii=False)
 
     return f"""
-You are updating existing natural disaster records to fill in missing severity values.
+You are updating existing natural disaster records to fill in missing severity values and repair bad descriptions.
 
 For each record:
-- earthquake => severity = earthquake magnitude
-- hurricane => severity = hurricane category number
+- earthquake => severity = earthquake magnitude if it can be reliably determined, otherwise null
+- hurricane => severity = hurricane category number if it can be reliably determined, otherwise null
 - landslide => severity = null
 - tsunami => severity = null
 - any other disaster type => severity = null
+
+Description repair rules:
+- If description is exactly "Trigger: N/A" or another obvious placeholder like "N/A" or "NA", replace it.
+- Write a short, factual, plain description of the event.
+- Prefer using only information already present in the record.
+- Do not invent extra details that are not reasonably inferable.
+- If little is known, use a safe generic description based on name, type, and date.
+- If the existing description is already meaningful, preserve it exactly.
 
 Critical output rules:
 - Output ONLY raw curl commands.
@@ -77,30 +119,26 @@ Critical output rules:
 - Start the very first output line with: curl -X PUT
 - Every record must produce exactly one curl command.
 - Preserve all existing fields exactly as they already are.
-- Only change the "severity" field.
+- Only change the "severity" field if needed and the "description" field if it is a bad placeholder.
 - Keep the same _id already present in each record.
 - Use full JSON objects in the -d body.
+- Output valid JSON inside each -d body.
 
 Records to update:
 {records_json}
 
 Every command must match this exact shape:
 curl -X PUT {server.rstrip('/')}/natural_disasters/RECORD_ID \\
--H "Authorization: Bearer $TOKEN" \\
+-H "X-Auth-Bypass-Key: $AUTH_BYPASS_KEY" \\
 -H "Content-Type: application/json" \\
--d '{{ ... full JSON object with updated severity ... }}'
+-d '{{ ... full JSON object with updated fields ... }}'
 """.strip()
 
 
 def extract_curl_commands(text):
-    """
-    Clean Gemini output and keep only raw curl commands.
-    This removes markdown fences, JSON blobs, and any extra commentary.
-    """
     if not text:
         return ""
 
-    # Remove markdown fences if the model ignored instructions
     text = text.replace("```bash", "")
     text = text.replace("```json", "")
     text = text.replace("```sh", "")
@@ -116,7 +154,6 @@ def extract_curl_commands(text):
         raw_line = line.rstrip("\n")
         stripped = raw_line.strip()
 
-        # New command starts
         if stripped.startswith("curl -X PUT "):
             if current:
                 commands.append("\n".join(current).strip())
@@ -128,7 +165,6 @@ def extract_curl_commands(text):
         if not in_command:
             continue
 
-        # Keep curl continuation/header/data lines
         if (
             stripped.startswith("-H ")
             or stripped.startswith("-d ")
@@ -140,20 +176,6 @@ def extract_curl_commands(text):
             or stripped.startswith('"')
             or stripped.startswith("'")
             or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
-            or stripped.startswith("],")
             or stripped.startswith("[")
             or stripped.startswith("]")
             or stripped.startswith("},")
@@ -161,14 +183,12 @@ def extract_curl_commands(text):
             or stripped == ""
         ):
             current.append(raw_line)
-            # Blank line ends a command block cleanly
             if stripped == "":
                 commands.append("\n".join(current).strip())
                 current = []
                 in_command = False
             continue
 
-        # If we hit unrelated junk after a command, close the current command
         if current:
             commands.append("\n".join(current).strip())
             current = []
@@ -177,7 +197,6 @@ def extract_curl_commands(text):
     if current:
         commands.append("\n".join(current).strip())
 
-    # Final pass: keep only non-empty curl blocks
     cleaned = []
     for cmd in commands:
         cmd = cmd.strip()
@@ -252,6 +271,10 @@ def main():
         print("Error: --chunk-size must be greater than 0.", file=sys.stderr)
         sys.exit(1)
 
+    if not os.environ.get("AUTH_BYPASS_KEY", "").strip():
+        print("Error: AUTH_BYPASS_KEY is not set.", file=sys.stderr)
+        sys.exit(1)
+
     client = genai.Client(api_key=api_key)
 
     try:
@@ -260,13 +283,13 @@ def main():
         print(f"Error fetching disasters: {e}", file=sys.stderr)
         sys.exit(1)
 
-    missing = [d for d in disasters if is_missing_severity(d)]
+    missing = [d for d in disasters if needs_repair(d)]
 
     if not missing:
-        print("No disasters with missing severity found.", file=sys.stderr)
+        print("No disasters with missing severity or bad placeholder descriptions found.", file=sys.stderr)
         sys.exit(0)
 
-    print(f"Found {len(missing)} disasters with missing severity.", file=sys.stderr)
+    print(f"Found {len(missing)} disasters needing severity/description repair.", file=sys.stderr)
 
     batch_count = 0
     emitted_batches = 0
@@ -279,7 +302,6 @@ def main():
         curl_block = generate_batch_curls(client, prompt)
 
         if curl_block:
-            # stdout must contain only runnable curl commands
             print(curl_block)
             emitted_batches += 1
         else:

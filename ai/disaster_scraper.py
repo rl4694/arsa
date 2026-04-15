@@ -72,6 +72,7 @@ For landslides and tsunamis, set "severity" to null.
 Output ONLY curl commands with no explanation.
 Each command must follow this format exactly:
 curl -X POST {server}/natural_disasters/ \\
+-H "X-Auth-Bypass-Key: $AUTH_BYPASS_KEY" \\
 -H "Content-Type: application/json" \\
 -d '{{
 "name": "[event name]",
