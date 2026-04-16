@@ -97,8 +97,8 @@ You are updating existing natural disaster records to fill in missing severity v
 For each record:
 - earthquake => severity = earthquake magnitude if it can be reliably determined, otherwise null
 - hurricane => severity = hurricane category number if it can be reliably determined, otherwise null
-- landslide => severity = null
-- tsunami => severity = null
+- landslide => severity = 1-5 scale based on impact (1 minor localized slide, 5 catastrophic with major destruction or fatalities)
+- tsunami => severity = 1-5 scale based on impact (1 minor localized slide, 5 catastrophic with major destruction or fatalities)
 - any other disaster type => severity = null
 
 Description repair rules:
