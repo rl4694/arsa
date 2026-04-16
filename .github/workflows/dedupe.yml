@@ -31,10 +31,6 @@ jobs:
       - name: Install Python packages
         run: make dev_env
 
-      - name: Run backfill
-        run: |
-          python ai/utilities/backfill.py --server "https://${DEMO_PA_DOMAIN}"
-
       - name: Run dedupe
         run: |
           python ai/utilities/dedupe.py --server "https://${DEMO_PA_DOMAIN}"
