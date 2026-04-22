@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 import argparse
 import sys
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DISASTER_RULES = {
     "earthquake": {"radius_km": 100, "date_window_days": 2},

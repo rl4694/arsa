@@ -6,8 +6,9 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 import server.controllers.crud as crud
 import pycountry
-from server.controllers.users import require_auth
+import security.security as security
 
+SECURITY_FEATURE = security.NATIONS
 NATIONS_RESP = 'records'
 COLLECTION = 'nations'
 NAME = 'name'
@@ -39,12 +40,13 @@ class NationList(Resource):
     Collection-level operations for nations.
     Provides list and create functionality.
     """
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('list_nations')
     def get(self):
         """Return all nations."""
         return {NATIONS_RESP: nations.read()}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.CREATE)
     @api.expect(nation_model)
     @api.doc('create_nation')
     def post(self):
@@ -67,6 +69,7 @@ class NationList(Resource):
 
 @api.route('/fields')
 class NationFields(Resource):
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_fields')
     def get(self):
         """Get field information for nations."""
@@ -82,13 +85,14 @@ class Nation(Resource):
     Item-level operations for a single nation.
     Provides retrieve, update, and delete functionality.
     """
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_nation')
     def get(self, nation_id):
         """Retrieve a single nation by ID."""
         record = nations.select(nation_id)
         return {NATIONS_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.UPDATE)
     @api.expect(nation_model)
     @api.doc('update_nation')
     def put(self, nation_id):
@@ -110,7 +114,7 @@ class Nation(Resource):
         record = nations.select(nation_id)
         return {NATIONS_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.DELETE)
     @api.doc('delete_nation')
     def delete(self, nation_id):
         """Delete a nation by ID."""

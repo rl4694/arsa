@@ -7,6 +7,9 @@ import sys
 from google import genai
 from google.genai import types
 from google.genai import errors
+from dotenv import load_dotenv
+
+load_dotenv()
 
 FULL_MODEL_LIST = [
     "gemini-2.5-flash",

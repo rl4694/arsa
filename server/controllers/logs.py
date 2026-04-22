@@ -8,8 +8,12 @@ get_log_path() picks the right source automatically.
 import os
 from flask import request
 from flask_restx import Resource, Namespace
-from server.controllers.users import require_auth
+import security.security as security
+from dotenv import load_dotenv
 
+load_dotenv()
+
+SECURITY_FEATURE = 'logs'
 LOGS_RESP = 'logs'
 # Used by endpoints.py to configure the local RotatingFileHandler
 LOG_FILE = os.environ.get('LOG_FILE', 'arsa.log')
@@ -40,7 +44,7 @@ def get_log_path():
 
 @api.route('/', strict_slashes=False)
 class LogList(Resource):
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_logs',
              params={'n': f'Number of log lines to return (default {DEFAULT_LINES}, max {MAX_LINES})'})
     @api.response(200, 'Success')

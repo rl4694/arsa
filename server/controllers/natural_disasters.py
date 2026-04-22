@@ -9,9 +9,10 @@ from math import radians, sin, cos, sqrt, atan2
 from numbers import Real
 import server.controllers.crud as crud
 import re
-from server.controllers.users import require_auth
 from ai.utilities.dedupe import consolidate_new_event
+import security.security as security
 
+SECURITY_FEATURE = security.DISASTERS
 DISASTERS_RESP = 'records'
 COLLECTION = 'natural_disasters'
 NAME = 'name'
@@ -126,6 +127,7 @@ disaster_model = api.model('NaturalDisaster', {
 
 @api.route('/', strict_slashes=False)
 class DisasterList(Resource):
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('list_disasters',
              params={
                  'date': 'Return disasters occurring on this date (YYYY-MM-DD)',
@@ -156,7 +158,7 @@ class DisasterList(Resource):
             filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
         return {DISASTERS_RESP: filtered}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.CREATE)
     @api.expect(disaster_model)
     @api.doc('create_disaster')
     def post(self):
@@ -202,6 +204,7 @@ class DisasterList(Resource):
 
 @api.route('/fields')
 class DisasterFields(Resource):
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_fields')
     def get(self):
         """Get field information for natural disasters."""
@@ -222,13 +225,14 @@ class DisasterFields(Resource):
 
 @api.route('/<string:disaster_id>')
 class Disaster(Resource):
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_disaster')
     def get(self, disaster_id):
         """Get a specific disaster by ID."""
         record = disasters.select(disaster_id)
         return {DISASTERS_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.UPDATE)
     @api.expect(disaster_model)
     @api.doc('update_disaster')
     def put(self, disaster_id):
@@ -237,7 +241,7 @@ class Disaster(Resource):
         record = disasters.select(disaster_id)
         return {DISASTERS_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.DELETE)
     @api.doc('delete_disaster')
     def delete(self, disaster_id):
         """Delete a disaster by ID."""
@@ -248,7 +252,7 @@ class Disaster(Resource):
 
 @api.route('/<string:event_id>/reports')
 class DisasterReports(Resource):
-
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     def get(self, event_id):
         event = disasters.select(event_id)
 
@@ -265,7 +269,7 @@ class DisasterReports(Resource):
         
 @api.route('/<string:event_id>/reports/<string:report_id>')
 class LinkReport(Resource):
-
+    @security.require_auth(SECURITY_FEATURE, security.UPDATE)
     def post(self, event_id, report_id):
 
         event = disasters.select(event_id)
@@ -300,7 +304,7 @@ def haversine(lat1, lon1, lat2, lon2):
     
 @api.route('/search')
 class DisasterSearch(Resource):
-
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('search_disasters',
              params={
                  'lat': 'Latitude',

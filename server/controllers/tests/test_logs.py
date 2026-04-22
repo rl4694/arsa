@@ -65,7 +65,7 @@ class TestGetLogPath:
 class TestLogsEndpoint:
     def test_returns_401_without_token(self, client):
         """Endpoint must reject unauthenticated requests."""
-        with patch('server.controllers.users.AUTH_BYPASS_KEY', 'non-empty-bypass'):
+        with patch('security.security.AUTH_BYPASS_KEY', 'non-empty-bypass'):
             response = client.get('/logs/')
         assert response.status_code == 401
 

@@ -6,8 +6,9 @@ from flask import request, jsonify
 from flask_restx import Resource, Namespace, fields
 from numbers import Real
 import server.controllers.crud as crud
-from server.controllers.users import require_auth
+import security.security as security
 
+SECURITY_FEATURE = security.CITIES
 CITIES_RESP = 'records'
 COLLECTION = 'cities'
 NAME = 'name'
@@ -47,12 +48,13 @@ class CityList(Resource):
     Handle collection-level operations for cities.
     Supports listing all cities and creating new ones.
     """
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('list_cities')
     def get(self):
         """Return all cities."""
         return {CITIES_RESP: cities.read()}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.CREATE)
     @api.expect(city_model)
     @api.doc('create_city')
     def post(self):
@@ -65,6 +67,7 @@ class CityList(Resource):
 
 @api.route('/fields')
 class CityFields(Resource):
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_fields')
     def get(self):
         """Get field information for cities."""
@@ -83,13 +86,14 @@ class City(Resource):
     Handle item-level operations for a single city.
     Supports retrieval, update, and deletion.
     """
+    @security.require_auth(SECURITY_FEATURE, security.READ)
     @api.doc('get_city')
     def get(self, city_id):
         """Retrieve a single city by ID."""
         record = cities.select(city_id)
         return {CITIES_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.UPDATE)
     @api.expect(city_model)
     @api.doc('update_city')
     def put(self, city_id):
@@ -98,7 +102,7 @@ class City(Resource):
         record = cities.select(city_id)
         return {CITIES_RESP: record}
 
-    @require_auth
+    @security.require_auth(SECURITY_FEATURE, security.DELETE)
     @api.doc('delete_city')
     def delete(self, city_id):
         """Delete a city by ID."""

@@ -1,4 +1,11 @@
 from functools import wraps
+from flask import request
+from flask_restx import abort
+from itsdangerous import URLSafeTimedSerializer
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # import data.db_connect as dbc
 
@@ -48,6 +55,8 @@ Our record format to meet our requirements (see security.md) will be:
 }
 """
 
+AUTH_BYPASS_KEY = os.environ.get("AUTH_BYPASS_KEY", "")
+SECRET_KEY = os.environ.get('SECRET_KEY', 'arsa-dev-secret')
 COLLECT_NAME = 'security'
 CREATE = 'create'
 READ = 'read'
@@ -58,20 +67,39 @@ CHECKS = 'checks'
 LOGIN = 'login'
 
 # Features:
-PEOPLE = 'people'
+CITIES = 'cities'
+STATES = 'states'
+NATIONS = 'nations'
+DISASTERS = 'disasters'
+LOGS = 'logs'
 
 security_recs = None
-# These will come from the DB soon:
-temp_recs = {
-    PEOPLE: {
-        CREATE: {
-            USER_LIST: ['ejc369@nyu.edu'],
-            CHECKS: {
-                LOGIN: True,
-            },
-        },
+crud_permissions = {
+    CREATE: {
+        CHECKS: { LOGIN: True },
+    },
+    READ: {
+        CHECKS: { LOGIN: False },
+    },
+    UPDATE: {
+        CHECKS: { LOGIN: True },
+    },
+    DELETE: {
+        CHECKS: { LOGIN: True },
     },
 }
+temp_recs = {
+    CITIES: crud_permissions,
+    STATES: crud_permissions,
+    NATIONS: crud_permissions,
+    DISASTERS: crud_permissions,
+    LOGS: {
+        READ: {
+            CHECKS: { LOGIN: True },
+        }
+    }
+}
+_serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 
 def read() -> dict:
@@ -100,3 +128,29 @@ def read_feature(feature_name: str) -> dict:
         return security_recs[feature_name]
     else:
         return None
+
+@needs_recs
+def require_auth(feature, operation):
+    def decorator(f):
+        """Decorator that validates the Bearer token on protected routes."""
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            checks = security_recs.get(feature).get(operation).get(CHECKS)
+            if checks.get(LOGIN):
+                auth_header = request.headers.get('Authorization', '')
+                # If bypass key was passed, skip authorization
+                if auth_header == AUTH_BYPASS_KEY:
+                    return f(*args, **kwargs)
+
+                # Check if bearer token is valid
+                if not auth_header.startswith('Bearer '):
+                    abort(401, 'Authorization token required')
+                token = auth_header[len('Bearer '):]
+                
+                try:
+                    _serializer.loads(token, salt='auth')
+                except Exception:
+                    abort(401, 'Invalid or expired token')
+            return f(*args, **kwargs)
+        return decorated
+    return decorator
