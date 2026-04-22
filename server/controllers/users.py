@@ -5,20 +5,15 @@ from functools import wraps
 from flask import request
 from flask_restx import Resource, Namespace, fields, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer
+import security.security as security
 import data.db_connect as dbc
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 USERS_RESP = 'user'
 COLLECTION = 'users'
 NAME = 'name'
 EMAIL = 'email'
 PASSWORD = 'password'
-SECRET_KEY = os.environ.get('SECRET_KEY', 'arsa-dev-secret')
-_serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 api = Namespace('users', description='User operations')
 
@@ -79,6 +74,6 @@ class UserLogin(Resource):
         if not user or not check_password_hash(user[PASSWORD], password):
             api.abort(401, 'Invalid email or password')
 
-        token = _serializer.dumps({NAME: user[NAME], EMAIL: user[EMAIL]}, salt='auth')
+        token = security._serializer.dumps({NAME: user[NAME], EMAIL: user[EMAIL]}, salt='auth')
 
         return {'token': token, NAME: user[NAME], EMAIL: user[EMAIL]}, 200

@@ -76,16 +76,24 @@ LOGS = 'logs'
 security_recs = None
 crud_permissions = {
     CREATE: {
-        CHECKS: { LOGIN: True },
+        CHECKS: {
+            LOGIN: True
+        },
     },
     READ: {
-        CHECKS: { LOGIN: False },
+        CHECKS: {
+            LOGIN: False
+        },
     },
     UPDATE: {
-        CHECKS: { LOGIN: True },
+        CHECKS: {
+            LOGIN: True
+        },
     },
     DELETE: {
-        CHECKS: { LOGIN: True },
+        CHECKS: {
+            LOGIN: True
+        },
     },
 }
 temp_recs = {
@@ -95,7 +103,9 @@ temp_recs = {
     DISASTERS: crud_permissions,
     LOGS: {
         READ: {
-            CHECKS: { LOGIN: True },
+            CHECKS: {
+                LOGIN: True
+            },
         }
     }
 }
@@ -129,6 +139,7 @@ def read_feature(feature_name: str) -> dict:
     else:
         return None
 
+
 @needs_recs
 def require_auth(feature, operation):
     def decorator(f):
@@ -146,7 +157,7 @@ def require_auth(feature, operation):
                 if not auth_header.startswith('Bearer '):
                     abort(401, 'Authorization token required')
                 token = auth_header[len('Bearer '):]
-                
+
                 try:
                     _serializer.loads(token, salt='auth')
                 except Exception:
