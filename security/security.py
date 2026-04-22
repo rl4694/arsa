@@ -2,10 +2,7 @@ from functools import wraps
 from flask import request
 from flask_restx import abort
 from itsdangerous import URLSafeTimedSerializer
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from server.env import get_env
 
 # import data.db_connect as dbc
 
@@ -55,8 +52,8 @@ Our record format to meet our requirements (see security.md) will be:
 }
 """
 
-AUTH_BYPASS_KEY = os.environ.get("AUTH_BYPASS_KEY", "")
-SECRET_KEY = os.environ.get('SECRET_KEY', 'arsa-dev-secret')
+AUTH_BYPASS_KEY = get_env('AUTH_BYPASS_KEY', '')
+SECRET_KEY = get_env('SECRET_KEY', 'arsa-dev-secret')
 COLLECT_NAME = 'security'
 CREATE = 'create'
 READ = 'read'
@@ -141,12 +138,14 @@ def read_feature(feature_name: str) -> dict:
 
 
 @needs_recs
-def require_auth(feature, operation):
+def require_auth(feature_name: str, operation: str):
     def decorator(f):
         """Decorator that validates the Bearer token on protected routes."""
         @wraps(f)
         def decorated(*args, **kwargs):
-            checks = security_recs.get(feature).get(operation).get(CHECKS)
+            feature = security_recs.get(feature_name, {})
+            permissions = feature.get(operation, {})
+            checks = permissions.get(CHECKS, {})
             if checks.get(LOGIN):
                 auth_header = request.headers.get('Authorization', '')
                 # If bypass key was passed, skip authorization

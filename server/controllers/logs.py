@@ -9,14 +9,12 @@ import os
 from flask import request
 from flask_restx import Resource, Namespace
 import security.security as security
-from dotenv import load_dotenv
-
-load_dotenv()
+from server.env import get_env
 
 SECURITY_FEATURE = 'logs'
 LOGS_RESP = 'logs'
 # Used by endpoints.py to configure the local RotatingFileHandler
-LOG_FILE = os.environ.get('LOG_FILE', 'arsa.log')
+LOG_FILE = get_env('LOG_FILE', 'arsa.log')
 # PythonAnywhere writes the WSGI error log here
 PA_ERROR_LOG = '/var/log/arsa.pythonanywhere.com.error.log'
 DEFAULT_LINES = 100
@@ -34,7 +32,7 @@ def get_log_path():
     2. PythonAnywhere error log — used automatically when running on PA
     3. arsa.log — local rotating log written by the RotatingFileHandler
     """
-    env_override = os.environ.get('LOG_FILE')
+    env_override = get_env('LOG_FILE', '')
     if env_override:
         return env_override
     if os.path.isfile(PA_ERROR_LOG):

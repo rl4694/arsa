@@ -1,15 +1,12 @@
 import argparse
 import json
 import math
-import os
 import requests
 import sys
 from google import genai
 from google.genai import types
 from google.genai import errors
-from dotenv import load_dotenv
-
-load_dotenv()
+from server.env import get_env
 
 FULL_MODEL_LIST = [
     "gemini-2.5-flash",
@@ -60,7 +57,7 @@ def needs_repair(record):
 
 
 def get_bypass_headers():
-    auth_bypass_key = os.environ.get("AUTH_BYPASS_KEY", "").strip()
+    auth_bypass_key = get_env("AUTH_BYPASS_KEY", "").strip()
     headers = {}
 
     if auth_bypass_key:
@@ -274,7 +271,7 @@ def main():
         print("Error: --chunk-size must be greater than 0.", file=sys.stderr)
         sys.exit(1)
 
-    if not os.environ.get("AUTH_BYPASS_KEY", "").strip():
+    if not get_env("AUTH_BYPASS_KEY", "").strip():
         print("Error: AUTH_BYPASS_KEY is not set.", file=sys.stderr)
         sys.exit(1)
 

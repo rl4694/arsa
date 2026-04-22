@@ -96,3 +96,23 @@ def test_bypass_key(app):
     })
     assert res.status_code == 200
     assert res.data == SUCCESS_RESP
+
+def test_invalid_feature(app):
+    @app.route('/invalid')
+    @security.require_auth('invalid_feature', security.READ)
+    def invalid_route():
+        return SUCCESS_RESP
+
+    res = app.test_client().get('/invalid')
+    assert res.status_code == 200
+    assert res.data == SUCCESS_RESP
+
+def test_invalid_operation(app):
+    @app.route('/invalid')
+    @security.require_auth(FEATURE, 'invalid_operation')
+    def invalid_route():
+        return SUCCESS_RESP
+
+    res = app.test_client().get('/invalid')
+    assert res.status_code == 200
+    assert res.data == SUCCESS_RESP

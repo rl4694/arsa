@@ -2,10 +2,7 @@ import requests
 from datetime import datetime, timedelta
 import argparse
 import sys
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from server.env import get_env
 
 DISASTER_RULES = {
     "earthquake": {"radius_km": 100, "date_window_days": 2},
@@ -17,7 +14,7 @@ DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
 DRY_RUN = False
 
 SERVER = None
-AUTH_BYPASS_KEY = os.environ.get("AUTH_BYPASS_KEY", "")
+AUTH_BYPASS_KEY = get_env("AUTH_BYPASS_KEY", "")
 HEADERS = {}
 
 

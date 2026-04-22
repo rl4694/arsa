@@ -2,13 +2,10 @@
 All interaction with MongoDB should be through this file!
 We may be required to use a new database at any point.
 """
-import os
 from functools import wraps
-from dotenv import load_dotenv
 import pymongo as pm
 import certifi
-
-load_dotenv()
+from server.env import get_env
 
 LOCAL = "0"
 CLOUD = "1"
@@ -21,10 +18,10 @@ SOCK_TIMEOUT = 'socketTimeoutMS'
 CONNECT = 'connect'
 MAX_POOL_SIZE = 'maxPoolSize'
 PA_SETTINGS = {
-    CONN_TIMEOUT: os.getenv('MONGO_CONN_TIMEOUT', 30000),
-    SOCK_TIMEOUT: os.getenv('MONGO_SOCK_TIMEOUT', None),
-    CONNECT: os.getenv('MONGO_CONNECT', False),
-    MAX_POOL_SIZE: os.getenv('MONGO_MAX_POOL_SIZE', 1),
+    CONN_TIMEOUT: get_env('MONGO_CONN_TIMEOUT', 30000),
+    SOCK_TIMEOUT: get_env('MONGO_SOCK_TIMEOUT', None),
+    CONNECT: get_env('MONGO_CONNECT', False),
+    MAX_POOL_SIZE: get_env('MONGO_MAX_POOL_SIZE', 1),
 }
 
 
@@ -65,8 +62,8 @@ def connect_db():
     global client
     if client is None:
         print('Setting client because it is None.')
-        if os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD:
-            mongo_url = os.environ.get('MONGO_URL')
+        if get_env('CLOUD_MONGO', LOCAL) == CLOUD:
+            mongo_url = get_env('MONGO_URL', '')
             if not mongo_url:
                 raise ValueError('You must set the MONGO_URL env variable '
                                  + 'to use Mongo in the cloud.')
