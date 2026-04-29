@@ -1,0 +1,78 @@
+name: Snapshot Natural Disasters DB
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Snapshot natural disasters
+        run: |
+          mkdir -p db_snapshots/natural_disasters
+
+          python - <<'PY'
+          import json
+          import os
+          import requests
+          from datetime import datetime
+
+          server = "https://${{ secrets.DEMO_PA_DOMAIN }}".rstrip("/")
+          headers = {
+              "X-Auth-Bypass-Key": os.environ.get("AUTH_BYPASS_KEY", "")
+          }
+
+          r = requests.get(
+              f"{server}/natural_disasters",
+              headers=headers,
+              timeout=30
+          )
+          r.raise_for_status()
+
+          data = r.json()
+
+          with open("db_snapshots/natural_disasters/latest.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+
+          timestamp = datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")
+          archive_path = f"db_snapshots/natural_disasters/{timestamp}.json"
+
+          with open(archive_path, "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+
+          print(f"Saved latest snapshot and archive snapshot: {archive_path}")
+          PY
+        env:
+          AUTH_BYPASS_KEY: ${{ secrets.AUTH_BYPASS_KEY }}
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add db_snapshots/natural_disasters
+
+          if git diff --cached --quiet; then
+            echo "No snapshot changes to commit."
+          else
+            git commit -m "Update natural disasters DB snapshot"
+            git push
+          fi
