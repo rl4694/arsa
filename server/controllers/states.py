@@ -7,6 +7,7 @@ from flask_restx import Resource, Namespace, fields
 import server.controllers.crud as crud
 import pycountry
 import security.security as security
+from server.controllers.nations import nations as nations_crud
 
 SECURITY_FEATURE = security.STATES
 STATES_RESP = 'records'
@@ -70,9 +71,10 @@ class StateFields(Resource):
     @api.doc('get_fields')
     def get(self):
         """Get field information for states."""
+        nation_names = sorted(set(r['name'] for r in nations_crud.read().values() if 'name' in r))
         return [
-            { crud.ATTRIBUTE: NAME, crud.DISPLAY: "City Name", crud.TYPE: "text" },
-            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: NAME, crud.DISPLAY: "State Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "select", crud.OPTIONS: nation_names },
         ]
 
 
