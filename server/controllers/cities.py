@@ -7,6 +7,8 @@ from flask_restx import Resource, Namespace, fields
 from numbers import Real
 import server.controllers.crud as crud
 import security.security as security
+from server.controllers.nations import nations as nations_crud
+from server.controllers.states import states as states_crud
 
 SECURITY_FEATURE = security.CITIES
 CITIES_RESP = 'records'
@@ -71,10 +73,12 @@ class CityFields(Resource):
     @api.doc('get_fields')
     def get(self):
         """Get field information for cities."""
+        nation_names = sorted(set(r['name'] for r in nations_crud.read().values() if 'name' in r))
+        state_names = sorted(set(r['name'] for r in states_crud.read().values() if 'name' in r))
         return [
             { crud.ATTRIBUTE: NAME, crud.DISPLAY: "City Name", crud.TYPE: "text" },
-            { crud.ATTRIBUTE: STATE_NAME, crud.DISPLAY: "State Name", crud.TYPE: "text" },
-            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "text" },
+            { crud.ATTRIBUTE: STATE_NAME, crud.DISPLAY: "State Name", crud.TYPE: "select", crud.OPTIONS: state_names },
+            { crud.ATTRIBUTE: NATION_NAME, crud.DISPLAY: "Nation Name", crud.TYPE: "select", crud.OPTIONS: nation_names },
             { crud.ATTRIBUTE: LATITUDE, crud.DISPLAY: "Latitude", crud.TYPE: "number" },
             { crud.ATTRIBUTE: LONGITUDE, crud.DISPLAY: "Longitude", crud.TYPE: "number" },
         ]
