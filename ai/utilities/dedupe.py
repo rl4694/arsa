@@ -4,13 +4,18 @@ import argparse
 import sys
 from server.env import get_env
 
-DISASTER_RULES = {
-    "earthquake": {"radius_km": 100, "date_window_days": 2},
-    "landslide":  {"radius_km": 100, "date_window_days": 3},
-    "tsunami":    {"radius_km": 150, "date_window_days": 2},
-    "hurricane":  {"radius_km": 300, "date_window_days": 7},
-}
-DEFAULT_RULE = {"radius_km": 10, "date_window_days": 3}
+try:
+    from ai.utilities.disaster_config import DISASTER_TYPES, DEFAULT_DEDUPE
+except ImportError:
+    DISASTER_TYPES = {
+        "earthquake": {"radius_km": 100, "date_window_days": 2},
+        "landslide": {"radius_km": 100, "date_window_days": 3},
+        "tsunami": {"radius_km": 150, "date_window_days": 2},
+        "hurricane": {"radius_km": 300, "date_window_days": 7},
+    }
+    DEFAULT_DEDUPE = {"radius_km": 10, "date_window_days": 3}
+
+
 DRY_RUN = False
 
 SERVER = None
@@ -52,7 +57,7 @@ def get_server_and_headers(server=None, headers=None):
 
 
 def get_rule(event_type):
-    return DISASTER_RULES.get(event_type, DEFAULT_RULE)
+    return DISASTER_TYPES.get(event_type, DEFAULT_DEDUPE)
 
 
 def parse_date(date_str):
@@ -95,7 +100,9 @@ def get_date_window(date_str, date_window_days):
 def search_nearby(event, server=None, headers=None):
     resolved_server, resolved_headers = get_server_and_headers(server, headers)
 
-    rule = get_rule(event["type"])
+    event_type = event.get("type")
+    rule = get_rule(event_type)
+
     date_start, date_end = get_date_window(event["date"], rule["date_window_days"])
 
     params = {
@@ -104,7 +111,7 @@ def search_nearby(event, server=None, headers=None):
         "radius_km": rule["radius_km"],
         "date_start": date_start,
         "date_end": date_end,
-        "type": event["type"],
+        "type": event_type,
     }
 
     r = requests.get(
@@ -223,7 +230,6 @@ def pick_parent_candidate(event, server=None, headers=None):
     if not candidates:
         return None
 
-    # prefer the earliest/smallest id so later records fold under older ones.
     candidates.sort(key=lambda c: c.get("_id", ""))
     return candidates[0]
 
@@ -232,7 +238,7 @@ def consolidate_new_event(new_event, new_event_id=None, server=None, headers=Non
     """
     Helper for backend/API usage.
 
-    Given a new event dict (and optionally its created id), find an existing parent.
+    Given a new event dict and optionally its created id, find an existing parent.
     Returns a dict describing what should happen, without forcing the caller
     to run the whole batch dedupe script.
 
@@ -241,6 +247,7 @@ def consolidate_new_event(new_event, new_event_id=None, server=None, headers=Non
       {"action": "link", "parent": <parent_record>}
     """
     event_for_match = dict(new_event)
+
     if new_event_id and "_id" not in event_for_match:
         event_for_match["_id"] = new_event_id
 
@@ -262,21 +269,21 @@ def main():
 
     events = get_all_events(server=server, headers=headers)
 
-    # Keep only valid dict events with _id
     clean_events = []
     for event in events:
         if not isinstance(event, dict):
             print(f"Skipping non-dict event: {event}")
             continue
+
         if "_id" not in event:
             print(f"Skipping event with no _id: {event}")
             continue
+
         clean_events.append(event)
 
     id_map = {e["_id"]: e for e in clean_events}
 
     for event in clean_events:
-        # Skip hidden/child events
         if not event.get("show", True):
             continue
 
@@ -299,27 +306,21 @@ def main():
 
             cid = candidate["_id"]
 
-            # Extra safety: same type only
             if candidate.get("type") != root_event.get("type"):
                 continue
 
-            # Check stricter date window
             if date_diff(root_event["date"], candidate["date"]) > rule["date_window_days"]:
                 continue
 
-            # Avoid double linking by only linking "later" ids under "earlier" ids
-            # so we do not create A->B and B->A on different passes.
             if cid < root_id:
                 continue
 
             try:
                 link(root_id, cid, server=server, headers=headers)
 
-                # Update local state so later iterations do not process stale data
                 candidate["show"] = False
                 candidate["parent_event"] = root_id
 
-                # Keep id_map in sync
                 id_map[cid] = candidate
 
             except requests.RequestException as e:
