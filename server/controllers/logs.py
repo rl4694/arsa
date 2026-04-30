@@ -48,7 +48,7 @@ class LogList(Resource):
     @api.response(200, 'Success')
     @api.response(401, 'Unauthorized')
     def get(self):
-        """Return recent server log entries from the log file."""
+        """Return recent error logs."""
         try:
             n = min(int(request.args.get('n', DEFAULT_LINES)), MAX_LINES)
         except (ValueError, TypeError):
