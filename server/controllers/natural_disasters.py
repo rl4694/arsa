@@ -39,9 +39,8 @@ KEY = (NAME, DATE, LATITUDE, LONGITUDE)
 class NaturalDisasters(crud.CRUD):
     def validate(self, fields: dict):
         super().validate(fields)
-        # Check if date is in the format 'yyyy-mm-dd' or '-yyyy-mm-dd'
-        if DATE in fields:
-            self.validate_date(fields[DATE])
+        # Check if date is in the format 'yyyy-mm-dd'
+        self.validate_date(fields.get(DATE))
         self.validate_coordinates(fields)
 
     def validate_coordinates(self, fields: dict) -> None:
@@ -61,8 +60,7 @@ class NaturalDisasters(crud.CRUD):
 
     def validate_date(self, date_string: str) -> None:
         """
-        Validate date string in format 'yyyy-mm-dd' or '-yyyy-mm-dd' (for negative/BCE years).
-        Supports 3-digit years (e.g., '500-01-01') and negative years (e.g., '-500-01-01').
+        Validate date string in format 'yyyy-mm-dd'.
         
         Args:
             date_string: Date string to validate
@@ -70,40 +68,15 @@ class NaturalDisasters(crud.CRUD):
         Raises:
             ValueError: If date format is invalid or values are out of range
         """
-        # Pattern: optional minus sign, 1-4 digits for year, month, day
-        pattern = r'^(-?)(\d{1,4})-(\d{1,2})-(\d{1,2})$'
-        match = re.match(pattern, date_string)
-        
-        if not match:
-            raise ValueError(f'Invalid date format: {date_string}. Expected format: yyyy-mm-dd or -yyyy-mm-dd')
-        
-        negative, year_str, month_str, day_str = match.groups()
-        
         try:
-            year = int(year_str)
-            month = int(month_str)
-            day = int(day_str)
-            
-            # Apply negative sign if present
-            if negative:
-                year = -year
-            
-            # Validate ranges
-            if month < 1 or month > 12:
-                raise ValueError(f'Month must be between 1 and 12, got {month}')
-            
-            if day < 1 or day > 31:
-                raise ValueError(f'Day must be between 1 and 31, got {day}')
-            
-            # For positive years only, try to validate with datetime
-            # (datetime only supports years 1-9999)
-            if year > 0 and year <= 9999:
-                try:
-                    datetime(year, month, day)
-                except ValueError as e:
-                    raise ValueError(f'Invalid date: {date_string} - {str(e)}')
+            parts = date_string.split("-")
+            # Handle years with less than 4 digits
+            if len(parts) > 0:
+                parts[0] = parts[0].zfill(4)
+            normalized = "-".join(parts)
+            datetime.strptime(normalized, '%Y-%m-%d')
         except ValueError as e:
-            raise ValueError(f'Invalid date string: {date_string} - {str(e)}')
+            raise ValueError(f'Invalid date: {date_string} - {str(e)}')
 
 disasters = NaturalDisasters(
     COLLECTION,
@@ -121,9 +94,6 @@ disasters = NaturalDisasters(
         REPORTS: list,
     }
 )
-
-def validate_date(date_string: str) -> None:
-    disasters.validate_date(date_string)
 
 api = Namespace('natural_disasters', description='Natural Disasters CRUD operations')
 disaster_model = api.model('NaturalDisaster', {
@@ -161,15 +131,15 @@ class DisasterList(Resource):
         filtered = [r for r in records.values() if r.get(SHOW, True)]
 
         if date:
-            validate_date(date)
+            disasters.validate_date(date)
             filtered = [r for r in filtered if r.get(DATE) == date]
 
         if start_date:
-            validate_date(start_date)
+            disasters.validate_date(start_date)
             filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) >= start_date]
 
         if end_date:
-            validate_date(end_date)
+            disasters.validate_date(end_date)
             filtered = [r for r in filtered if r.get(DATE) and r.get(DATE) <= end_date]
         return {DISASTERS_RESP: filtered}
 
@@ -353,12 +323,12 @@ class DisasterSearch(Resource):
                 continue
 
             if date_start:
-                validate_date(date_start)
+                disasters.validate_date(date_start)
                 if not r.get(DATE) or r.get(DATE) < date_start:
                     continue
 
             if date_end:
-                validate_date(date_end)
+                disasters.validate_date(date_end)
                 if not r.get(DATE) or r.get(DATE) > date_end:
                     continue
 

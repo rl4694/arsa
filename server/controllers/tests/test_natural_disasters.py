@@ -39,11 +39,11 @@ class TestValidate:
             nd.DESCRIPTION: SAMPLE_DESCRIPTION,
         })
 
-    def test_valid_negative_year(self):
+    def test_valid_0_padded_year(self):
         disasters.validate({
             nd.NAME: SAMPLE_NAME,
             nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-            nd.DATE: '-500-01-01',
+            nd.DATE: '0050-01-01',
             nd.LATITUDE: 1.0,
             nd.LONGITUDE: 1.0,
             nd.DESCRIPTION: SAMPLE_DESCRIPTION,
