@@ -7,6 +7,7 @@ from flask_restx import Resource, Namespace, fields, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import security.security as security
 import data.db_connect as dbc
+from server.controllers.email import Email
 import os
 
 USERS_RESP = 'user'
@@ -41,20 +42,26 @@ class UserRegister(Resource):
         password = data.get(PASSWORD, '')
 
         if not name or not email or not password:
-            api.abort(400, 'name, email, and password are required')
+            api.abort(400, 'Name, email, and password are required')
 
-        existing = dbc.read_one(COLLECTION, {EMAIL: email})
+        email_obj = None
+        try:
+            email_obj = Email(email)
+        except:
+            api.abort(400, f'Invalid email format: {email}')
+
+        existing = dbc.read_one(COLLECTION, {EMAIL: str(email_obj)})
         if existing:
             api.abort(409, 'An account with that email already exists')
 
         hashed_pw = generate_password_hash(password)
         dbc.create(COLLECTION, {
             NAME: name,
-            EMAIL: email,
+            EMAIL: str(email_obj),
             PASSWORD: hashed_pw,
         })
 
-        return {USERS_RESP: {NAME: name, EMAIL: email}}, 201
+        return {USERS_RESP: {NAME: name, EMAIL: str(email_obj)}}, 201
 
 
 @api.route('/login')
@@ -70,7 +77,13 @@ class UserLogin(Resource):
         if not email or not password:
             api.abort(400, 'email and password are required')
 
-        user = dbc.read_one(COLLECTION, {EMAIL: email})
+        email_obj = None
+        try:
+            email_obj = Email(email)
+        except:
+            api.abort(400, f'Invalid email format: {email}')
+
+        user = dbc.read_one(COLLECTION, {EMAIL: str(email_obj)})
         if not user or not check_password_hash(user[PASSWORD], password):
             api.abort(401, 'Invalid email or password')
 
