@@ -32,7 +32,8 @@ EARTHQUAKE = 'earthquake'
 LANDSLIDE = 'landslide'
 TSUNAMI = 'tsunami'
 HURRICANE = 'hurricane'
-DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE]
+OTHER = 'other'
+DISASTER_TYPES = [EARTHQUAKE, LANDSLIDE, TSUNAMI, HURRICANE, OTHER]
 KEY = (NAME, DATE, LATITUDE, LONGITUDE)
 
 
@@ -199,7 +200,7 @@ class DisasterFields(Resource):
                 crud.ATTRIBUTE: DISASTER_TYPE,
                 crud.DISPLAY: "Type",
                 crud.TYPE: "select",
-                crud.OPTIONS: [EARTHQUAKE, TSUNAMI, LANDSLIDE, HURRICANE],
+                crud.OPTIONS: [EARTHQUAKE, TSUNAMI, LANDSLIDE, HURRICANE, OTHER],
             },
             { crud.ATTRIBUTE: DATE, crud.DISPLAY: "Date", crud.TYPE: "date" },
             { crud.ATTRIBUTE: LATITUDE, crud.DISPLAY: "Latitude", crud.TYPE: "number" },
