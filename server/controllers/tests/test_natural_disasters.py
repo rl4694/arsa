@@ -91,35 +91,3 @@ class TestValidate:
                 nd.LONGITUDE: 1.0,
                 nd.DESCRIPTION: SAMPLE_DESCRIPTION,
             })
-
-    def test_valid_coordinates_boundaries(self):
-        disasters.validate({
-            nd.NAME: SAMPLE_NAME,
-            nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-            nd.DATE: '2000-01-01',
-            nd.LATITUDE: -180.0,
-            nd.LONGITUDE: 180.0,
-            nd.DESCRIPTION: SAMPLE_DESCRIPTION,
-        })
-
-    def test_invalid_latitude_out_of_range(self):
-        with pytest.raises(ValueError, match='Latitude'):
-            disasters.validate({
-                nd.NAME: SAMPLE_NAME,
-                nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-                nd.DATE: '2000-01-01',
-                nd.LATITUDE: 181.0,
-                nd.LONGITUDE: 0.0,
-                nd.DESCRIPTION: SAMPLE_DESCRIPTION,
-            })
-
-    def test_invalid_longitude_out_of_range(self):
-        with pytest.raises(ValueError, match='Longitude'):
-            disasters.validate({
-                nd.NAME: SAMPLE_NAME,
-                nd.DISASTER_TYPE: SAMPLE_DISASTER_TYPE,
-                nd.DATE: '2000-01-01',
-                nd.LATITUDE: 0.0,
-                nd.LONGITUDE: -181.0,
-                nd.DESCRIPTION: SAMPLE_DESCRIPTION,
-            })

@@ -20,7 +20,14 @@ LATITUDE = 'latitude'
 LONGITUDE = 'longitude'
 KEY = (NAME, STATE_NAME)
 
-cities = crud.CRUD(
+
+class Cities(crud.CRUD):
+    def validate(self, fields: dict):
+        super().validate(fields)
+        crud.validate_coordinates(fields.get(LATITUDE), fields.get(LONGITUDE))
+
+
+cities = Cities(
     COLLECTION,
     KEY,
     {

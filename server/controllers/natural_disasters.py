@@ -42,22 +42,7 @@ class NaturalDisasters(crud.CRUD):
         super().validate(fields)
         # Check if date is in the format 'yyyy-mm-dd'
         self.validate_date(fields.get(DATE))
-        self.validate_coordinates(fields)
-
-    def validate_coordinates(self, fields: dict) -> None:
-        """Ensure latitude and longitude are within [-180, 180]."""
-        if LATITUDE in fields and fields[LATITUDE] is not None:
-            lat = fields[LATITUDE]
-            if not (-180 <= lat <= 180):
-                raise ValueError(
-                    f'Latitude must be between -180 and 180, got {lat}'
-                )
-        if LONGITUDE in fields and fields[LONGITUDE] is not None:
-            lon = fields[LONGITUDE]
-            if not (-180 <= lon <= 180):
-                raise ValueError(
-                    f'Longitude must be between -180 and 180, got {lon}'
-                )
+        crud.validate_coordinates(fields.get(LATITUDE), fields.get(LONGITUDE))
 
     def validate_date(self, date_string: str) -> None:
         """

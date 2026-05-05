@@ -1,6 +1,6 @@
 # server/controllers/tests/test_crud.py
 import pytest
-from server.controllers.crud import is_valid_id, CRUD
+from server.controllers.crud import is_valid_id, validate_coordinates, CRUD
 
 FIELD1 = 'field1'
 FIELD2 = 'field2'
@@ -202,3 +202,15 @@ class TestDelete:
     def test_invalid_id(self):
         with pytest.raises(ValueError):
             crud.delete(123)
+
+class TestValidateCoordinates:
+    def test_valid_coordinates_boundaries(self):
+        validate_coordinates(-180.0, 180.0)
+
+    def test_invalid_latitude_out_of_range(self):
+        with pytest.raises(ValueError, match='Latitude'):
+            validate_coordinates(181.0, 180.0)
+
+    def test_invalid_longitude_out_of_range(self):
+        with pytest.raises(ValueError, match='Longitude'):
+            validate_coordinates(0.0, -181.0)

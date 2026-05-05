@@ -8,6 +8,7 @@ cache after writes.
 """
 from typing import Iterable, Optional, Tuple
 from bson.objectid import ObjectId
+from numbers import Real
 from server.controllers.cache import Cache
 import data.db_connect as dbc
 
@@ -17,6 +18,20 @@ ATTRIBUTE = "attribute"
 DISPLAY = "display"
 TYPE = "type"
 OPTIONS = "options"
+
+
+def validate_coordinates(lat: Real, lon: Real) -> None:
+    """Ensure latitude and longitude are within [-180, 180]."""
+    if lat is not None:
+        if not (-180 <= lat <= 180):
+            raise ValueError(
+                f'Latitude must be between -180 and 180, got {lat}'
+            )
+    if lon is not None:
+        if not (-180 <= lon <= 180):
+            raise ValueError(
+                f'Longitude must be between -180 and 180, got {lon}'
+            )
 
 
 def is_valid_id(_id: str) -> bool:
