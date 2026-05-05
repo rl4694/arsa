@@ -52,7 +52,8 @@ Our record format to meet our requirements (see security.md) will be:
 }
 """
 
-AUTH_BYPASS_KEY = get_env('AUTH_BYPASS_KEY', '')
+DEFAULT_BYPASS_KEY = 'default-bypass'
+AUTH_BYPASS_KEY = get_env('AUTH_BYPASS_KEY', DEFAULT_BYPASS_KEY)
 SECRET_KEY = get_env('SECRET_KEY', 'arsa-dev-secret')
 COLLECT_NAME = 'security'
 CREATE = 'create'

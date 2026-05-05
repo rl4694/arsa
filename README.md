@@ -8,7 +8,10 @@ To create the env for a new developer, run `make dev_env`.
 To seed data into the database after creating the dev env, run `make seed`.
 
 ## Configuration
-- To run this project, you must set the following environment variables (or create a .env file locally)
+If you want to use a different key to bypass authentication (highly recommended), set the following environment variables (or create a .env file locally):
+- AUTH_BYPASS_KEY: your key
+
+If you want to connect to Mongo Atlas, set the following environment variables (or add them to the .env file)
 - CLOUD_MONGO: Set to "1" to use Atlas, or "0" for local
 - MONGO_URL: mongodb+srv://sjp9:[key]@arsa.afndfz7.mongodb.net/?appName=arsa
 

@@ -7,6 +7,7 @@ from google import genai
 from google.genai import types
 from google.genai import errors
 from server.env import get_env
+from security.security import DEFAULT_BYPASS_KEY
 
 FULL_MODEL_LIST = [
     "gemini-2.5-flash",
@@ -57,7 +58,7 @@ def needs_repair(record):
 
 
 def get_bypass_headers():
-    auth_bypass_key = get_env("AUTH_BYPASS_KEY", "").strip()
+    auth_bypass_key = get_env("AUTH_BYPASS_KEY", DEFAULT_BYPASS_KEY).strip()
     headers = {}
 
     if auth_bypass_key:
@@ -271,7 +272,7 @@ def main():
         print("Error: --chunk-size must be greater than 0.", file=sys.stderr)
         sys.exit(1)
 
-    if not get_env("AUTH_BYPASS_KEY", "").strip():
+    if not get_env("AUTH_BYPASS_KEY", DEFAULT_BYPASS_KEY).strip():
         print("Error: AUTH_BYPASS_KEY is not set.", file=sys.stderr)
         sys.exit(1)
 

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import argparse
 import sys
 from server.env import get_env
+from security.security import DEFAULT_BYPASS_KEY
 
 try:
     from ai.utilities.disaster_config import DISASTER_TYPES, DEFAULT_DEDUPE
@@ -19,7 +20,7 @@ except ImportError:
 DRY_RUN = False
 
 SERVER = None
-AUTH_BYPASS_KEY = get_env("AUTH_BYPASS_KEY", "")
+AUTH_BYPASS_KEY = get_env("AUTH_BYPASS_KEY", DEFAULT_BYPASS_KEY)
 HEADERS = {}
 
 
