@@ -5,6 +5,8 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
+To seed data into the database after creating the dev env, run `make seed`.
+
 ## Configuration
 - To run this project, you must set the following environment variables (or create a .env file locally)
 - CLOUD_MONGO: Set to "1" to use Atlas, or "0" for local

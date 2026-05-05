@@ -19,7 +19,7 @@ lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 	@$(LINTER) $(PYLINTFLAGS) $*.py || echo "flake8 found style issues but just warning instead of failing"
 
 pytests: FORCE
-	pytest $(PYTESTFLAGS) --cov=$(PKG)
+	. ../venv/bin/activate && pytest $(PYTESTFLAGS) --cov=$(PKG)
 
 # test a python file:
 %.py: FORCE

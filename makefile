@@ -32,6 +32,9 @@ dev_env: FORCE
 	@echo "You should set PYTHONPATH to: "
 	@echo $(shell pwd)
 
+seed: FORCE
+	. ./venv/bin/activate && python -m server.etl.seed
+
 prod_env: FORCE
 	pip install -r $(REQ_DIR)/requirements.txt
 
