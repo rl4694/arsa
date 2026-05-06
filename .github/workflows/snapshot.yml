@@ -33,7 +33,7 @@ jobs:
           import json
           import os
           import requests
-          from datetime import datetime
+          from datetime import datetime, timezone
 
           server = "https://${{ secrets.DEMO_PA_DOMAIN }}".rstrip("/")
           headers = {
@@ -49,16 +49,26 @@ jobs:
 
           data = r.json()
 
-          with open("db_snapshots/natural_disasters/latest.json", "w", encoding="utf-8") as f:
+          latest_path = "db_snapshots/natural_disasters/latest.json"
+
+          if os.path.exists(latest_path):
+              with open(latest_path, "r", encoding="utf-8") as f:
+                  old_data = json.load(f)
+
+              if old_data == data:
+                  print("No changes detected. Snapshot not updated.")
+                  raise SystemExit(0)
+
+          with open(latest_path, "w", encoding="utf-8") as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
 
-          timestamp = datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")
+          timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
           archive_path = f"db_snapshots/natural_disasters/{timestamp}.json"
 
           with open(archive_path, "w", encoding="utf-8") as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
 
-          print(f"Saved latest snapshot and archive snapshot: {archive_path}")
+          print(f"Changes detected. Saved latest snapshot and archive snapshot: {archive_path}")
           PY
         env:
           AUTH_BYPASS_KEY: ${{ secrets.AUTH_BYPASS_KEY }}
