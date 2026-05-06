@@ -1,0 +1,63 @@
+name: Disaster Ingestion
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    environment: pa_deploy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore bookmark artifact
+        uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
+        with:
+          name: disaster-bookmark
+          path: ai
+          workflow: disaster-ingestion.yml
+          branch: master
+          search_artifacts: true
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Python packages
+        run: make dev_env
+
+      - name: Run disaster ingestion
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "GEMINI_API_KEY is empty or missing. Skipping disaster ingestion execution."
+            exit 0
+          fi
+
+          python ai/disaster_scraper.py \
+            --key "$GEMINI_API_KEY" \
+            --server "https://${DEMO_PA_DOMAIN}" > curls.sh
+
+          cat curls.sh
+
+          if [ -s curls.sh ]; then
+            bash curls.sh || true
+          else
+            echo "No curl commands generated. Skipping execution."
+          fi
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DEMO_PA_DOMAIN: ${{ secrets.DEMO_PA_DOMAIN }}
+          AUTH_BYPASS_KEY: ${{ secrets.AUTH_BYPASS_KEY }}
+
+      - name: Save bookmark artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: disaster-bookmark
+          path: ai/last_successful_run.txt
+          if-no-files-found: ignore
